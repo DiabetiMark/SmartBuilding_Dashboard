@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'password', 'name', 'phone', 'isAdmin'
     ];
 
     /**
@@ -26,4 +26,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function rooms()
+    {
+        return $this->belongsToMany('App\Room');
+    }
+
+
 }
