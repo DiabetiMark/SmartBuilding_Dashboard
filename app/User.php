@@ -32,5 +32,8 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Room');
     }
 
-
+    public function getFillable()
+    {
+        return $this->fillable;
+    }
 }

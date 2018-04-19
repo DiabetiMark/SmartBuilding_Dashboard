@@ -43,7 +43,7 @@ class UserController extends Controller
 
         if($user !== null) 
         {
-            return response()->json($product);
+            return response()->json($user);
         }
 
         $error = [

@@ -14,6 +14,6 @@ class DataRegister extends Model
 
     public function getFillable()
     {
-        return $this->$fillable;
+        return $this->fillable;
     }
 }

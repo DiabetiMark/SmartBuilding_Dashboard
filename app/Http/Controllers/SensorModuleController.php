@@ -61,17 +61,17 @@ class SensorModuleController extends Controller
      */
     public function showAll()
     {
-        return $users = SensorModule::all();
+        return $sensorModules = SensorModule::all();
     }
 
     public function showOne($id)
     {
-        $user = SensorModule::select('moduleName')
+        $sensorModule = SensorModule::select('moduleName')
         ->find($id);
 
-        if($user !== null) 
+        if($sensorModule !== null) 
         {
-            return response()->json($product);
+            return response()->json($sensorModule);
         }
 
         $error = [

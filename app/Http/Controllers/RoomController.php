@@ -62,17 +62,17 @@ class RoomController extends Controller
      */
     public function showAll()
     {
-        return $users = Room::all();
+        return $rooms = Room::all();
     }
 
     public function showOne($id)
     {
-        $user = Room::select('roomName', 'roomDescription')
+        $room = Room::select('roomName', 'roomDescription')
         ->find($id);
 
-        if($user !== null) 
+        if($room !== null) 
         {
-            return response()->json($product);
+            return response()->json($room);
         }
 
         $error = [

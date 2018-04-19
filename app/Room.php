@@ -28,6 +28,6 @@ class Room extends Model
 
     public function getFillable()
     {
-        return $this->$fillable;
+        return $this->fillable;
     }
 }

@@ -62,17 +62,17 @@ class DataRegisterController extends Controller
      */
     public function showAll()
     {
-        return $users = DataRegister::all();
+        return $dataregisters = DataRegister::all();
     }
 
     public function showOne($id)
     {
-        $user = DataRegister::select('id', 'value', 'created_at')
+        $dataregister = DataRegister::select('id', 'value', 'created_at')
         ->find($id);
 
-        if($user !== null) 
+        if($dataregister !== null) 
         {
-            return response()->json($product);
+            return response()->json($dataregister);
         }
 
         $error = [

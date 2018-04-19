@@ -61,17 +61,17 @@ class FieldController extends Controller
      */
     public function showAll()
     {
-        return $users = Field::all();
+        return $items = Field::all();
     }
 
     public function showOne($id)
     {
-        $user = Field::select('fieldName')
+        $item = Field::select('fieldName')
         ->find($id);
 
-        if($user !== null) 
+        if($item !== null) 
         {
-            return response()->json($product);
+            return response()->json($item);
         }
 
         $error = [
