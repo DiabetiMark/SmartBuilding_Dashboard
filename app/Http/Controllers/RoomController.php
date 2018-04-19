@@ -145,4 +145,15 @@ class RoomController extends Controller
     {
         //
     }
+
+    //custom actions
+    public function getUsers($id)
+    {
+        return $rooms = Room::find($id)->users;
+    }
+
+    public function getSensorModules($id)
+    {
+        return $rooms = Room::find($id)->SensorModules;
+    }
 }

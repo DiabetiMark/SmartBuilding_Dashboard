@@ -142,4 +142,15 @@ class SensorModuleController extends Controller
     {
         //
     }
+
+    //custom actions
+    public function getRooms($id)
+    {
+        return $rooms = SensorModule::find($id)->rooms;
+    }
+
+    public function getDataRegisters($id)
+    {
+        return $rooms = SensorModule::find($id)->dataRegisters;
+    }
 }

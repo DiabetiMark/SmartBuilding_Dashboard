@@ -89,4 +89,10 @@ class UserController extends Controller
         return response()->json($error, $errorCode);
         
     }
+
+    //custom actions
+    public function getRooms($id)
+    {
+        return $rooms = User::find($id)->rooms;
+    }
 }

@@ -16,4 +16,9 @@ class DataRegister extends Model
     {
         return $this->fillable;
     }
+
+    public function sensorModules()
+    {
+        return $this->belongsToMany('App\SensorModule');
+    }
 }

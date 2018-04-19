@@ -143,4 +143,10 @@ class DataRegisterController extends Controller
     {
         //
     }
+
+    //custom actions
+    public function getSensorModules($id)
+    {
+        return $rooms = DataRegister::find($id)->sensorModules;
+    }
 }
