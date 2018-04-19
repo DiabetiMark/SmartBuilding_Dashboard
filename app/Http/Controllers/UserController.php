@@ -38,7 +38,7 @@ class UserController extends Controller
 
     public function showOne($id)
     {
-        $user = Product::select('username', 'name', 'phone', 'isAdmin')
+        $user = User::select('username', 'name', 'phone', 'isAdmin')
         ->find($id);
 
         if($user !== null) 
@@ -48,7 +48,7 @@ class UserController extends Controller
 
         $error = [
             "status" => xxxx,
-            "message" => 'user kon niet gevonden worden',
+            "message" => 'User kon niet gevonden worden',
         ];
 
         return response()->json($error, 404);
@@ -80,7 +80,7 @@ class UserController extends Controller
             //if the category cannot be found
             $error = [
                 "status" => xxxx,
-                "message" => 'De user is niet gevonden',
+                "message" => 'User kon niet gevonden worden',
             ];
             $errorCode = 404;
         }

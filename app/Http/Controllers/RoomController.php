@@ -35,7 +35,23 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'roomName' => 'required|numeric',
+            'roomDescription' => 'required|numeric',
+        ]);
+
+        $item = new Room;
+
+        if ($this->setCreate($item, $request)) {
+            return;
+        }
+
+        $error = [
+            "status" => xxxx,
+            "message" => "Room is niet aangemaakt",
+        ];
+
+        return response()->json($error, 404);
     }
 
     /**
@@ -44,9 +60,27 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function show(Room $room)
+    public function showAll()
     {
-        //
+        return $users = Room::all();
+    }
+
+    public function showOne($id)
+    {
+        $user = Room::select('roomName', 'roomDescription')
+        ->find($id);
+
+        if($user !== null) 
+        {
+            return response()->json($product);
+        }
+
+        $error = [
+            "status" => xxxx,
+            "message" => 'Sensor module kon niet gevonden worden',
+        ];
+
+        return response()->json($error, 404);
     }
 
     /**
@@ -67,9 +101,38 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Room $room)
+    public function update($id, Request $reqeust)
     {
-        //
+        $this->validate($request, [
+            'roomName' => 'numeric',
+            'roomDescription' => 'numeric',
+        ]);
+
+        $item = Room::find($id);
+
+        if($item !== null){
+            if($this->setUpdate($item, $request)){
+                return;
+            }
+
+            $error = [
+                "status" => xxxx,
+                "message" => 'Het wijzigen van de room is niet gelukt',
+            ];
+            $errorCode = 405;
+        } else {
+
+            //if the category cannot be found
+            $error = [
+                "status" => xxxx,
+                "message" => 'De room is niet gevonden',
+            ];
+            $errorCode = 404;
+        }
+
+        //return the response of the error in json
+        return response()->json($error, $errorCode);
+        
     }
 
     /**
