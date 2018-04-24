@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('pages/home');
 });
+Route::get('/settings', function () {
+    return view('pages/settings');
+});
+Route::get('/users', function () {
+    return view('pages/users');
+});
+
