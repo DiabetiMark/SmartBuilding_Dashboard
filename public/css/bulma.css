@@ -5658,10 +5658,11 @@ a.dropdown-item.is-active {
 }
 
 .menu-label {
-    color: #7a7a7a;
+    color: white;
     font-size: 0.75em;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    font-weight: bold;
 }
 
 .menu-label:not(:first-child) {
@@ -5978,7 +5979,7 @@ a.dropdown-item.is-active {
 }
 
 .navbar {
-    background-color: white;
+    background-color: #2c3e50;
     min-height: 3.25rem;
     position: relative;
     z-index: 30;
@@ -5986,7 +5987,7 @@ a.dropdown-item.is-active {
 
 .navbar.is-white {
     background-color: white;
-    color: #0a0a0a;
+    color: #2c3e50;
 }
 
 .navbar.is-white .navbar-brand > .navbar-item,
@@ -6634,7 +6635,7 @@ body.has-navbar-fixed-bottom {
 
 .navbar-item,
 .navbar-link {
-    color: #4a4a4a;
+    color: white;
     display: block;
     line-height: 1.5;
     padding: 0.5rem 0.75rem;

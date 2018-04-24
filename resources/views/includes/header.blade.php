@@ -9,3 +9,4 @@
 <!-- Place favicon.ico in the root directory -->
 
 <link href="{{ asset('css/bulma.css') }}" rel="stylesheet">
+<link href="{{ asset('css/custom.css') }}" rel="stylesheet">

@@ -6,7 +6,7 @@
 
 <body>
     @include('includes.navbar')
-    @yield('content')
+    <!-- Content is passed inside the navbar content section -->
     @include('includes.footer')
 </body>
 </html>
