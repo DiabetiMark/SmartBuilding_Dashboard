@@ -30,9 +30,7 @@
                 <li><a href="{{ url('/') }}" {{ (Request::is('/') ? 'class=is-active' : '') }}>Overzicht</a></li>
                 <li>
                     <ul>
-                        <li><a>Ruimte 1</a></li>
-                        <li><a>Ruimte 2</a></li>
-                        <li><a>Ruimte 3</a></li>
+                        <li><a>TODO</a></li>
                     </ul>
                 </li>
             </ul>

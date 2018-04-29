@@ -6,32 +6,7 @@
         <div class="tile is-horizontal">
             <div class="tile is-parent">
                 <article class="tile is-child notification notification-box is-aareon">
-                    <nav class="level">
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="heading">Ruimtes</p>
-                                <p class="title">3</p>
-                            </div>
-                        </div>
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="heading">Sensoren</p>
-                                <p class="title">16</p>
-                            </div>
-                        </div>
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="heading">Metingen</p>
-                                <p class="title">301</p>
-                            </div>
-                        </div>
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="heading">Status</p>
-                                <p class="title"><span class="tag is-success">Online</span></p>
-                            </div>
-                        </div>
-                    </nav>
+                    <div id="app"><stats-component></stats-component></div> <!-- VUE -->
                 </article>
             </div>
         </div>
@@ -52,17 +27,18 @@
     <!-- Graphs END -->
 
     <!-- TODO VUE -->
+    <!--<div id="app"><room-component></room-component></div>-->
 
     <!-- Provide our graphs with the data it needs -->
     <script>
         // Temperature
-        new Chart(document.getElementById("tempChart"), {
+        var chart = new Chart(document.getElementById("tempChart"), {
             "type": "line",
             "data": {
-                "labels": ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"],
+                "labels": [],
                 "datasets": [{
                     "label": "Gemiddelde temperatuur in alle ruimtes in ℃",
-                    "data": [20.6, 21.3, 21.1, 20.8, 22.1, 21, 20.6],
+                    "data": [],
                     "fill": false,
                     "borderColor": "rgb(54, 162, 235)",
                     "lineTension": .3
@@ -75,7 +51,7 @@
         new Chart(document.getElementById("humidityChart"), {
             "type": "bar",
             "data": {
-                "labels": ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"],
+                "labels": ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"],
                 "datasets": [{
                     "label": "Gemiddelde luchtvochtigheid in alle ruimtes in percentages",
                     "data": [52, 53, 52, 55, 57, 57, 51],
@@ -95,5 +71,14 @@
                 }
             }
         });
+
+        setInterval(function(){
+            let hours = new Date().getHours();
+            let minutes = new Date().getMinutes();
+
+            chart.data.labels.push(hours + ':' + minutes);
+            chart.data.datasets[0].data.push(Math.floor((Math.random() * 20) + 19));
+            chart.update();
+        }, 1000 * 10);
     </script>
 @stop
