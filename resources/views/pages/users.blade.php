@@ -1,5 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-    <h1>Users</h1>
+    <section class="section">
+        <h1>Users</h1>
+    </section>
 @stop

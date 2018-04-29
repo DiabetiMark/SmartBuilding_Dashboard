@@ -4433,6 +4433,10 @@ a.box:active {
     position: relative;
 }
 
+.notification-box {
+    border-radius: 0;
+}
+
 .notification a:not(.button) {
     color: currentColor;
     text-decoration: underline;
@@ -4510,6 +4514,11 @@ a.box:active {
 
 .notification.is-danger {
     background-color: #ff3860;
+    color: #fff;
+}
+
+.notification.is-aareon {
+    background-color: #3498db;
     color: #fff;
 }
 
@@ -7415,7 +7424,6 @@ label.panel-block:hover {
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
-    padding: 0.75rem;
 }
 
 .columns.is-mobile > .column.is-narrow {
@@ -8679,8 +8687,6 @@ label.panel-block:hover {
 
 .tile.is-ancestor {
     margin-left: -0.75rem;
-    margin-right: -0.75rem;
-    margin-top: -0.75rem;
 }
 
 .tile.is-ancestor:last-child {
