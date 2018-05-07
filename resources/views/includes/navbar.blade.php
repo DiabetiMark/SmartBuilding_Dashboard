@@ -16,7 +16,7 @@
             <a class="navbar-item" href="#">
                 <i class="far fa-user"></i>&nbsp;Account
             </a>
-            <a class="navbar-item" href="#">
+            <a class="navbar-item" href="{{ url('/login') }}">
                 <i class="fas fa-sign-out-alt"></i>&nbsp;Uitloggen
             </a>
         </div>

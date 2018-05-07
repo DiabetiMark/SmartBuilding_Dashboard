@@ -77,8 +77,8 @@
             let minutes = new Date().getMinutes();
 
             chart.data.labels.push(hours + ':' + minutes);
-            chart.data.datasets[0].data.push(Math.floor((Math.random() * 20) + 19));
+            chart.data.datasets[0].data.push(Math.floor((Math.random() * 3)));
             chart.update();
-        }, 1000 * 10);
+        }, 1000 * 5);
     </script>
 @stop
