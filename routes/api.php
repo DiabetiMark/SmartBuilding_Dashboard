@@ -18,13 +18,16 @@ Route::group(['middleware' => 'auth:api'], function () {
     //You need to include the line below in your controller
     //use Illuminate\Support\Facades\Auth;
     //With "$user = Auth::user()" you get the authenticated user
-    Route::post('/user', 'UserController@store');  
-    Route::get('/user', 'UserController@showAll'); 
+   
+    Route::post('/logout', 'UserController@logout');
+    
+    Route::get('/getAuthUser', 'UserController@getAuthUser');
 });
 
 //user
 Route::get('/user/{id}', 'UserController@showOne');
-Route::post('/user', 'UserController@store');
+Route::post('/user', 'UserController@store');  
+Route::get('/user', 'UserController@showAll'); 
 Route::put('/user/{id}', 'UserController@update');
 //Route::delete('/user/{id}', 'UserController@destroy');      werkt nog niet
 

@@ -13,3 +13,18 @@
 
 <!-- We need Chart.js in the header so it loads before all the content -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="{{ URL::asset('js/vue-cookies.js') }}"></script>
+<script src="{{ URL::asset('js/errors.js') }}"></script>
+
+<script>
+    Vue.config.devtools = true;
+    window.axios.defaults.headers.common = {
+        'X-CSRF-TOKEN' : '{{csrf_token()}}',
+        'X-Requested-With' : 'XMLHttpRequest',
+        'Accept' : 'application/json',
+        'Authorization' : 'Bearer ' + this.$cookies.get('bearer'),
+    };
+</script>

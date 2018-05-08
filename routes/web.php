@@ -11,16 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('pages/home');
-});
-Route::get('/login', function () {
-    return view('pages/login');
-});
-Route::get('/settings', function () {
-    return view('pages/settings');
-});
-Route::get('/users', function () {
-    return view('pages/users');
-});
+Route::view('/', 'pages/home')->middleware('authWeb')->name('home');
+
+Route::view('/login', 'pages/login')->name('login');
+
+Route::view('/settings', 'pages/settingshome')->middleware('authWeb');
+
+Route::view('/users', 'pages/users')->middleware('authWeb');
 
