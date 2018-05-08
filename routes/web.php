@@ -12,5 +12,15 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages/home');
 });
+Route::get('/login', function () {
+    return view('pages/login');
+});
+Route::get('/settings', function () {
+    return view('pages/settings');
+});
+Route::get('/users', function () {
+    return view('pages/users');
+});
+

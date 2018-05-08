@@ -1,0 +1,21 @@
+.is-sidebar-menu {
+    padding: 2.5rem;
+    background: #34495e;
+}
+.is-sidebar-menu li a {
+    color: white;
+}
+
+.columns.is-fullheight {
+    min-height: calc(100vh - ( 3.25rem - .75rem ) );
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+}
+.columns.is-fullheight .column {
+    overflow-y: auto;
+}
+
+.columns:not(:last-child){
+    margin-bottom: 0 !important;
+}

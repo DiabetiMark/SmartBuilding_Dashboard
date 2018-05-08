@@ -4,13 +4,43 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    public function login(Request $request)
+    {
+        $rules = [
+            'username' => 'required|max:255',
+            'password' => 'required|max:255',
+        ];
+
+        $customMessages = [
+            'email.required' => trans('errors.emailRequired'),
+            'email.max' => trans('errors.emailMax'),
+            'password.required' => trans('errors.passwordRequired'),
+            'password.min' => trans('errors.passwordMax'),
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        if (Auth::attempt(['username' => request('username'), 'password' => request('password')])) {
+            $user = Auth::user();
+            $success['token'] = $user->createToken('MyApp', [$user->role])->accessToken;
+
+            return response()->json(['success' => $success], 200);
+        } else {
+            $errors['errors']["password"][0] = trans('errors.inlogfail');
+
+            return response()->json($errors, 401);
+        }
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [
-            'username' => 'required|unique|max:45',
+            'username' => 'required|unique:users|max:45',
             'password' => 'required',
             'name' => 'required|max:45',
             'phone' => 'required|max:30',
