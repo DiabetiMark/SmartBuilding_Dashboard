@@ -15,7 +15,7 @@ Route::view('/', 'pages/home')->middleware('authWeb')->name('home');
 
 Route::view('/login', 'pages/login')->name('login');
 
-Route::view('/settings', 'pages/settingshome')->middleware('authWeb');
+Route::view('/settings', 'pages/settings')->middleware('authWeb');
 
 Route::view('/users', 'pages/users')->middleware('authWeb');
 
