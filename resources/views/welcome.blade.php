@@ -9,6 +9,21 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        
+        <!-- Script -->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="{{ URL::asset('js/vue-cookies.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+        <script>
+            Vue.config.devtools = true;
+            window.axios.defaults.headers.common = {
+              'X-CSRF-TOKEN' : '{{csrf_token()}}',
+              'X-Requested-With' : 'XMLHttpRequest',
+              'Accept' : 'application/json',
+              'Authorization' : 'Bearer ' + this.$cookies.get('bearer'),
+            };
+        </script>
 
         <!-- Styles -->
         <style>
@@ -65,7 +80,7 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="flex-center position-ref full-height" id="nav">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -91,5 +106,31 @@
                 </div>
             </div>
         </div>
+        <script>
+        let outerVue = new Vue({
+            el: '#nav',
+
+            data: {
+
+            },
+
+            created() {
+                this.getUsers();
+            },
+
+           methods: {
+            getUsers(){
+                axios.get('api/user')
+                .then(function (response) {
+                    outerVue.customer = response.data;
+                })
+                .catch(function (response) {
+                    console.log(response);
+                    
+                });
+            }
+           }
+        });
+        </script>
     </body>
 </html>

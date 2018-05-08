@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Carbon\Carbon;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,15 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Passport::routes();
+
+        Passport::tokensExpireIn(Carbon::now()->addMinutes(10));
+
+        Passport::refreshTokensExpireIn(Carbon::now()->addDays(10));
+
+        Passport::tokensCan([
+            'customer' => 'Customer scope',
+            'admin' => 'Admin scope',
+        ]);
     }
 }

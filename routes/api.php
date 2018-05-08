@@ -13,6 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::group(['middleware' => 'auth:api'], function () {
+    //Put routes here that you want to protect with login
+    //You need to include the line below in your controller
+    //use Illuminate\Support\Facades\Auth;
+    //With "$user = Auth::user()" you get the authenticated user
+    
+});
+
 //user
 Route::get('/user/{id}', 'UserController@showOne');
 Route::get('/user', 'UserController@showAll');
@@ -62,7 +70,8 @@ Route::put('/dataregister/{id}', 'UserDataRegisterControllerController@update');
 //custom room actions
 Route::get('/dataregister/sensormodules/{id}', 'RoomController@getSensorModules');
 
-
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::post('/login', 'UserController@login');
