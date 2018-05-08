@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Cookie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -29,12 +31,30 @@ class UserController extends Controller
             $user = Auth::user();
             $success['token'] = $user->createToken('MyApp', [$user->role])->accessToken;
 
+            Cookie::make('bearer', $success['token'], 86400);
+
             return response()->json(['success' => $success], 200);
         } else {
             $errors['errors']["password"][0] = trans('errors.inlogfail');
 
             return response()->json($errors, 401);
         }
+    }
+
+    public function logout()
+    {
+        $id = Auth::user()->id;
+        DB::table('oauth_access_tokens')
+            ->where('user_id', $id)
+            ->delete();
+        Cookie::queue(\Cookie::forget('bearer'));
+        return response()->json(['succes' => 'true']);
+    }
+
+    public function getAuthUser()
+    {
+        $customer_user = Auth::user();
+        return response()->json($customer_user);
     }
 
     public function store(Request $request)
