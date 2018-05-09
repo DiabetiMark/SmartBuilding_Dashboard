@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Cookie;
+use App\User;
+use Carbon\Carbon;
+use App\Mail\passwordReset;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -145,5 +148,70 @@ class UserController extends Controller
     public function getRooms($id)
     {
         return $rooms = User::find($id)->rooms;
+    }
+
+    public function resetPasswordemail(Request $request)
+    {
+
+        $this->validate($request, [
+            'email' => 'required|email',
+        ]);
+
+        $user = User::select('id', 'email', 'name')
+            ->where('email', $request->email)
+            ->first();
+
+        if ($user !== null) {
+            $hash = bin2hex(random_bytes(17));
+
+            \App::setLocale($user->lang);
+
+            if ($forget_password = DB::table('password_resets')->insert(
+                [
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'hash' => $hash,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]
+            )){
+                Mail::to($user->email)->send(new passwordReset(env('APP_URL') . "/login/wachtwoord/" . $user->id . "/" . $user->email . "/" . $hash, $user->name));
+            }
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $rules = [
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+            ],
+            'password' => 'required|confirmed|min:1|max:255',
+            'user_id' => 'required'
+        ];
+
+        $customMessages = [
+            'email[1]' => trans('errors.emailValidate'),
+            'email[2]' => trans('errors.emailMax'),
+            'password.confirmed' => trans('errors.passwordConfirmed'),
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        if(DB::table('password_resets')
+        ->where('email', $request->email)
+        ->where('hash', $request->hash)
+        ->where('user_id', $request->user_id)
+        ->where('created_at', '>=', Carbon::now()->subMinutes(20))->count()){
+            if(User::find($request->user_id)->update(['password' => $request->password])){
+                DB::table('password_resets')
+                ->where('email', $request->email)
+                ->where('hash', $request->hash)
+                ->where('user_id', $request->user_id)
+                ->where('created_at', '>=', Carbon::now()->subHour())->delete();
+            }
+        } 
     }
 }
