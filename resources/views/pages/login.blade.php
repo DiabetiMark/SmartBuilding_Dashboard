@@ -13,23 +13,35 @@
                 <div class="column is-4 is-offset-4">
                     <img width="100%" src="{{ asset('img/logo.svg') }}">
                     <div class="box">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input is-large" type="text" placeholder="Gebruikersnaam" v-model='user.username' autofocus required>
+                        <form @submit.prevent="login" @keydown="user.errors.clear($event.target.name)" >
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input is-large" type="text" placeholder="Gebruikersnaam" v-model='user.username' autofocus required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="field">
-                            <div class="control">
-                                <input class="input is-large" type="password" placeholder="Wachtwoord" v-model='user.password' required>
+                            <transition-group name="errorTag" tag="p">
+                                <span class="inputError" v-bind:key="user.errors.get('username')" v-cloak>
+                                    @{{ user.errors.get('username') }}
+                                </span>
+                            </transition-group>
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input is-large" type="password" placeholder="Wachtwoord" v-model='user.password' required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="field">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Onthoud mij
-                            </label>
-                        </div>
-                        <button class="button is-block is-info is-large is-fullwidth" @click="login">Login</button>
+                            <transition-group name="errorTag" tag="p">
+                                <span class="inputError" v-bind:key="user.errors.get('password')" v-cloak>
+                                    @{{ user.errors.get('password') }}
+                                </span>
+                            </transition-group>
+                            <div class="field">
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    Onthoud mij
+                                </label>
+                            </div>
+                            <button class="button is-block is-info is-large is-fullwidth">Login</button>
+                        </form>
                     </div>
                     <p class="has-text-grey">
                         <a href="{{ url('/login/forget') }}">Wachtwoord vergeten?</a>
@@ -44,7 +56,7 @@
 
             data: {
                 user: {
-                    username: 'Chiel_Timmermans',
+                    username: 'Chiel timmermans',
                     password: 'test1234',
                     errors: new Errors()
                 }

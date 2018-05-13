@@ -23,6 +23,11 @@
                                 <input class="input is-large" type="password" placeholder="Wachtwoord bevestigen" v-model='user.password_confirmation' required>
                             </div>
                         </div>
+                        <transition-group name="errorTag" tag="p">
+                            <span class="inputError" v-bind:key="user.errors.get('password')" v-cloak>
+                                @{{ user.errors.get('password') }}
+                            </span>
+                        </transition-group>
                         <button class="button is-block is-info is-large is-fullwidth" @click="send">Opslaan</button>
                     </div>
                 </div>
@@ -52,8 +57,7 @@
                 send(){
                     axios.post('/api/login/wachtwoord/update', this.$data.user)
                     .then(function(response) {
-                        this.$cookies.set('bearer', response.data.success.token, 86400, '/');
-                        window.location.replace('/');
+                        //iets van melding geven dat het geupdate is ofzo?
                     })
                     .catch(error => this.user.errors.record(error.response.data.errors));
                 }
