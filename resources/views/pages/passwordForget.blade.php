@@ -17,14 +17,12 @@
                         <form @submit.prevent="send" @keydown="user.errors.clear($event.target.name)" >  
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-large" type="email" placeholder="Email" v-model='user.email' autofocus required>
+                                    <input class="input is-large" type="email" name="email" placeholder="Email" v-model='user.email' autofocus required>
                                 </div>
                             </div>
-                            <transition-group name="errorTag" tag="p">
-                                <span class="inputError" v-bind:key="user.errors.get('email')" v-cloak>
-                                    @{{ user.errors.get('email') }}
-                                </span>
-                            </transition-group>
+                            <span class="inputError" v-bind:key="user.errors.get('email')" v-cloak>
+                                @{{ user.errors.get('email') }}
+                            </span>
                             <button class="button is-block is-info is-large is-fullwidth">Verzenden</button>
                         </form>
                     </div>

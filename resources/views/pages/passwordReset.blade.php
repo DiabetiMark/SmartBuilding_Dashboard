@@ -13,22 +13,22 @@
                 <div class="column is-4 is-offset-4">
                     <img width="100%" src="{{ asset('img/logo.svg') }}">
                     <div class="box">
-                        <div class="field">
-                            <div class="control">
-                                <input class="input is-large" type="password" placeholder="Wachtwoord" v-model='user.password' autofocus required>
+                        <form @submit.prevent="send" @keydown="user.errors.clear($event.target.name)" >
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input is-large" type="password" name="password" placeholder="Wachtwoord" v-model='user.password' autofocus required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="field">
-                            <div class="control">
-                                <input class="input is-large" type="password" placeholder="Wachtwoord bevestigen" v-model='user.password_confirmation' required>
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input is-large" type="password" name="password" placeholder="Wachtwoord bevestigen" v-model='user.password_confirmation' required>
+                                </div>
                             </div>
-                        </div>
-                        <transition-group name="errorTag" tag="p">
                             <span class="inputError" v-bind:key="user.errors.get('password')" v-cloak>
                                 @{{ user.errors.get('password') }}
                             </span>
-                        </transition-group>
-                        <button class="button is-block is-info is-large is-fullwidth" @click="send">Opslaan</button>
+                            <button class="button is-block is-info is-large is-fullwidth" >Opslaan</button>
+                        </form>
                     </div>
                 </div>
             </div>

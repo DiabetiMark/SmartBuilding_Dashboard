@@ -16,24 +16,20 @@
                         <form @submit.prevent="login" @keydown="user.errors.clear($event.target.name)" >
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-large" type="text" placeholder="Gebruikersnaam" v-model='user.username' autofocus required>
+                                    <input class="input is-large" name="username" type="text" placeholder="Gebruikersnaam" v-model='user.username' autofocus required>
                                 </div>
                             </div>
-                            <transition-group name="errorTag" tag="p">
-                                <span class="inputError" v-bind:key="user.errors.get('username')" v-cloak>
-                                    @{{ user.errors.get('username') }}
-                                </span>
-                            </transition-group>
+                            <span class="inputError" v-bind:key="user.errors.get('username')" v-cloak>
+                                @{{ user.errors.get('username') }}
+                            </span>
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-large" type="password" placeholder="Wachtwoord" v-model='user.password' required>
+                                    <input class="input is-large" name="password" type="password" placeholder="Wachtwoord" v-model='user.password' required>
                                 </div>
                             </div>
-                            <transition-group name="errorTag" tag="p">
-                                <span class="inputError" v-bind:key="user.errors.get('password')" v-cloak>
-                                    @{{ user.errors.get('password') }}
-                                </span>
-                            </transition-group>
+                            <span class="inputError" v-bind:key="user.errors.get('password')" v-cloak>
+                                @{{ user.errors.get('password') }}
+                            </span>
                             <div class="field">
                                 <label class="checkbox">
                                     <input type="checkbox">
@@ -63,15 +59,12 @@
             },
 
             created() {
-
             },
 
             methods: {
                 login(){
                     axios.post('/api/login', this.$data.user)
                     .then(function(response) {
-                        this.$cookies.set('bearer', response.data.success.token, 86400, '/');
-                        window.location.replace('/');
                     })
                     .catch(error => this.user.errors.record(error.response.data.errors));
                 }

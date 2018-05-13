@@ -210,10 +210,10 @@ class UserController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         if(DB::table('password_resets')
-        ->where('email', $request->email)
-        ->where('hash', $request->hash)
-        ->where('user_id', $request->user_id)
-        ->where('created_at', '>=', Carbon::now()->subMinutes(20))->count()){
+            ->where('email', $request->email)
+            ->where('hash', $request->hash)
+            ->where('user_id', $request->user_id)
+            ->where('created_at', '>=', Carbon::now()->subMinutes(20))->count()){
             if(User::find($request->user_id)->update(['password' => $request->password])){
                 DB::table('password_resets')
                 ->where('email', $request->email)
