@@ -22,10 +22,10 @@ class UserController extends Controller
         ];
 
         $customMessages = [
-            'email.required' => trans('errors.emailRequired'),
-            'email.max' => trans('errors.emailMax'),
-            'password.required' => trans('errors.passwordRequired'),
-            'password.min' => trans('errors.passwordMax'),
+            'username.required' => "Emailadres is verplicht.",
+            'username.max' => "Emailadres mag niet meer dan 255 tekens bevatten.",
+            'password.required' => 'Wachtwoord is verplicht.',
+            'password.max' => 'Wachtwoord mag niet meer dan 255 tekens bevatten.',
         ];
 
         $this->validate($request, $rules, $customMessages);
@@ -38,7 +38,7 @@ class UserController extends Controller
 
             return response()->json(['success' => $success], 200);
         } else {
-            $errors['errors']["password"][0] = trans('errors.inlogfail');
+            $errors['errors']["password"][0] = "De combinatie van e-mailadres en wachtwoord is niet geldig.";
 
             return response()->json($errors, 401);
         }
@@ -153,9 +153,17 @@ class UserController extends Controller
     public function resetPasswordemail(Request $request)
     {
 
-        $this->validate($request, [
-            'email' => 'required|email',
-        ]);
+        $rules = [
+            'email' => 'required|email|max:255',
+        ];
+
+        $customMessages = [
+            'email.required' => 'Emailadres is verplicht.',
+            'email.email' => 'Emailadres moet een \'@\' en een \'.\' bevatten.',
+            'email.max' => 'Emailadres kan niet meer dan 255 tekens bevatten.',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
 
         $user = User::select('id', 'email', 'name')
             ->where('email', $request->email)
@@ -193,18 +201,19 @@ class UserController extends Controller
         ];
 
         $customMessages = [
-            'email[1]' => trans('errors.emailValidate'),
-            'email[2]' => trans('errors.emailMax'),
-            'password.confirmed' => trans('errors.passwordConfirmed'),
+            'password.required' => 'wachtwoord is verplicht.',
+            'password.confirmed' => 'wachtwoord komt niet overeen.',
+            'password.min' => 'wachtwoord mag niet minder dan 1 teken bevatten.',
+            'password.max' => 'wachtwoord mag niet meer dan 255 tekens bevatten.',
         ];
 
         $this->validate($request, $rules, $customMessages);
 
         if(DB::table('password_resets')
-        ->where('email', $request->email)
-        ->where('hash', $request->hash)
-        ->where('user_id', $request->user_id)
-        ->where('created_at', '>=', Carbon::now()->subMinutes(20))->count()){
+            ->where('email', $request->email)
+            ->where('hash', $request->hash)
+            ->where('user_id', $request->user_id)
+            ->where('created_at', '>=', Carbon::now()->subMinutes(20))->count()){
             if(User::find($request->user_id)->update(['password' => $request->password])){
                 DB::table('password_resets')
                 ->where('email', $request->email)

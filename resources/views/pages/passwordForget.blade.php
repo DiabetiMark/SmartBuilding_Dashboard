@@ -14,12 +14,17 @@
                     <img width="100%" src="{{ asset('img/logo.svg') }}">
                     <div class="box">
                         <h1>Wachtwoord vergeten</h1>
-                        <div class="field">
-                            <div class="control">
-                                <input class="input is-large" type="email" placeholder="Email" v-model='user.email' autofocus required>
+                        <form @submit.prevent="send" @keydown="user.errors.clear($event.target.name)" >  
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input is-large" type="email" name="email" placeholder="Email" v-model='user.email' autofocus required>
+                                </div>
                             </div>
-                        </div>
-                        <button class="button is-block is-info is-large is-fullwidth" @click="send">Verzenden</button>
+                            <span class="inputError" v-bind:key="user.errors.get('email')" v-cloak>
+                                @{{ user.errors.get('email') }}
+                            </span>
+                            <button class="button is-block is-info is-large is-fullwidth">Verzenden</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -44,8 +49,6 @@
                 send(){
                     axios.post('/api/login/forget', this.$data.user)
                     .then(function(response) {
-                        this.$cookies.set('bearer', response.data.success.token, 86400, '/');
-                        window.location.replace('/');
                     })
                     .catch(error => this.user.errors.record(error.response.data.errors));
                 }
