@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Cookie;
+use App\User;
+use Carbon\Carbon;
+use App\Mail\passwordReset;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -19,10 +22,10 @@ class UserController extends Controller
         ];
 
         $customMessages = [
-            'email.required' => trans('errors.emailRequired'),
-            'email.max' => trans('errors.emailMax'),
-            'password.required' => trans('errors.passwordRequired'),
-            'password.min' => trans('errors.passwordMax'),
+            'username.required' => "Emailadres is verplicht.",
+            'username.max' => "Emailadres mag niet meer dan 255 tekens bevatten.",
+            'password.required' => 'Wachtwoord is verplicht.',
+            'password.max' => 'Wachtwoord mag niet meer dan 255 tekens bevatten.',
         ];
 
         $this->validate($request, $rules, $customMessages);
@@ -35,7 +38,7 @@ class UserController extends Controller
 
             return response()->json(['success' => $success], 200);
         } else {
-            $errors['errors']["password"][0] = trans('errors.inlogfail');
+            $errors['errors']["password"][0] = "De combinatie van e-mailadres en wachtwoord is niet geldig.";
 
             return response()->json($errors, 401);
         }
@@ -145,5 +148,79 @@ class UserController extends Controller
     public function getRooms($id)
     {
         return $rooms = User::find($id)->rooms;
+    }
+
+    public function resetPasswordemail(Request $request)
+    {
+
+        $rules = [
+            'email' => 'required|email|max:255',
+        ];
+
+        $customMessages = [
+            'email.required' => 'Emailadres is verplicht.',
+            'email.email' => 'Emailadres moet een \'@\' en een \'.\' bevatten.',
+            'email.max' => 'Emailadres kan niet meer dan 255 tekens bevatten.',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        $user = User::select('id', 'email', 'name')
+            ->where('email', $request->email)
+            ->first();
+
+        if ($user !== null) {
+            $hash = bin2hex(random_bytes(17));
+
+            \App::setLocale($user->lang);
+
+            if ($forget_password = DB::table('password_resets')->insert(
+                [
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'hash' => $hash,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]
+            )){
+                Mail::to($user->email)->send(new passwordReset(env('APP_URL') . "/login/wachtwoord/" . $user->id . "/" . $user->email . "/" . $hash, $user->name));
+            }
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $rules = [
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+            ],
+            'password' => 'required|confirmed|min:1|max:255',
+            'user_id' => 'required'
+        ];
+
+        $customMessages = [
+            'password.required' => 'wachtwoord is verplicht.',
+            'password.confirmed' => 'wachtwoord komt niet overeen.',
+            'password.min' => 'wachtwoord mag niet minder dan 1 teken bevatten.',
+            'password.max' => 'wachtwoord mag niet meer dan 255 tekens bevatten.',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        if(DB::table('password_resets')
+            ->where('email', $request->email)
+            ->where('hash', $request->hash)
+            ->where('user_id', $request->user_id)
+            ->where('created_at', '>=', Carbon::now()->subMinutes(20))->count()){
+            if(User::find($request->user_id)->update(['password' => $request->password])){
+                DB::table('password_resets')
+                ->where('email', $request->email)
+                ->where('hash', $request->hash)
+                ->where('user_id', $request->user_id)
+                ->where('created_at', '>=', Carbon::now()->subHour())->delete();
+            }
+        } 
     }
 }

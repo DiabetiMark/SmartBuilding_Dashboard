@@ -19,3 +19,7 @@ Route::view('/settings', 'pages/settings')->middleware('authWeb');
 
 Route::view('/users', 'pages/users')->middleware('authWeb');
 
+Route::view('/login/forget', 'pages/passwordForget');
+
+Route::get('/login/wachtwoord/{user_id}/{email}/{hash}', 'PagesController@resetPassword');
+

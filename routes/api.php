@@ -78,3 +78,5 @@ Route::get('/dataregister/sensormodules/{id}', 'RoomController@getSensorModules'
 // });
 
 Route::post('/login', 'UserController@login');
+Route::post('/login/forget', 'UserController@resetPasswordemail');
+Route::post('/login/wachtwoord/update', 'UserController@resetPassword');

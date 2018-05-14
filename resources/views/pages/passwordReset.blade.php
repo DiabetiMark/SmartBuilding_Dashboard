@@ -13,35 +13,23 @@
                 <div class="column is-4 is-offset-4">
                     <img width="100%" src="{{ asset('img/logo.svg') }}">
                     <div class="box">
-                        <form @submit.prevent="login" @keydown="user.errors.clear($event.target.name)" >
+                        <form @submit.prevent="send" @keydown="user.errors.clear($event.target.name)" >
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-large" name="username" type="text" placeholder="Gebruikersnaam" v-model='user.username' autofocus required>
+                                    <input class="input is-large" type="password" name="password" placeholder="Wachtwoord" v-model='user.password' autofocus required>
                                 </div>
                             </div>
-                            <span class="inputError" v-bind:key="user.errors.get('username')" v-cloak>
-                                @{{ user.errors.get('username') }}
-                            </span>
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-large" name="password" type="password" placeholder="Wachtwoord" v-model='user.password' required>
+                                    <input class="input is-large" type="password" name="password" placeholder="Wachtwoord bevestigen" v-model='user.password_confirmation' required>
                                 </div>
                             </div>
                             <span class="inputError" v-bind:key="user.errors.get('password')" v-cloak>
                                 @{{ user.errors.get('password') }}
                             </span>
-                            <div class="field">
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    Onthoud mij
-                                </label>
-                            </div>
-                            <button class="button is-block is-info is-large is-fullwidth">Login</button>
+                            <button class="button is-block is-info is-large is-fullwidth" >Opslaan</button>
                         </form>
                     </div>
-                    <p class="has-text-grey">
-                        <a href="{{ url('/login/forget') }}">Wachtwoord vergeten?</a>
-                    </p>
                 </div>
             </div>
         </div>
@@ -52,19 +40,24 @@
 
             data: {
                 user: {
-                    username: 'Chiel timmermans',
-                    password: 'test1234',
+                    user_id: '{{ $user_id }}',
+                    email: '{{ $email }}',
+                    hash: '{{ $hash }}',
+                    password: '',
+                    password_confirmation: '',
                     errors: new Errors()
                 }
             },
 
             created() {
+
             },
 
             methods: {
-                login(){
-                    axios.post('/api/login', this.$data.user)
+                send(){
+                    axios.post('/api/login/wachtwoord/update', this.$data.user)
                     .then(function(response) {
+                        //iets van melding geven dat het geupdate is ofzo?
                     })
                     .catch(error => this.user.errors.record(error.response.data.errors));
                 }

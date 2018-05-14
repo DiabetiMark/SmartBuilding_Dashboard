@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use Cookie;
 use Closure;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Factory as Auth;
-use Cookie;
+
 class authWeb
 {
     /**
