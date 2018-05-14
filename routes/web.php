@@ -13,13 +13,14 @@
 
 Route::view('/', 'pages/home')->middleware('authWeb')->name('home');
 
-Route::view('/login', 'pages/login')->name('login');
 
 Route::view('/settings', 'pages/settings')->middleware('authWeb');
 
 Route::view('/users', 'pages/users')->middleware('authWeb');
 
-Route::view('/login/forget', 'pages/passwordForget');
 
+
+Route::view('/login', 'pages/login/login')->name('login');
+Route::view('/login/forget', 'pages/login/passwordForget');
 Route::get('/login/wachtwoord/{user_id}/{email}/{hash}', 'PagesController@resetPassword');
 

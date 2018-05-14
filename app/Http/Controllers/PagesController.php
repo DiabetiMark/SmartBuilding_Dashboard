@@ -18,7 +18,7 @@ class PagesController extends Controller
         ->where('user_id', $user_id)
         ->where('created_at', '>=', Carbon::now()->subMinutes(20))->count();
         if($count){
-            return view('pages.passwordReset', ['user_id' => $user_id, 'email' => $email, 'hash' => $hash]);
+            return view('pages/login.passwordReset', ['user_id' => $user_id, 'email' => $email, 'hash' => $hash]);
         }
         return redirect('/login');
     }
