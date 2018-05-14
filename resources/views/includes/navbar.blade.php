@@ -71,6 +71,7 @@ let navVue = new Vue({
 
                 axios.post('/api/logout')
                 .then(function (response) {
+                    this.$cookies.remove('bearer');
                     window.location.replace('/login');
                 }).catch(response => console.log(response));
             }

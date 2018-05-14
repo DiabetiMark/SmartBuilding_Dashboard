@@ -25,6 +25,7 @@
         <button class="button is-block is-info is-large is-fullwidth">Login</button>
     </form>
 </template>
+<script src="{{ URL::asset('js/vue-cookies.js') }}"></script>
 <script>
     import axios from 'axios';
 
@@ -37,7 +38,7 @@
             return{
                 user: {
                     username: 'Chiel timmermans',
-                    password: 'test1234',
+                    password: '12345678',
                     errors: new Errors()
                 }
             }
@@ -46,7 +47,13 @@
         methods: {
             login: function(){
                 axios.post('/api/login', this.$data.user)
-                .catch(error => this.user.errors.record(error.response.data.errors));
+                .then(function(response){
+                    $cookies.set('bearer', response.data.success.token, 86400, '/'); 
+                    window.location = '/';
+                })
+                .catch(function(error){
+                    this.user.errors.record(error.response.data.errors)
+                });
             }
         }
     }

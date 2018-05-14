@@ -13,6 +13,7 @@
                 <div class="column is-4 is-offset-4">
                     <img width="100%" src="{{ asset('img/logo.svg') }}">
                     <div class="box">
+                        <h1>Wachtwoord vergeten</h1>
                         <div id="app"><password-forget-component></password-forget-component></div>
                     </div>
                 </div>

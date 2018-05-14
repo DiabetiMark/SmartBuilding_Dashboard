@@ -13,56 +13,11 @@
                 <div class="column is-4 is-offset-4">
                     <img width="100%" src="{{ asset('img/logo.svg') }}">
                     <div class="box">
-                        <form @submit.prevent="send" @keydown="user.errors.clear($event.target.name)" >
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-large" type="password" name="password" placeholder="Wachtwoord" v-model='user.password' autofocus required>
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-large" type="password" name="password" placeholder="Wachtwoord bevestigen" v-model='user.password_confirmation' required>
-                                </div>
-                            </div>
-                            <span class="inputError" v-bind:key="user.errors.get('password')" v-cloak>
-                                @{{ user.errors.get('password') }}
-                            </span>
-                            <button class="button is-block is-info is-large is-fullwidth" >Opslaan</button>
-                        </form>
+                        <div id="app"><password-reset-component></password-reset-component></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <script>
-        let innerVue = new Vue({
-            el: '#page-container',
-
-            data: {
-                user: {
-                    user_id: '{{ $user_id }}',
-                    email: '{{ $email }}',
-                    hash: '{{ $hash }}',
-                    password: '',
-                    password_confirmation: '',
-                    errors: new Errors()
-                }
-            },
-
-            created() {
-
-            },
-
-            methods: {
-                send(){
-                    axios.post('/api/login/wachtwoord/update', this.$data.user)
-                    .then(function(response) {
-                        //iets van melding geven dat het geupdate is ofzo?
-                    })
-                    .catch(error => this.user.errors.record(error.response.data.errors));
-                }
-            }
-        });
-        </script>
 </body>
 </html>
