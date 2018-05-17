@@ -47699,6 +47699,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -47712,7 +47718,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 username: 'Chiel timmermans',
                 password: '12345678',
                 errors: new Errors()
-            }
+            },
+            loadingSpinner: false
         };
     },
 
@@ -47720,11 +47727,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         login: function login() {
             var self = this;
+            this.loadingSpinner = true;
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/login', this.$data.user).then(function (response) {
                 $cookies.set('bearer', response.data.success.token, 86400, '/');
                 window.location = '/';
             }).catch(function (error) {
                 self.user.errors.record(error.response.data.errors);
+                self.loadingSpinner = false;
             });
         }
     }
@@ -47738,112 +47747,142 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "form",
-    {
-      on: {
-        submit: function($event) {
-          $event.preventDefault()
-          return _vm.login($event)
-        },
-        keydown: function($event) {
-          _vm.user.errors.clear($event.target.name)
+  return _c("div", { staticClass: "box" }, [
+    !_vm.user.errors.empty()
+      ? _c("div", { staticClass: "notification is-danger" }, [
+          _c(
+            "span",
+            { key: _vm.user.errors.get("password"), staticClass: "inputError" },
+            [
+              _vm._v(
+                "\n        " +
+                  _vm._s(_vm.user.errors.get("password")) +
+                  "\n        "
+              )
+            ]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.login($event)
+          },
+          keydown: function($event) {
+            _vm.user.errors.clear($event.target.name)
+          }
         }
-      }
-    },
-    [
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.username,
-                expression: "user.username"
-              }
-            ],
-            staticClass: "input is-large",
-            attrs: {
-              name: "username",
-              type: "text",
-              placeholder: "Gebruikersnaam",
-              autofocus: "",
-              required: ""
-            },
-            domProps: { value: _vm.user.username },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+      },
+      [
+        _c("div", { staticClass: "field" }, [
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.user.username,
+                  expression: "user.username"
                 }
-                _vm.$set(_vm.user, "username", $event.target.value)
-              }
-            }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "span",
-        { key: _vm.user.errors.get("username"), staticClass: "inputError" },
-        [
-          _vm._v(
-            "\n        " + _vm._s(_vm.user.errors.get("username")) + "\n    "
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "field" }, [
-        _c("div", { staticClass: "control" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.password,
-                expression: "user.password"
-              }
-            ],
-            staticClass: "input is-large",
-            attrs: {
-              name: "password",
-              type: "password",
-              placeholder: "Wachtwoord",
-              required: ""
-            },
-            domProps: { value: _vm.user.password },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+              ],
+              staticClass: "input is-large",
+              attrs: {
+                name: "username",
+                type: "text",
+                placeholder: "Gebruikersnaam",
+                autofocus: "",
+                required: ""
+              },
+              domProps: { value: _vm.user.username },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.user, "username", $event.target.value)
                 }
-                _vm.$set(_vm.user, "password", $event.target.value)
               }
-            }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "span",
-        { key: _vm.user.errors.get("password"), staticClass: "inputError" },
-        [
-          _vm._v(
-            "\n        " + _vm._s(_vm.user.errors.get("password")) + "\n    "
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "button is-block is-info is-large is-fullwidth" },
-        [_vm._v("Login")]
-      )
-    ]
-  )
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field" }, [
+          _c("div", { staticClass: "control" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.user.password,
+                  expression: "user.password"
+                }
+              ],
+              staticClass: "input is-large",
+              attrs: {
+                name: "password",
+                type: "password",
+                placeholder: "Wachtwoord",
+                required: ""
+              },
+              domProps: { value: _vm.user.password },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.user, "password", $event.target.value)
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _vm.loadingSpinner
+          ? _c(
+              "button",
+              { staticClass: "button is-block is-info is-large is-fullwidth" },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "svg-inline--fa fa-spinner fa-w-16 fa-spin",
+                    staticStyle: { "font-size": "24px" },
+                    attrs: {
+                      "aria-hidden": "true",
+                      "data-prefix": "fa",
+                      "data-icon": "spinner",
+                      role: "img",
+                      xmlns: "http://www.w3.org/2000/svg",
+                      viewBox: "0 0 512 512",
+                      "data-fa-i2svg": ""
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        fill: "currentColor",
+                        d:
+                          "M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          : _c(
+              "button",
+              { staticClass: "button is-block is-info is-large is-fullwidth" },
+              [_vm._v("Login")]
+            )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -47853,7 +47892,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "field" }, [
       _c("label", { staticClass: "checkbox" }, [
         _c("input", { attrs: { type: "checkbox" } }),
-        _vm._v("\n            Onthoud mij\n        ")
+        _vm._v("\n                Onthoud mij\n            ")
       ])
     ])
   }
