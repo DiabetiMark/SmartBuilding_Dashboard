@@ -47719,11 +47719,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         login: function login() {
+            var self = this;
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/login', this.$data.user).then(function (response) {
                 $cookies.set('bearer', response.data.success.token, 86400, '/');
                 window.location = '/';
             }).catch(function (error) {
-                this.user.errors.record(error.response.data.errors);
+                self.user.errors.record(error.response.data.errors);
             });
         }
     }

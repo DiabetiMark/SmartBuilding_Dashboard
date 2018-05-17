@@ -22,6 +22,7 @@
             </div>
         </div>
     </section>
+    <script src="{{ URL::asset('js/vue-cookies.js') }}"></script>
     @include('includes.footer')
 </body>
 </html>

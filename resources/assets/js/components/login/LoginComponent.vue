@@ -25,13 +25,13 @@
         <button class="button is-block is-info is-large is-fullwidth">Login</button>
     </form>
 </template>
-<script src="{{ URL::asset('js/vue-cookies.js') }}"></script>
+
 <script>
     import axios from 'axios';
 
     export default {
         mounted() {
-            console.log('LoginComponent mounted')
+            console.log('LoginComponent mounted');
         },
 
         data(){
@@ -46,13 +46,14 @@
 
         methods: {
             login: function(){
+                let self = this;
                 axios.post('/api/login', this.$data.user)
                 .then(function(response){
                     $cookies.set('bearer', response.data.success.token, 86400, '/'); 
                     window.location = '/';
                 })
                 .catch(function(error){
-                    this.user.errors.record(error.response.data.errors)
+                    self.user.errors.record(error.response.data.errors)
                 });
             }
         }
