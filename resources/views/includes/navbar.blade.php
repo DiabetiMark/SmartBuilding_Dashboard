@@ -25,14 +25,13 @@
 <div class="columns is-fullheight">
     <div class="column is-2 is-sidebar-menu is-hidden-mobile">
         <aside class="menu">
-            <p class="menu-label"><i class="fas fa-server"></i>&nbsp;Ruimtes</p>
+            <p class="menu-label"><i class="fas fa-home"></i></i>&nbsp;Algemeen</p>
             <ul class="menu-list">
                 <li><a href="{{ url('/') }}" {{ (Request::is('/') ? 'class=is-active' : '') }}>Overzicht</a></li>
-                <li>
-                    <ul>
-                        <li><a>TODO</a></li>
-                    </ul>
-                </li>
+            </ul>
+            <p class="menu-label"><i class="fas fa-server"></i>&nbsp;Ruimtes</p>
+            <ul class="menu-list">
+                <li><a href="{{ url('/overview') }}" {{ (Request::is('overview') ? 'class=is-active' : '') }}>Ruimteoverzicht</a></li>
             </ul>
             <p class="menu-label"><i class="fas fa-cogs"></i>&nbsp;Beheer</p>
             <ul class="menu-list">
