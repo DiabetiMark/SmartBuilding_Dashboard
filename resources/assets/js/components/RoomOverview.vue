@@ -25,7 +25,7 @@
             <tr v-for="room in rooms" v-if="room.isVisible">
                 <td>{{ room.id }}</td>
                 <td>{{ room.roomName }}</td>
-                <td>{{ room.roomDescription }}</td>
+                <td>{{ room.roomDescription.substr(0, 50) + '..' }} (<a href="#">Lees meer</a>)</td>
                 <td>{{ room.created_at }}</td>
                 <td>{{ room.updated_at }}</td>
                 <td>
