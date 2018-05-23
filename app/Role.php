@@ -4,17 +4,21 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Field extends Model
+class Role extends Model
 {
     public $timestamps = true;
-    public $table = 'fields';
+    public $table = 'roles';
     protected $fillable = [
-        'fieldName',
-        'fieldType',
+        'role',
     ];
 
     public function getFillable()
     {
         return $this->fillable;
+    }
+
+    public function getRole()
+    {
+        return $this->hasMany('App\User');
     }
 }

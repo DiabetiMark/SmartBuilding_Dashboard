@@ -15,8 +15,9 @@ class CreateFieldsTable extends Migration
     {
         Schema::create('fields', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('fieldName', 45);
-            $table->timestamps();
+            $table->string('fieldName', 45)->nullable(false);
+            $table->string('fieldType', 45)->nullable(false);
+
         });
     }
 

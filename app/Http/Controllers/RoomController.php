@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Room;
+use App\SensorModule;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -155,5 +157,18 @@ class RoomController extends Controller
     public function getSensorModules($id)
     {
         return $rooms = Room::find($id)->SensorModules;
+    }
+
+    public function getAllValue($id){
+        $modules = Room::find($id)->SensorModules;
+        $data_register_sensor_modules = DB::table('data_register_sensor_module')->select('field_id', 'data_register_id', 'sensor_module_id')->get();
+        $data_register = DataRegister::all();
+        $fieldName = Field::all();
+        foreach($modules as $module){
+            unset($module->pivot);
+            
+            
+        }
+        return $rooms;
     }
 }

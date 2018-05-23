@@ -68,7 +68,6 @@ class UserController extends Controller
             'password' => 'required',
             'name' => 'required|max:45',
             'phone' => 'required|max:30',
-            'isAdmin' => 'required|numeric|max:1',
         ]);
 
         $item = new User;

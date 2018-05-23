@@ -6,14 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
+    public $table = 'rooms';
     public $timestamps = true;
     
     protected $fillable = [
-        'username', 
-        'password', 
-        'name', 
-        'phone', 
-        'isAdmin'
+        'roomName', 
+        'roomDescription', 
     ];
 
     public function users()
@@ -21,9 +19,9 @@ class Room extends Model
         return $this->belongsToMany('App\User');
     }
 
-    public function SensorModules()
+    public function sensorModules()
     {
-        return $this->belongsToMany('App\SensorModule');
+        return $this->hasMany('App\SensorModule');
     }
 
     public function getFillable()

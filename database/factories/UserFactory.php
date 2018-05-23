@@ -20,7 +20,6 @@ $factory->define(App\User::class, function (Faker $faker) {
         'name' => $faker->name,        
         'email' => $faker->email,
         'phone' => $faker->phoneNumber,
-        'isAdmin' => $faker->numberBetween(0, 1),
-        'remember_token' => str_random(10),
+        'role_id' => $faker->numberBetween(1, 2),
     ];
 });
