@@ -38,8 +38,8 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'roomName' => 'required|numeric',
-            'roomDescription' => 'required|numeric',
+            'name' => 'required|numeric',
+            'description' => 'required|numeric',
         ]);
 
         $item = new Room;
@@ -69,7 +69,7 @@ class RoomController extends Controller
 
     public function showOne($id)
     {
-        $room = Room::select('roomName', 'roomDescription')
+        $room = Room::select('name', 'description')
         ->find($id);
 
         if($room !== null) 
@@ -106,8 +106,8 @@ class RoomController extends Controller
     public function update($id, Request $reqeust)
     {
         $this->validate($request, [
-            'roomName' => 'numeric',
-            'roomDescription' => 'numeric',
+            'name' => 'numeric',
+            'description' => 'numeric',
         ]);
 
         $item = Room::find($id);
@@ -156,19 +156,26 @@ class RoomController extends Controller
 
     public function getSensorModules($id)
     {
-        return $rooms = Room::find($id)->SensorModules;
+        return $rooms = Room::find($id)->sensorModules;
     }
 
-    public function getAllValue($id){
-        $modules = Room::find($id)->SensorModules;
-        $data_register_sensor_modules = DB::table('data_register_sensor_module')->select('field_id', 'data_register_id', 'sensor_module_id')->get();
-        $data_register = DataRegister::all();
-        $fieldName = Field::all();
-        foreach($modules as $module){
+    public function getAllValues($id){
+        $room = Room::find($id);
+        unset($room->created_at);
+        unset($room->updated_at);
+        foreach($room->sensorModules as $module){
+            $module->room_name = $room->roomName;
             unset($module->pivot);
-            
+            unset($module->room_id);
+            unset($module->created_at);
+            unset($module->updated_at);
+            foreach($module->dataRegisters as $dataRegister){
+                $dataRegister->field;
+                unset($dataRegister->sensorModule_id);
+                unset($dataRegister->field_id);
+            }
             
         }
-        return $rooms;
+        return $room;
     }
 }

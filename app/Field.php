@@ -9,8 +9,8 @@ class Field extends Model
     public $timestamps = true;
     public $table = 'fields';
     protected $fillable = [
-        'fieldName',
-        'fieldType',
+        'name',
+        'type',
     ];
 
     public function getFillable()

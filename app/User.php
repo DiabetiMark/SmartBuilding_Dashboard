@@ -43,6 +43,11 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Room');
     }
 
+    public function role()
+    {
+        return $this->belongsTo('App\Role');
+    }
+
     public function getFillable()
     {
         return $this->fillable;

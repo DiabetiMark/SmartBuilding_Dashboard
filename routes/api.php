@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 //user
 Route::get('/user/{id}', 'UserController@showOne');
+Route::get('/user/{id}/getAll', 'UserController@getAllValues');
 Route::post('/user', 'UserController@store');  
 Route::get('/user', 'UserController@showAll'); 
 Route::put('/user/{id}', 'UserController@update');
@@ -47,6 +48,7 @@ Route::get('/sensormodule/dataregister/{id}', 'SensorModuleController@getDataReg
 
 //room
 Route::get('/room/{id}', 'RoomController@showOne');
+Route::get('/room/{id}/getAll', 'RoomController@getAllValues');
 Route::get('/room', 'RoomController@showAll');
 Route::post('/room', 'RoomController@store');
 Route::put('/room/{id}', 'RoomController@update');

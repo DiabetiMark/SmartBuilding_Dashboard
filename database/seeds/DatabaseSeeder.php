@@ -34,8 +34,8 @@ class DatabaseSeeder extends Seeder
 
         for ($y = 0; $y < 5; $y++) {
             DB::table('fields')->insert([
-                'fieldName' => $fieldName[$y],
-                'fieldType' => $fieldType[$y],
+                'name' => $fieldName[$y],
+                'type' => $fieldType[$y],
             ]);
         }
         

@@ -24,4 +24,8 @@ class DataRegister extends Model
     {
         return $this->belongsTo('App\SensorModule', 'sensorModule_id', 'id');
     }
+
+    public function field(){
+        return $this->belongsTo('App\Field', 'field_id', 'id');
+    }
 }

@@ -222,4 +222,20 @@ class UserController extends Controller
             }
         } 
     }
+
+    public function getAllValues($id)
+    {
+        $user = User::find($id);
+        $user->role->role;
+        unset($user->role_id);
+        unset($user->created_at);
+        unset($user->updated_at);
+        $index = 0;
+        foreach($user->rooms as $room){
+            unset($room->pivot);
+            $user->rooms[$index] = app('App\Http\Controllers\RoomController')->getAllValues($room->id);
+            $index++;
+        }
+        return $user;
+    }
 }
