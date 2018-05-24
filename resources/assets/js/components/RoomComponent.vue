@@ -1,11 +1,6 @@
 <template>
     <div>
-        <ul v-if="modules && modules.length">
-            <h1>Room <b>1</b> has the following ({{ modules.length }}) sensors:</h1>
-            <li v-for="module of modules">
-                <b>ID</b>: {{ module.pivot.sensor_module_id }}
-            </li>
-        </ul>
+        {{ data }}
     </div>
 </template>
 
@@ -13,39 +8,52 @@
     import axios from 'axios';
 
     export default {
-        mounted() {
-            console.log('RoomComponent mounted')
-        },
+        props: ['room'],
 
         data(){
             return{
+                roomId: roomId,
                 modules: [],
-                allTemperatures: [],
-                errors: []
+                data: [],
             }
         },
 
-        methods: {
-            loadModulesForRoom: function(roomId){
-                axios.get('/api/room/sensormodules/' + roomId).then(response => {
-                    this.modules = response.data;
-                }).catch(e => {
-                    this.errors.push(e);
-                });
-            },
-
-            getTemperatures: function(roomId){
-                axios.get('/api/sensormodule/dataregister/' + roomId).then(response => {
-                    this.allTemperatures = response.data;
-                }).catch(e => {
-                    this.errors.push(e);
-                });
-            }
+        mounted() {
+            console.log('RoomComponent mounted');
         },
 
         created(){
-            this.loadModulesForRoom(1);
-            this.getTemperatures(1);
+            this.getData();
+        },
+
+        methods: {
+            getData(){
+                axios.get('/api/room/' + this.roomId + '/getAllValues').then(response => {
+                    let data = {
+                        'temperatuur': [],
+                        'luchtvochtigheid': []
+                    };
+
+                    let modules = response.data.sensor_modules;
+                    console.log(modules);
+                    modules.forEach((module) =>{
+                        module.data_registers.forEach((dataregister) =>{
+                           data[dataregister.field.fieldName].push({
+                               'timestamp': dataregister.updated_at,
+                               'date': dataregister.updated_at.split(' ')[0],
+                               'time': dataregister.updated_at.split(' ')[1],
+                               'value': dataregister.value
+                           });
+                        });
+                    });
+
+                    this.data = data;
+                    this.modules = modules;
+                    console.log(data);
+                }).catch(e => {
+                    console.log(e);
+                });
+            }
         }
     }
 </script>

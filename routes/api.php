@@ -68,7 +68,7 @@ Route::put('/field/{id}', 'FieldController@update');
 //dataregister
 Route::get('/dataregister/{id}', 'DataRegisterController@showOne');
 Route::get('/dataregister', 'DataRegisterController@showAll');
-Route::get('/room/{room_id}/getAllValues', 'RoomController@getAllValue');
+Route::get('/room/{room_id}/getAllValues', 'RoomController@getAllValues');
 Route::post('/dataregister', 'DataRegisterController@store');
 Route::put('/dataregister/{id}', 'UserDataRegisterControllerController@update');
 //Route::delete('/dataregister/{id}', 'UserDataRegisterControllerController@destroy');      werkt nog niet

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Room;
-use App\SensorModule;
 use Illuminate\Http\Request;
+use JavaScript;
+
 
 class RoomController extends Controller
 {
@@ -14,9 +15,9 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($room)
     {
-        //
+        return view('/pages/room')->with('room', $room);
     }
 
     /**

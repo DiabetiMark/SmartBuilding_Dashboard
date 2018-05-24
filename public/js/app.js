@@ -47323,52 +47323,57 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['room'],
+
+    data: function data() {
+        return {
+            roomId: roomId,
+            modules: [],
+            data: []
+        };
+    },
     mounted: function mounted() {
         console.log('RoomComponent mounted');
     },
-    data: function data() {
-        return {
-            modules: [],
-            allTemperatures: [],
-            errors: []
-        };
+    created: function created() {
+        this.getData();
     },
 
 
     methods: {
-        loadModulesForRoom: function loadModulesForRoom(roomId) {
+        getData: function getData() {
             var _this = this;
 
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room/sensormodules/' + roomId).then(function (response) {
-                _this.modules = response.data;
-            }).catch(function (e) {
-                _this.errors.push(e);
-            });
-        },
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room/' + this.roomId + '/getAllValues').then(function (response) {
+                var data = {
+                    'temperatuur': [],
+                    'luchtvochtigheid': []
+                };
 
-        getTemperatures: function getTemperatures(roomId) {
-            var _this2 = this;
+                var modules = response.data.sensor_modules;
+                console.log(modules);
+                modules.forEach(function (module) {
+                    module.data_registers.forEach(function (dataregister) {
+                        data[dataregister.field.fieldName].push({
+                            'timestamp': dataregister.updated_at,
+                            'date': dataregister.updated_at.split(' ')[0],
+                            'time': dataregister.updated_at.split(' ')[1],
+                            'value': dataregister.value
+                        });
+                    });
+                });
 
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/sensormodule/dataregister/' + roomId).then(function (response) {
-                _this2.allTemperatures = response.data;
+                _this.data = data;
+                _this.modules = modules;
+                console.log(data);
             }).catch(function (e) {
-                _this2.errors.push(e);
+                console.log(e);
             });
         }
-    },
-
-    created: function created() {
-        this.loadModulesForRoom(1);
-        this.getTemperatures(1);
     }
 });
 
@@ -47380,34 +47385,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.modules && _vm.modules.length
-      ? _c(
-          "ul",
-          [
-            _c("h1", [
-              _vm._v("Room "),
-              _c("b", [_vm._v("1")]),
-              _vm._v(
-                " has the following (" +
-                  _vm._s(_vm.modules.length) +
-                  ") sensors:"
-              )
-            ]),
-            _vm._v(" "),
-            _vm._l(_vm.modules, function(module) {
-              return _c("li", [
-                _c("b", [_vm._v("ID")]),
-                _vm._v(
-                  ": " + _vm._s(module.pivot.sensor_module_id) + "\n        "
-                )
-              ])
-            })
-          ],
-          2
-        )
-      : _vm._e()
-  ])
+  return _c("div", [_vm._v("\n    " + _vm._s(_vm.data) + "\n")])
 }
 var staticRenderFns = []
 render._withStripped = true
