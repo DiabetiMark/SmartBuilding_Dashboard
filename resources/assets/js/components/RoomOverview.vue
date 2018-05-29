@@ -25,13 +25,13 @@
             <tr v-for="room in rooms" v-if="room.isVisible">
                 <td>{{ room.id }}</td>
                 <td>{{ room.roomName }}</td>
-                <td>{{ room.roomDescription.substr(0, 50) + '..' }} (<a href="#">Lees meer</a>)</td>
+                <td>{{ room.roomDescription.substr(0, 50) + '..' }} (<a v-bind:href="'/overview/' + room.id">Lees meer</a>)</td>
                 <td>{{ room.created_at }}</td>
                 <td>{{ room.updated_at }}</td>
                 <td>
                     <div class="field is-grouped">
                         <p class="control">
-                            <a class="button is-small is-link">
+                            <a v-bind:href="'/overview/' + room.id" class="button is-small is-link">
                                 Bekijk
                             </a>
                         </p>

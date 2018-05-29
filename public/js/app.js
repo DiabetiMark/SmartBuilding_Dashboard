@@ -47323,6 +47323,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -47333,7 +47345,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             roomId: roomId,
             modules: [],
-            data: []
+            data: {
+                'temperatuur': [],
+                'luchtvochtigheid': []
+            }
         };
     },
     mounted: function mounted() {
@@ -47355,10 +47370,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 };
 
                 var modules = response.data.sensor_modules;
-                console.log(modules);
                 modules.forEach(function (module) {
                     module.data_registers.forEach(function (dataregister) {
-                        data[dataregister.field.fieldName].push({
+                        data[dataregister.field.name].push({
                             'timestamp': dataregister.updated_at,
                             'date': dataregister.updated_at.split(' ')[0],
                             'time': dataregister.updated_at.split(' ')[1],
@@ -47369,9 +47383,64 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this.data = data;
                 _this.modules = modules;
+                _this.populateGraphs();
                 console.log(data);
             }).catch(function (e) {
                 console.log(e);
+            });
+        },
+        populateGraphs: function populateGraphs() {
+            var tempTime = [];
+            var tempValues = [];
+            this.data.temperatuur.forEach(function (temp) {
+                tempTime.push(temp.time);
+                tempValues.push(temp.value);
+            });
+
+            new Chart(this.$refs.tempChart, {
+                "type": "line",
+                "data": {
+                    "labels": tempTime,
+                    "datasets": [{
+                        "label": "Gemiddelde temperatuur in alle ruimtes in ℃",
+                        "data": tempValues,
+                        "fill": false,
+                        "borderColor": "rgb(54, 162, 235)",
+                        "lineTension": .3
+                    }]
+                },
+                "options": {}
+            });
+
+            var humTime = [];
+            var humValues = [];
+            this.data.luchtvochtigheid.forEach(function (hum) {
+                humTime.push(hum.time);
+                humValues.push(hum.value);
+            });
+
+            new Chart(this.$refs.humidityChart, {
+                "type": "bar",
+                "data": {
+                    "labels": humTime,
+                    "datasets": [{
+                        "label": "Gemiddelde luchtvochtigheid in alle ruimtes in percentages",
+                        "data": humValues,
+                        "fill": false,
+                        "backgroundColor": ["rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)"],
+                        "borderColor": ["rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)"],
+                        "borderWidth": 1
+                    }]
+                },
+                "options": {
+                    "scales": {
+                        "yAxes": [{
+                            "ticks": {
+                                "beginAtZero": true
+                            }
+                        }]
+                    }
+                }
             });
         }
     }
@@ -47385,7 +47454,29 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    " + _vm._s(_vm.data) + "\n")])
+  return _c("div", [
+    _vm.data.temperatuur.length === 0 && _vm.data.luchtvochtigheid.length === 0
+      ? _c(
+          "div",
+          { staticClass: "notification is-warning has-text-centered" },
+          [
+            _c("strong", [
+              _vm._v("Er kon geen data worden gevonden voor deze ruimte")
+            ])
+          ]
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "columns" }, [
+      _c("div", { staticClass: "column" }, [
+        _c("canvas", { ref: "tempChart", attrs: { id: "tempChart" } })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "column" }, [
+        _c("canvas", { ref: "humidityChart", attrs: { id: "humidityChart" } })
+      ])
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -47606,7 +47697,9 @@ var render = function() {
                     _vm._v(
                       _vm._s(room.roomDescription.substr(0, 50) + "..") + " ("
                     ),
-                    _c("a", { attrs: { href: "#" } }, [_vm._v("Lees meer")]),
+                    _c("a", { attrs: { href: "/overview/" + room.id } }, [
+                      _vm._v("Lees meer")
+                    ]),
                     _vm._v(")")
                   ]),
                   _vm._v(" "),
@@ -47614,7 +47707,24 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(room.updated_at))]),
                   _vm._v(" "),
-                  _vm._m(2, true)
+                  _c("td", [
+                    _c("div", { staticClass: "field is-grouped" }, [
+                      _c("p", { staticClass: "control" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "button is-small is-link",
+                            attrs: { href: "/overview/" + room.id }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            Bekijk\n                        "
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+                  ])
                 ])
               : _vm._e()
           })
@@ -47649,22 +47759,6 @@ var staticRenderFns = [
         _c("th", [_vm._v("Gemaakt op")]),
         _vm._v(" "),
         _c("th", [_vm._v("Acties")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("div", { staticClass: "field is-grouped" }, [
-        _c("p", { staticClass: "control" }, [
-          _c("a", { staticClass: "button is-small is-link" }, [
-            _vm._v(
-              "\n                            Bekijk\n                        "
-            )
-          ])
-        ])
       ])
     ])
   }

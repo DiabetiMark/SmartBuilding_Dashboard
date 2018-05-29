@@ -12,7 +12,7 @@
 */
 
 Route::view('/', 'pages/home')->middleware('authWeb')->name('home');
-Route::view('/overview', 'pages/overview')->middleware('authWeb');
+Route::view('/overview', 'pages/overview');
 Route::get('/overview/{room}', 'RoomController@index');
 
 Route::view('/settings', 'pages/settings')->middleware('authWeb');
