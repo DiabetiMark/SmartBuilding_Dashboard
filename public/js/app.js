@@ -47335,6 +47335,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -47344,15 +47384,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             roomId: roomId,
+            roomName: '',
+            roomDescription: '',
             modules: [],
             data: {
                 'temperatuur': [],
                 'luchtvochtigheid': []
-            }
+            },
+            dates: [],
+            dateDropdown: undefined
         };
     },
     mounted: function mounted() {
         console.log('RoomComponent mounted');
+
+        var dropdown = document.querySelector('.dropdown');
+        dropdown.addEventListener('click', function (event) {
+            event.stopPropagation();
+            dropdown.classList.toggle('is-active');
+        });
+        window.addEventListener('click', function () {
+            if (dropdown.classList.contains('is-active')) dropdown.classList.toggle('is-active');
+        });
+        this.dateDropdown = dropdown;
     },
     created: function created() {
         this.getData();
@@ -47378,13 +47432,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             'time': dataregister.updated_at.split(' ')[1],
                             'value': dataregister.value
                         });
+
+                        _this.dates.push(dataregister.updated_at.split(' ')[0]);
                     });
                 });
 
                 _this.data = data;
+                _this.dates = _this.dates.filter(function (item, pos, self) {
+                    return self.indexOf(item) === pos;
+                });
                 _this.modules = modules;
+                _this.roomName = response.data.roomName;
+                _this.roomDescription = response.data.roomDescription;
                 _this.populateGraphs();
-                console.log(data);
+                console.log(response.data);
             }).catch(function (e) {
                 console.log(e);
             });
@@ -47455,6 +47516,94 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c(
+      "nav",
+      { staticClass: "breadcrumb", attrs: { "aria-label": "breadcrumbs" } },
+      [
+        _c("ul", [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _c("li", { staticClass: "is-active" }, [
+            _c("a", { attrs: { href: "#", "aria-current": "page" } }, [
+              _vm._v(_vm._s(_vm.roomName))
+            ])
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "level" }, [
+      _c("div", { staticClass: "level-left" }, [
+        _c("div", { staticClass: "level-item" }, [
+          _c("div", { staticClass: "title" }, [_vm._v(_vm._s(_vm.roomName))])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "level-right" }, [
+        _c("div", { staticClass: "level-item" }, [
+          _c(
+            "div",
+            { staticClass: "dropdown is-right", attrs: { id: "datedropdown" } },
+            [
+              _c("div", { staticClass: "dropdown-trigger" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "button is-small",
+                    attrs: {
+                      "aria-haspopup": "true",
+                      "aria-controls": "dropdown-menu"
+                    }
+                  },
+                  [
+                    _c("span", [_vm._v(_vm._s(_vm.dates[0]))]),
+                    _vm._v(" "),
+                    _vm._m(2)
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "dropdown-menu",
+                  attrs: { id: "dropdown-menu", role: "menu" }
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "dropdown-content" },
+                    _vm._l(_vm.dates, function(date) {
+                      return _c(
+                        "a",
+                        {
+                          staticClass: "dropdown-item is-active",
+                          attrs: { href: "#" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(date) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    })
+                  )
+                ]
+              )
+            ]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", [_vm._v(_vm._s(_vm.roomDescription))]),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
     _vm.data.temperatuur.length === 0 && _vm.data.luchtvochtigheid.length === 0
       ? _c(
           "div",
@@ -47475,10 +47624,40 @@ var render = function() {
       _c("div", { staticClass: "column" }, [
         _c("canvas", { ref: "humidityChart", attrs: { id: "humidityChart" } })
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("pre", [_vm._v(_vm._s(_vm.data))])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [_c("a", { attrs: { href: "/" } }, [_vm._v("Home")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { attrs: { href: "/overview" } }, [_vm._v("Overzicht")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "icon is-small" }, [
+      _c("i", {
+        staticClass: "fa fa-angle-down",
+        attrs: { "aria-hidden": "true" }
+      })
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -47588,6 +47767,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -47646,6 +47832,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
     _c("div", { staticClass: "column is-half" }, [
       _c("label", { staticClass: "label" }, [_vm._v("Zoek een ruimte")]),
       _vm._v(" "),
@@ -47672,7 +47860,7 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _vm._m(0)
+        _vm._m(1)
       ])
     ]),
     _vm._v(" "),
@@ -47682,7 +47870,7 @@ var render = function() {
       "table",
       { staticClass: "table is-striped is-narrow is-hoverable is-fullwidth" },
       [
-        _vm._m(1),
+        _vm._m(2),
         _vm._v(" "),
         _c(
           "tbody",
@@ -47734,6 +47922,26 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "nav",
+      { staticClass: "breadcrumb", attrs: { "aria-label": "breadcrumbs" } },
+      [
+        _c("ul", [
+          _c("li", [_c("a", { attrs: { href: "/" } }, [_vm._v("Home")])]),
+          _vm._v(" "),
+          _c("li", { staticClass: "is-active" }, [
+            _c("a", { attrs: { href: "#", "aria-current": "page" } }, [
+              _vm._v("Overzicht")
+            ])
+          ])
+        ])
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

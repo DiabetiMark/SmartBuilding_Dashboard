@@ -31,7 +31,7 @@
             </ul>
             <p class="menu-label"><i class="fas fa-server"></i>&nbsp;Ruimtes</p>
             <ul class="menu-list">
-                <li><a href="{{ url('/overview') }}" {{ (Request::is('overview') ? 'class=is-active' : '') }}>Ruimteoverzicht</a></li>
+                <li><a href="{{ url('/overview') }}" {{ ((Request::is('overview') || Request::is('overview/*')) ? 'class=is-active' : '') }}>Ruimteoverzicht</a></li>
             </ul>
             <p class="menu-label"><i class="fas fa-cogs"></i>&nbsp;Beheer</p>
             <ul class="menu-list">

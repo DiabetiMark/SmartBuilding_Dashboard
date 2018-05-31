@@ -1,5 +1,12 @@
 <template>
     <div>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Overzicht</a></li>
+            </ul>
+        </nav>
+
         <div class="column is-half">
             <label class="label">Zoek een ruimte</label>
             <div class="control has-icons-left has-icons-right">
