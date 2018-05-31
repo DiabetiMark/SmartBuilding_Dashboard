@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Cookie;
 use App\User;
+use App\Role;
 use Carbon\Carbon;
 use App\Mail\passwordReset;
 use Illuminate\Http\Request;
@@ -29,10 +30,12 @@ class UserController extends Controller
         ];
 
         $this->validate($request, $rules, $customMessages);
-
         if (Auth::attempt(['username' => request('username'), 'password' => request('password')])) {
             $user = Auth::user();
-            $success['token'] = $user->createToken('MyApp', [$user->role])->accessToken;
+            $role = Role::find($user->role);
+            $role = $role[0]->role;
+            
+            $success['token'] = $user->createToken('MyApp', [$role])->accessToken;
 
             Cookie::make('bearer', $success['token'], 86400);
 
