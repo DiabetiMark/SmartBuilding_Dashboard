@@ -48933,6 +48933,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -48941,7 +48943,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     data: function data() {
         return {
-            users: ''
+            users: '',
+            userInfo: '',
+            user_id: ''
         };
     },
     mounted: function mounted() {},
@@ -48952,7 +48956,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         getData: function getData() {
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room/' + this.roomId + '/getAllValues').then(function (response) {}).catch(function (e) {
+            var _this = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/user').then(function (response) {
+                _this.users = response.data;
+                _this.user_id = response.data[0].id;
+            }).catch(function (e) {
+                console.log(e);
+            });
+        },
+        userChanged: function userChanged() {
+            console.log("pils");
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/user/rooms/' + self.user_id).then(function (response) {
+                self.userInfo = response.data;
+            }).catch(function (e) {
                 console.log(e);
             });
         }
@@ -48967,7 +48984,43 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.user_id,
+            expression: "user_id"
+          }
+        ],
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.user_id = $event.target.multiple
+              ? $$selectedVal
+              : $$selectedVal[0]
+          }
+        }
+      },
+      _vm._l(_vm.users, function(user) {
+        return _c(
+          "option",
+          { domProps: { value: user.id }, on: { change: _vm.userChanged } },
+          [_vm._v(_vm._s(user.username))]
+        )
+      })
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
