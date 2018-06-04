@@ -35,6 +35,9 @@ Route::put('/user/{id}', 'UserController@update');
 //custom user actions
 Route::get('/user/rooms/{id}', 'UserController@getRooms');
 
+//user
+Route::post('/room_user', 'RoomUserController@store');
+
 //SensorModule
 Route::get('/sensormodule/{id}', 'SensorModuleController@showOne');
 Route::get('/sensormodule', 'SensorModuleController@showAll');
