@@ -48377,21 +48377,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 data: {
                     roomName: '',
                     roomDescription: ''
-                }
+                },
+                errors: new Errors()
             },
             addModule: {
                 data: {
                     moduleName: '',
                     room_id: '',
                     user_id: ''
-                }
+                },
+                errors: new Errors()
             },
             addSensor: {
                 data: {
                     moduleName: '',
                     room_id: '',
                     user_id: ''
-                }
+                },
+                errors: new Errors()
             },
             addUser: {
                 data: {
@@ -48399,7 +48402,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     email: '',
                     name: '',
                     role: ''
-                }
+                },
+                errors: new Errors()
             },
             open: [false, false, false, false, false],
             users: false,
@@ -48411,8 +48415,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             add_room_id: false,
             rooms: false,
             newRoomLink: {
-                room_id: '',
-                user_id: ''
+                data: {
+                    room_id: '',
+                    user_id: ''
+                },
+                errors: new Errors()
             },
             addRoomToUser: false,
             noRoomsToAdd: true
@@ -48433,14 +48440,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.users = response.data;
                 _this.user_id = response.data[0].id;
                 _this.userChanged();
-            }).catch(function (e) {
-                console.log(e);
+            }).catch(function (error) {
+                _this.addUser.errors.record(error.response.data.errors);
             });
         },
         changeAdd: function changeAdd(index) {
             for (var i = 0; i < Object.keys(this.open).length; i++) {
-                console.log(i + "\t" + index);
-
                 if (i == index) {
                     Vue.set(this.open, i, !this.open[i]);
                 } else {
@@ -48475,8 +48480,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/room', this.addRoom.data).then(function (response) {
                 _this4.rooms = response.data;
                 _this4.checkRooms();
-            }).catch(function (e) {
-                console.log(e);
+            }).catch(function (error) {
+                _this4.addRoom.errors.record(error.response.data.errors);
             });
         },
         createModule: function createModule() {
@@ -48487,8 +48492,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this5.userInfo = response.data;
                 _this5.room_id = 0;
                 _this5.checkRooms();
-            }).catch(function (e) {
-                console.log(e);
+            }).catch(function (error) {
+                _this5.addModule.errors.record(error.response.data.errors);
             });
         },
         checkRooms: function checkRooms() {
@@ -48526,14 +48531,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         AddRoom: function AddRoom() {
             var _this7 = this;
 
-            this.newRoomLink.user_id = this.user_id;
-            this.newRoomLink.room_id = this.rooms[this.add_room_id].id;
+            this.newRoomLink.data.user_id = this.user_id;
+            this.newRoomLink.data.room_id = this.rooms[this.add_room_id].id;
 
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/room_user', this.newRoomLink).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/room_user', this.newRoomLink.data).then(function (response) {
                 _this7.userInfo = response.data;
                 _this7.checkRooms();
-            }).catch(function (e) {
-                console.log(e);
+            }).catch(function (error) {
+                _this7.newRoomLink.errors.record(error.response.data.errors);
             });
         },
         roomChanged: function roomChanged() {
@@ -48907,7 +48912,7 @@ var render = function() {
                     return _vm.createRoom($event)
                   },
                   keydown: function($event) {
-                    _vm.user.errors.clear($event.target.name)
+                    _vm.addRoom.errors.clear($event.target.name)
                   }
                 }
               },
@@ -48998,7 +49003,7 @@ var render = function() {
                     return _vm.createModule($event)
                   },
                   keydown: function($event) {
-                    _vm.user.errors.clear($event.target.name)
+                    _vm.addModule.errors.clear($event.target.name)
                   }
                 }
               },
@@ -49106,7 +49111,7 @@ var render = function() {
                     return _vm.createUser($event)
                   },
                   keydown: function($event) {
-                    _vm.user.errors.clear($event.target.name)
+                    _vm.addUser.errors.clear($event.target.name)
                   }
                 }
               },

@@ -62,7 +62,7 @@
             </div>
         </template>
         <template v-if="this.open[2]">
-            <form @submit.prevent="createRoom" @keydown="user.errors.clear($event.target.name)">
+            <form @submit.prevent="createRoom" @keydown="addRoom.errors.clear($event.target.name)">
                 <div>
                     <div>
                         <input name="naam" type="text" placeholder="Ruimte naam" v-model='addRoom.data.roomName' autofocus required>
@@ -77,7 +77,7 @@
             </form>
         </template>
         <template v-if="this.open[3]">
-            <form @submit.prevent="createModule" @keydown="user.errors.clear($event.target.name)">
+            <form @submit.prevent="createModule" @keydown="addModule.errors.clear($event.target.name)">
                 <div>
                     <div>
                         <input name="naam" type="text" placeholder="Module naam" v-model='addModule.data.moduleName' autofocus required>
@@ -97,7 +97,7 @@
             <p>ff kijken hoe we dit gaan doen...</p>
         </template>
         <template v-if="this.open[1]">
-            <form @submit.prevent="createUser" @keydown="user.errors.clear($event.target.name)">
+            <form @submit.prevent="createUser" @keydown="addUser.errors.clear($event.target.name)">
                 <div>
                     <div>
                         <input name="naam" type="text" placeholder="Naam" v-model='addUser.data.name' required>
@@ -141,21 +141,24 @@
                     data: {
                         roomName: '',
                         roomDescription: '',
-                    }
+                    },
+                    errors: new Errors(),
                 },
                 addModule: {
                     data: {
                         moduleName: '',
                         room_id: '',
                         user_id: '',
-                    }
+                    },
+                    errors: new Errors(),
                 },
                 addSensor: {
                     data: {
                         moduleName: '',
                         room_id: '',
                         user_id: '',
-                    }
+                    },
+                    errors: new Errors(),
                 },
                 addUser: {
                     data: {
@@ -163,7 +166,8 @@
                         email: '',
                         name: '',
                         role: '',
-                    }
+                    },
+                    errors: new Errors(),
                 },
                 open: [
                     false,
@@ -181,8 +185,11 @@
                 add_room_id: false,
                 rooms: false,
                 newRoomLink: {
-                    room_id: '',
-                    user_id: '',
+                    data: {
+                        room_id: '',
+                        user_id: '',
+                    },
+                    errors: new Errors(),
                 },
                 addRoomToUser: false,
                 noRoomsToAdd: true,
@@ -204,14 +211,12 @@
                     this.users = response.data;
                     this.user_id = response.data[0].id;
                     this.userChanged();
-                }).catch(e => {
-                    console.log(e);
+                }).catch(error => {
+                    this.addUser.errors.record(error.response.data.errors)
                 });
             },
             changeAdd(index){
                 for(var i = 0; i < Object.keys(this.open).length; i++){
-                    console.log(i + "\t" + index);
-                    
                     if(i == index){
                         Vue.set(this.open, i, !this.open[i]);
                     } else {
@@ -244,8 +249,8 @@
                 .then(response => {
                     this.rooms = response.data;
                     this.checkRooms();
-                }).catch(e => {
-                    console.log(e);
+                }).catch(error => {
+                    this.addRoom.errors.record(error.response.data.errors)
                 });
             },
             createModule(){
@@ -255,8 +260,8 @@
                     this.userInfo = response.data;
                     this.room_id = 0;
                     this.checkRooms();
-                }).catch(e => {
-                    console.log(e);
+                }).catch(error => {
+                    this.addModule.errors.record(error.response.data.errors)
                 });
             },
             checkRooms(){
@@ -291,15 +296,15 @@
                 });
             },
             AddRoom(){
-                this.newRoomLink.user_id = this.user_id;
-                this.newRoomLink.room_id = this.rooms[this.add_room_id].id;
+                this.newRoomLink.data.user_id = this.user_id;
+                this.newRoomLink.data.room_id = this.rooms[this.add_room_id].id;
 
-                axios.post('api/room_user', this.newRoomLink)
+                axios.post('api/room_user', this.newRoomLink.data)
                 .then(response => {
                     this.userInfo = response.data;
                     this.checkRooms();
-                }).catch(e => {
-                    console.log(e);
+                }).catch(error => {
+                    this.newRoomLink.errors.record(error.response.data.errors)
                 });
             },
             roomChanged(){
