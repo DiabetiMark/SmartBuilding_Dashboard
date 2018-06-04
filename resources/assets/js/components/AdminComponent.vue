@@ -1,8 +1,11 @@
 <template>
     <div>
-        <button @click="addRoomToUser = !addRoomToUser; addModuleToRoom = false">Voeg kamer aan gebruiker toe</button>
-        <button @click="addModuleToRoom = !addModuleToRoom; addRoomToUser = false">Voeg module aan ruimte toe</button>
-        <template v-if="addRoomToUser">
+        <button @click="changeAdd(0)">Voeg kamer aan gebruiker toe</button>
+        <button @click="changeAdd(1)">Voeg gebruiker toe</button>
+        <button @click="changeAdd(2)">Voeg kamer toe</button>
+        <button @click="changeAdd(3)">Voeg module toe</button>
+        <button @click="changeAdd(4)">Voeg sensor toe</button>
+        <template v-if="this.open[0]">
             <br>
             Gebruiker:
             <select v-model='user_id' @change="userChanged" v-if="users">
@@ -58,11 +61,70 @@
             </template>
             </div>
         </template>
-        <template v-if="addModuleToRoom">
-            <br>
-            <select v-model='addModule.room_id' v-if="rooms.length > 0">
-                <option v-for="(room, key) in rooms" :value="key">{{room.roomName}}</option>
-            </select>
+        <template v-if="this.open[2]">
+            <form @submit.prevent="createRoom" @keydown="user.errors.clear($event.target.name)">
+                <div>
+                    <div>
+                        <input name="naam" type="text" placeholder="Ruimte naam" v-model='addRoom.data.roomName' autofocus required>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input  name="omschrijving" type="text" placeholder="Ruimte omschrijving" v-model='addRoom.data.roomDescription' required>
+                    </div>
+                </div>
+                <input value="Toevoegen" type="submit">
+            </form>
+        </template>
+        <template v-if="this.open[3]">
+            <form @submit.prevent="createModule" @keydown="user.errors.clear($event.target.name)">
+                <div>
+                    <div>
+                        <input name="naam" type="text" placeholder="Module naam" v-model='addModule.data.moduleName' autofocus required>
+                    </div>
+                </div>
+                <div>
+                    <div>Ruimte: 
+                        <select v-model='addModule.data.room_id' v-if="rooms.length > 0">
+                            <option v-for="room in rooms" :value="room.id" >{{room.roomName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <input value="Toevoegen" type="submit">
+            </form>
+        </template>
+        <template v-if="this.open[4]">
+            <p>ff kijken hoe we dit gaan doen...</p>
+        </template>
+        <template v-if="this.open[1]">
+            <form @submit.prevent="createUser" @keydown="user.errors.clear($event.target.name)">
+                <div>
+                    <div>
+                        <input name="naam" type="text" placeholder="Naam" v-model='addUser.data.name' required>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <input name="gebruikersnaam" type="text" placeholder="Gebruikersnaam" v-model='addUser.data.username' required>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <input name="email" type="email" placeholder="Email" v-model='addUser.data.email' required>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <select v-model='addModule.data.room_id' v-if="rooms.length > 0">
+                            <option value="1" >1</option>
+                            <option value="2" >2</option>
+                            <option value="3" >3</option>
+                        </select>
+                    </div>
+                </div>
+
+                <input value="Toevoegen" type="submit">
+            </form>
         </template>
     </div>
 </template>
@@ -75,9 +137,41 @@
 
         data(){
             return{
-                addModule: {
-                    room_id: '',
+                addRoom: {
+                    data: {
+                        roomName: '',
+                        roomDescription: '',
+                    }
                 },
+                addModule: {
+                    data: {
+                        moduleName: '',
+                        room_id: '',
+                        user_id: '',
+                    }
+                },
+                addSensor: {
+                    data: {
+                        moduleName: '',
+                        room_id: '',
+                        user_id: '',
+                    }
+                },
+                addUser: {
+                    data: {
+                        username: '',
+                        email: '',
+                        name: '',
+                        role: '',
+                    }
+                },
+                open: [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                ],
                 users: false,
                 userInfo: false,
                 user_id: false,
@@ -92,7 +186,6 @@
                 },
                 addRoomToUser: false,
                 noRoomsToAdd: true,
-                addModuleToRoom: false,
 
             }
         },
@@ -105,6 +198,27 @@
         },
 
         methods: {
+            createUser(){
+                axios.post('/api/user', this.addUser.data)
+                .then(response => {
+                    this.users = response.data;
+                    this.user_id = response.data[0].id;
+                    this.userChanged();
+                }).catch(e => {
+                    console.log(e);
+                });
+            },
+            changeAdd(index){
+                for(var i = 0; i < Object.keys(this.open).length; i++){
+                    console.log(i + "\t" + index);
+                    
+                    if(i == index){
+                        Vue.set(this.open, i, !this.open[i]);
+                    } else {
+                        Vue.set(this.open, i, false);
+                    }
+                }             
+            },
             getData(){
                 axios.get('/api/user')
                 .then(response => {
@@ -121,6 +235,26 @@
                     this.rooms = response.data;
                     this.checkRooms();
 
+                }).catch(e => {
+                    console.log(e);
+                });
+            },
+            createRoom(){
+                axios.post('/api/room', this.addRoom.data)
+                .then(response => {
+                    this.rooms = response.data;
+                    this.checkRooms();
+                }).catch(e => {
+                    console.log(e);
+                });
+            },
+            createModule(){
+                this.addModule.data.user_id = this.user_id;
+                axios.post('/api/sensormodule', this.addModule.data)
+                .then(response => {
+                    this.userInfo = response.data;
+                    this.room_id = 0;
+                    this.checkRooms();
                 }).catch(e => {
                     console.log(e);
                 });
@@ -148,10 +282,7 @@
                     this.userInfo = response.data;
                     this.room_id = 0;
                     this.checkRooms();
-                    this.addRoom = false;
-                    if(this.userInfo.rooms.length == 0){
-                        this.addRoom = true;
-                    }
+                    
                     if(!this.rooms){
                         this.getRooms();
                     }

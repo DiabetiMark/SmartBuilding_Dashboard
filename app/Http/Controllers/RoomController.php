@@ -39,14 +39,14 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|numeric',
-            'description' => 'required|numeric',
+            'roomName' => 'required',
+            'roomDescription' => 'required',
         ]);
 
         $item = new Room;
 
         if ($this->setCreate($item, $request)) {
-            return;
+            return $this->showAll();
         }
 
         $error = [
@@ -107,8 +107,7 @@ class RoomController extends Controller
     public function update($id, Request $reqeust)
     {
         $this->validate($request, [
-            'name' => 'numeric',
-            'description' => 'numeric',
+            
         ]);
 
         $item = Room::find($id);

@@ -10,8 +10,8 @@ class Room extends Model
     public $timestamps = true;
     
     protected $fillable = [
-        'name', 
-        'description', 
+        'roomName', 
+        'roomDescription', 
     ];
 
     public function users()

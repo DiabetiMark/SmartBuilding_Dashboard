@@ -37,12 +37,13 @@ class SensorModuleController extends Controller
     {
         $this->validate($request, [
             'moduleName' => 'required|max:45',
+            'user_id' => 'required|numeric'
         ]);
 
         $item = new SensorModule;
 
         if ($this->setCreate($item, $request)) {
-            return;
+            return app('App\Http\Controllers\UserController')->getAllValues($request->user_id);;
         }
 
         $error = [
