@@ -12,12 +12,34 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         factory(App\User::class, 100)->create();
-        factory(App\Field::class, 100)->create();
-        factory(App\DataRegister::class, 100)->create();
-        factory(App\SensorModule::class, 100)->create();
-        factory(App\Room::class, 100)->create();
+        factory(App\DataRegister::class, 10)->create();
+        factory(App\SensorModule::class, 5)->create();
+        factory(App\Room::class, 10)->create();
 
-        for ($x = 1; $x < 10; $x++) {
+        $fieldName = [
+            'temperatuur',
+            'luchtvochtigheid',
+            'methaan',
+            'deur',
+            'beweging', 
+        ];
+    
+        $fieldType = [
+            'integer',
+            'integer',
+            'integer',
+            'boolean',
+            'boolean',
+        ];
+
+        for ($y = 0; $y < 5; $y++) {
+            DB::table('fields')->insert([
+                'name' => $fieldName[$y],
+                'type' => $fieldType[$y],
+            ]);
+        }
+        
+        for ($x = 1; $x < 2; $x++) {
             for ($y = 1; $y < 5; $y++) {
                 DB::table('room_user')->insert([
                     'user_id' => $x,
@@ -26,23 +48,14 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        for ($x = 1; $x < 10; $x++) {
-            for ($y = 1; $y < 5; $y++) {
-                DB::table('room_sensor_module')->insert([
-                    'sensor_module_id' => $x,
-                    'room_id' => $y,
-                ]);
-            }
-        }
-
-        for ($x = 1; $x < 10; $x++) {
-            for ($y = 1; $y < 5; $y++) {
-                DB::table('data_register_sensor_module')->insert([
-                    'field_id' => 1,
-                    'sensor_module_id' => $x,
-                    'data_register_id' => $y,
-                ]);
-            }
-        }
+        DB::table('roles')->insert([
+            'role' => 'default',
+        ]);
+        DB::table('roles')->insert([
+            'role' => 'facilitor',
+        ]);
+        DB::table('roles')->insert([
+            'role' => 'admin',
+        ]);
     }
 }

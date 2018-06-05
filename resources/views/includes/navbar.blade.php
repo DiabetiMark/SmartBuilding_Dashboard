@@ -1,4 +1,4 @@
-<nav class="navbar">
+<nav class="navbar" id="nav">
     <div class="navbar-brand">
         <a class="navbar-item" href="http://bulma.io">
             <img src="{{ asset('img/logo.png') }}" alt="SmartBuilding Aareon" width="112" height="28">
@@ -16,7 +16,7 @@
             <a class="navbar-item" href="#">
                 <i class="far fa-user"></i>&nbsp;Account
             </a>
-            <a class="navbar-item" href="{{ url('/login') }}">
+            <a class="navbar-item" @click="logout">
                 <i class="fas fa-sign-out-alt"></i>&nbsp;Uitloggen
             </a>
         </div>
@@ -25,14 +25,13 @@
 <div class="columns is-fullheight">
     <div class="column is-2 is-sidebar-menu is-hidden-mobile">
         <aside class="menu">
-            <p class="menu-label"><i class="fas fa-server"></i>&nbsp;Ruimtes</p>
+            <p class="menu-label"><i class="fas fa-home"></i></i>&nbsp;Algemeen</p>
             <ul class="menu-list">
                 <li><a href="{{ url('/') }}" {{ (Request::is('/') ? 'class=is-active' : '') }}>Overzicht</a></li>
-                <li>
-                    <ul>
-                        <li><a>TODO</a></li>
-                    </ul>
-                </li>
+            </ul>
+            <p class="menu-label"><i class="fas fa-server"></i>&nbsp;Ruimtes</p>
+            <ul class="menu-list">
+                <li><a href="{{ url('/overview') }}" {{ ((Request::is('overview') || Request::is('overview/*')) ? 'class=is-active' : '') }}>Ruimteoverzicht</a></li>
             </ul>
             <p class="menu-label"><i class="fas fa-cogs"></i>&nbsp;Beheer</p>
             <ul class="menu-list">
@@ -45,3 +44,36 @@
         @yield('content')
     </div>
 </div>
+<script>
+let navVue = new Vue({
+        el: '#nav',
+
+        data: {
+            user: '',
+        },
+
+        created(){
+            this.getAuthUser();
+        },
+
+        methods: {
+            getAuthUser(){
+                axios.get('/api/getAuthUser')
+                .then(function (response) {
+                    navVue.user = response.data;
+                }).catch(response => console.log(response));
+            },
+            logout(){
+                window.axios.defaults.headers.common = {
+                    'Authorization' : 'Bearer ' + this.$cookies.get('bearer'),
+                };
+
+                axios.post('/api/logout')
+                .then(function (response) {
+                    this.$cookies.remove('bearer');
+                    window.location.replace('/login');
+                }).catch(response => console.log(response));
+            }
+        }
+    });
+</script>

@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class DataRegister extends Model
 {
     public $timestamps = true;
+    public $table = 'dataRegisters';
 
     protected $fillable = [
+        'field_id',
+        'sensorModule_id',
         'value',
     ];
 
@@ -19,6 +22,10 @@ class DataRegister extends Model
 
     public function sensorModules()
     {
-        return $this->belongsToMany('App\SensorModule');
+        return $this->belongsTo('App\SensorModule', 'sensorModule_id', 'id');
+    }
+
+    public function field(){
+        return $this->belongsTo('App\Field', 'field_id', 'id');
     }
 }
