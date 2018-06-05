@@ -43,7 +43,7 @@ class SensorModuleController extends Controller
         $item = new SensorModule;
 
         if ($this->setCreate($item, $request)) {
-            return app('App\Http\Controllers\UserController')->getAllValues($request->user_id);;
+            return app('App\Http\Controllers\UserController')->getAllValues($request->user_id);
         }
 
         $error = [
@@ -101,7 +101,7 @@ class SensorModuleController extends Controller
      * @param  \App\SensorModule  $sensorModule
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $reqeust)
+    public function update($id, Request $request)
     {
         $this->validate($request, [
             'moduleName' => 'max:45',
@@ -111,7 +111,11 @@ class SensorModuleController extends Controller
 
         if($item !== null){
             if($this->setUpdate($item, $request)){
-                return;
+                $data = array(
+                    'allValues' => app('App\Http\Controllers\UserController')->getAllValues($request->user_id),
+                    'modules' => $this->showAll(),
+                );
+                return $data;
             }
 
             $error = [

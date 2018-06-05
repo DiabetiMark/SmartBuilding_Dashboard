@@ -169,12 +169,13 @@ class RoomController extends Controller
             unset($module->room_id);
             unset($module->created_at);
             unset($module->updated_at);
-            foreach($module->dataRegisters as $dataRegister){
-                $dataRegister->field;
-                unset($dataRegister->sensorModule_id);
-                unset($dataRegister->field_id);
+            foreach($module->sensors as $sensor){
+                foreach($sensor->dataRegisters as $dataRegister){
+                    $dataRegister->field;
+                    unset($dataRegister->sensorModule_id);
+                    unset($dataRegister->field_id);
+                }
             }
-            
         }
         return $room;
     }

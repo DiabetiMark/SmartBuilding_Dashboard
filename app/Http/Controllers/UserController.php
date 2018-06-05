@@ -77,7 +77,7 @@ class UserController extends Controller
         $hash = bin2hex(random_bytes(7));
 
         $request->password = $hash;
-        $request->phone = 0;
+        
         if ($this->setCreate($item, $request)) {
             $data = array();
 

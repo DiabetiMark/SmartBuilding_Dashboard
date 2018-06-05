@@ -27,9 +27,10 @@
                     <select v-model='sensor_modules_id' @change="sensor_moduleChanged">
                         <option v-for="(sensor_module, key) in userInfo.rooms[room_id].sensor_modules" :value="key" >{{sensor_module.moduleName}}</option>
                     </select>
-                    <template v-if="userInfo.rooms[room_id].sensor_modules[sensor_modules_id].data_registers.length>0">
-                        <div v-for="data_register in userInfo.rooms[room_id].sensor_modules[sensor_modules_id].data_registers" >
-                            <p>{{data_register.field.name}}</p>
+                    <template v-if="userInfo.rooms[room_id].sensor_modules[sensor_modules_id].sensors.length>0">
+                        <br>
+                        <div v-for="sensor in userInfo.rooms[room_id].sensor_modules[sensor_modules_id].sensors" >
+                            <p>{{sensor.name}}</p>
                         </div>
                     </template>
                     <template v-else>
@@ -60,44 +61,6 @@
                 <p>Voor deze gebruiker zijn er geen kamers meer om toe tevoegen.</p>
             </template>
             </div>
-        </template>
-        <template v-if="this.open[2]">
-            <form @submit.prevent="createRoom" @keydown="addRoom.errors.clear($event.target.name)">
-                <div>
-                    <div>
-                        <input name="naam" type="text" placeholder="Ruimte naam" v-model='addRoom.data.roomName' autofocus required>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <input  name="omschrijving" type="text" placeholder="Ruimte omschrijving" v-model='addRoom.data.roomDescription' required>
-                    </div>
-                </div>
-                <input value="Toevoegen" type="submit">
-            </form>
-        </template>
-        <template v-if="this.open[3]">
-            <form @submit.prevent="createModule" @keydown="addModule.errors.clear($event.target.name)">
-                <div>
-                    <div>
-                        Module: 
-                        <select v-model='addModule.data.id' v-if="modules.length > 0">
-                            <option v-for="modul in modules" :value="modul.id" >{{modul.moduleName}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div>Ruimte: 
-                        <select v-model='addModule.data.room_id' v-if="rooms.length > 0">
-                            <option v-for="room in rooms" :value="room.id" >{{room.roomName}}</option>
-                        </select>
-                    </div>
-                </div>
-                <input value="Toevoegen" type="submit">
-            </form>
-        </template>
-        <template v-if="this.open[4]">
-            <p>ff kijken hoe we dit gaan doen...</p>
         </template>
         <template v-if="this.open[1]">
             <form @submit.prevent="createUser" @keydown="addUser.errors.clear($event.target.name)">
@@ -146,6 +109,50 @@
                 <input value="Toevoegen" type="submit">
             </form>
         </template>
+        <template v-if="this.open[2]">
+            <form @submit.prevent="createRoom" @keydown="addRoom.errors.clear($event.target.name)">
+                <div>
+                    <div>
+                        <input name="naam" type="text" placeholder="Ruimte naam" v-model='addRoom.data.roomName' autofocus required>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input  name="omschrijving" type="text" placeholder="Ruimte omschrijving" v-model='addRoom.data.roomDescription' required>
+                    </div>
+                </div>
+                <input value="Toevoegen" type="submit">
+            </form>
+        </template>
+        <template v-if="this.open[3]">
+            <template v-if="!allAdded()">
+                <form @submit.prevent="createModule" @keydown="addModule.errors.clear($event.target.name)">
+                    <div>
+                        <div>
+                            Module: 
+                            <select v-model='addModule.id' v-if="modules.length > 0">
+                                <option v-for="modul in modules" :value="modul.id" v-if="modul.room_id == null" >{{modul.moduleName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            Ruimte: 
+                            <select v-model='addModule.data.room_id' v-if="rooms.length > 0">
+                                <option v-for="room in rooms" :value="room.id" >{{room.roomName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input value="Toevoegen" type="submit">
+                </form>
+            </template>
+            <template v-else>
+                Er zijn geen los modules beschikbaar
+            </template>
+        </template>
+        <template v-if="this.open[4]">
+            <p>ff kijken hoe we dit gaan doen...</p>
+        </template>
     </div>
 </template>
 <style>
@@ -192,8 +199,8 @@
                     errors: new Errors(),
                 },
                 addModule: {
+                    id: '',
                     data: {
-                        id: '',
                         room_id: '',
                         user_id: '',
                     },
@@ -231,6 +238,7 @@
                 user_id: false,
                 room_id: false,
                 sensor_modules_id: 0,
+                sensor_id: 0,
                 changeAddRoom: false,
                 add_room_id: false,
                 rooms: false,
@@ -325,9 +333,10 @@
             },
             createModule(){
                 this.addModule.data.user_id = this.user_id;
-                axios.post('/api/sensormodule', this.addModule.data)
+                axios.put('/api/sensormodule/' + this.addModule.id, this.addModule.data)
                 .then(response => {
-                    this.userInfo = response.data;
+                    this.userInfo = response.data.allValues;
+                    this.modules = response.data.modules;
                     this.room_id = 0;
                     this.checkRooms();
                 }).catch(error => {
@@ -385,6 +394,14 @@
             notYetAdded(id){
                 for(var i=0; i < this.userInfo.rooms.length; i++){
                     if( this.userInfo.rooms[i].id == id){
+                        return false
+                    }
+                }
+                return true
+            },
+            allAdded(){
+                for(var i = 0; i < this.modules.length; i++){
+                    if(this.modules[i].room_id == null){
                         return false
                     }
                 }
