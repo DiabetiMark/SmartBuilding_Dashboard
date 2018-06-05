@@ -11,7 +11,7 @@ class DataRegister extends Model
 
     protected $fillable = [
         'field_id',
-        'sensorModule_id',
+        'sensor_id',
         'value',
     ];
 
@@ -20,9 +20,9 @@ class DataRegister extends Model
         return $this->fillable;
     }
 
-    public function sensorModules()
+    public function sensor()
     {
-        return $this->belongsTo('App\SensorModule', 'sensorModule_id', 'id');
+        return $this->belongsTo('App\Sensor', 'sensor_id', 'id');
     }
 
     public function field(){
