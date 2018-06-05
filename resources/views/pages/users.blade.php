@@ -2,6 +2,12 @@
 
 @section('content')
     <section class="section">
-        <h1>Users</h1>
+        <div class="columns">
+            <div class="column">
+                <div id="app">
+                    <admin-component></room-component>
+                </div>
+            </div>
+        </div>
     </section>
 @stop

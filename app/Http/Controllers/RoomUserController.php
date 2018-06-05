@@ -3,21 +3,19 @@
 namespace App\Http\Controllers;
 
 use DB;
-use App\Room;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use JavaScript;
 
-
-class RoomController extends Controller
+class RoomUserController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($room)
+    public function index()
     {
-        return view('/pages/room')->with('room', $room);
+        //
     }
 
     /**
@@ -39,19 +37,22 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'roomName' => 'required',
-            'roomDescription' => 'required',
+            'user_id' => 'required',
+            'room_id' => 'required',
         ]);
 
-        $item = new Room;
-
-        if ($this->setCreate($item, $request)) {
-            return $this->showAll();
+        if(DB::table('room_user')->insert([
+            'user_id' => $request->user_id,
+            'room_id' => $request->room_id,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ])){
+            return app('App\Http\Controllers\UserController')->getAllValues($request->user_id);
         }
 
         $error = [
             "status" => xxxx,
-            "message" => "Room is niet aangemaakt",
+            "message" => "Sensor module niet aangemaakt",
         ];
 
         return response()->json($error, 404);
@@ -60,22 +61,22 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Room  $room
+     * @param  \App\SensorModule  $sensorModule
      * @return \Illuminate\Http\Response
      */
     public function showAll()
     {
-        return $rooms = Room::all();
+        return $sensorModules = SensorModule::all();
     }
 
     public function showOne($id)
     {
-        $room = Room::select('name', 'description')
+        $sensorModule = SensorModule::select('moduleName')
         ->find($id);
 
-        if($room !== null) 
+        if($sensorModule !== null) 
         {
-            return response()->json($room);
+            return response()->json($sensorModule);
         }
 
         $error = [
@@ -89,10 +90,10 @@ class RoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Room  $room
+     * @param  \App\SensorModule  $sensorModule
      * @return \Illuminate\Http\Response
      */
-    public function edit(Room $room)
+    public function edit(SensorModule $sensorModule)
     {
         //
     }
@@ -101,16 +102,16 @@ class RoomController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Room  $room
+     * @param  \App\SensorModule  $sensorModule
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $reqeust)
     {
         $this->validate($request, [
-            
+            'moduleName' => 'max:45',
         ]);
 
-        $item = Room::find($id);
+        $item = SensorModule::find($id);
 
         if($item !== null){
             if($this->setUpdate($item, $request)){
@@ -119,7 +120,7 @@ class RoomController extends Controller
 
             $error = [
                 "status" => xxxx,
-                "message" => 'Het wijzigen van de room is niet gelukt',
+                "message" => 'Het wijzigen van de Sensor module is niet gelukt',
             ];
             $errorCode = 405;
         } else {
@@ -127,55 +128,34 @@ class RoomController extends Controller
             //if the category cannot be found
             $error = [
                 "status" => xxxx,
-                "message" => 'De room is niet gevonden',
+                "message" => 'De Sensor module is niet gevonden',
             ];
             $errorCode = 404;
         }
 
         //return the response of the error in json
         return response()->json($error, $errorCode);
-        
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Room  $room
+     * @param  \App\SensorModule  $sensorModule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Room $room)
+    public function destroy(SensorModule $sensorModule)
     {
         //
     }
 
     //custom actions
-    public function getUsers($id)
+    public function getRooms($id)
     {
-        return $rooms = Room::find($id)->users;
+        return $rooms = SensorModule::find($id)->rooms;
     }
 
-    public function getSensorModules($id)
+    public function getDataRegisters($id)
     {
-        return $rooms = Room::find($id)->sensorModules;
-    }
-
-    public function getAllValues($id){
-        $room = Room::find($id);
-        unset($room->created_at);
-        unset($room->updated_at);
-        foreach($room->sensorModules as $module){
-            $module->room_name = $room->roomName;
-            unset($module->pivot);
-            unset($module->room_id);
-            unset($module->created_at);
-            unset($module->updated_at);
-            foreach($module->dataRegisters as $dataRegister){
-                $dataRegister->field;
-                unset($dataRegister->sensorModule_id);
-                unset($dataRegister->field_id);
-            }
-            
-        }
-        return $room;
+        return $rooms = SensorModule::find($id)->dataRegisters;
     }
 }

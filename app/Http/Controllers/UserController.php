@@ -7,6 +7,7 @@ use App\User;
 use App\Role;
 use Carbon\Carbon;
 use App\Mail\passwordReset;
+use App\Mail\newUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -66,17 +67,35 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'username' => 'required|unique:users|max:45',
             'email' => 'required|unique:users|email|max:45',
-            'password' => 'required',
             'name' => 'required|max:45',
-            'phone' => 'required|max:30',
+            'username' => 'required|unique:users|max:45',
         ]);
 
         $item = new User;
 
+        $hash = bin2hex(random_bytes(7));
+
+        $request->password = $hash;
+        $request->phone = 0;
         if ($this->setCreate($item, $request)) {
-            return;
+            $data = array();
+
+            foreach($request->rooms as $room){
+                $dataRow =                 
+                array(
+                    'user_id' => $item->id,
+                    'room_id' => $room,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                );
+                array_push($data, $dataRow);
+            }
+
+            DB::table('room_user')->insert($data);
+
+            Mail::to($request->email)->send(new newUser($request->name, $hash, $request->username));
+            return $this->showAll();
         }
 
         $error = [
@@ -173,8 +192,6 @@ class UserController extends Controller
 
         if ($user !== null) {
             $hash = bin2hex(random_bytes(17));
-
-            \App::setLocale($user->lang);
 
             if ($forget_password = DB::table('password_resets')->insert(
                 [
