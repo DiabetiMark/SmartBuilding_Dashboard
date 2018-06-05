@@ -77,10 +77,25 @@ class UserController extends Controller
         $hash = bin2hex(random_bytes(7));
 
         $request->password = $hash;
-        $request->phone =0 ;
+        $request->phone = 0;
         if ($this->setCreate($item, $request)) {
+            $data = array();
+
+            foreach($request->rooms as $room){
+                $dataRow =                 
+                array(
+                    'user_id' => $item->id,
+                    'room_id' => $room,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                );
+                array_push($data, $dataRow);
+            }
+
+            DB::table('room_user')->insert($data);
+
             Mail::to($request->email)->send(new newUser($request->name, $hash, $request->username));
-            return;
+            return $this->showAll();
         }
 
         $error = [

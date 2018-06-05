@@ -122,13 +122,57 @@
                         </select>
                     </div>
                 </div>
+                <div>
+                    <div>
+                        <div class="multiselect">
+                            <div class="selectBox" @click="showCheckboxes">
+                                <select>
+                                    <option>Select an option</option>
+                                </select>
+                                <div class="overSelect"></div>
+                            </div>
+                            <div id="checkboxes">
+                                <label :for="room.id" v-for="room in this.rooms">
+                                    <input type="checkbox" :id="room.id" v-model="addUser.data.rooms" :value="room.id"/>{{room.roomName}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <input value="Toevoegen" type="submit">
             </form>
         </template>
     </div>
 </template>
-
+<style>
+    .multiselect {
+        width: 200px;
+    }
+    .selectBox {
+        position: relative;
+    }
+    .selectBox select{
+        width: 100%;
+    }
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+    #checkboxes{
+        display: none;
+        border: 1px #dadada solid;
+    }
+    #checkboxes label{
+        display: block;
+    }
+    #checkboxes label:hover {
+        background-color: #1e90ff;
+    }
+</style>
 <script>
     import axios from 'axios';
 
@@ -166,6 +210,9 @@
                         email: '',
                         name: '',
                         role: '',
+                        rooms: [
+
+                        ],
                     },
                     errors: new Errors(),
                 },
@@ -193,7 +240,7 @@
                 },
                 addRoomToUser: false,
                 noRoomsToAdd: true,
-
+                expanded: false,
             }
         },
 
@@ -205,6 +252,15 @@
         },
 
         methods: {
+            showCheckboxes(){
+                var checkboxes = document.getElementById('checkboxes');
+                if(!this.expanded){
+                    checkboxes.style.display = "block";
+                } else {
+                    checkboxes.style.display = "none";                    
+                }
+                this.expanded = !this.expanded;
+            },
             createUser(){
                 axios.post('/api/user', this.addUser.data)
                 .then(response => {
