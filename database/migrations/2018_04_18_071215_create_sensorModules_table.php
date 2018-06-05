@@ -16,7 +16,7 @@ class CreateSensorModulesTable extends Migration
         Schema::create('sensorModules', function (Blueprint $table) {
             $table->increments('id');
             $table->string('moduleName', 45)->nullable(false);
-            $table->integer('room_id')->nullable(false);
+            $table->integer('room_id')->nullable(true);
             $table->timestamps();
         });
     }

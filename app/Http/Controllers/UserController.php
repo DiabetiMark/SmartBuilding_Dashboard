@@ -81,18 +81,21 @@ class UserController extends Controller
         if ($this->setCreate($item, $request)) {
             $data = array();
 
-            foreach($request->rooms as $room){
-                $dataRow =                 
-                array(
-                    'user_id' => $item->id,
-                    'room_id' => $room,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                );
-                array_push($data, $dataRow);
+            if(!empty($request->rooms)){
+                foreach($request->rooms as $room){
+                    $dataRow =                 
+                    array(
+                        'user_id' => $item->id,
+                        'room_id' => $room,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    );
+                    array_push($data, $dataRow);
+                }
+    
+                DB::table('room_user')->insert($data);
             }
 
-            DB::table('room_user')->insert($data);
 
             Mail::to($request->email)->send(new newUser($request->name, $hash, $request->username));
             return $this->showAll();

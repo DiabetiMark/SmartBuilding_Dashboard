@@ -80,7 +80,10 @@
             <form @submit.prevent="createModule" @keydown="addModule.errors.clear($event.target.name)">
                 <div>
                     <div>
-                        <input name="naam" type="text" placeholder="Module naam" v-model='addModule.data.moduleName' autofocus required>
+                        Module: 
+                        <select v-model='addModule.data.id' v-if="modules.length > 0">
+                            <option v-for="modul in modules" :value="modul.id" >{{modul.moduleName}}</option>
+                        </select>
                     </div>
                 </div>
                 <div>
@@ -190,7 +193,7 @@
                 },
                 addModule: {
                     data: {
-                        moduleName: '',
+                        id: '',
                         room_id: '',
                         user_id: '',
                     },
@@ -241,6 +244,7 @@
                 addRoomToUser: false,
                 noRoomsToAdd: true,
                 expanded: false,
+                modules: false,
             }
         },
 
@@ -249,9 +253,19 @@
 
         created(){
             this.getData();
+            this.getModules();
         },
 
         methods: {
+            getModules(){
+                axios.get('/api/sensormodule')
+                .then(response => {
+                    this.modules = response.data;
+                })
+                .catch(error => {
+
+                })
+            },
             showCheckboxes(){
                 var checkboxes = document.getElementById('checkboxes');
                 if(!this.expanded){

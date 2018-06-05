@@ -48796,6 +48796,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -48813,7 +48816,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             addModule: {
                 data: {
-                    moduleName: '',
+                    id: '',
                     room_id: '',
                     user_id: ''
                 },
@@ -48855,16 +48858,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             addRoomToUser: false,
             noRoomsToAdd: true,
-            expanded: false
+            expanded: false,
+            modules: false
         };
     },
     mounted: function mounted() {},
     created: function created() {
         this.getData();
+        this.getModules();
     },
 
 
     methods: {
+        getModules: function getModules() {
+            var _this = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/sensormodule').then(function (response) {
+                _this.modules = response.data;
+            }).catch(function (error) {});
+        },
         showCheckboxes: function showCheckboxes() {
             var checkboxes = document.getElementById('checkboxes');
             if (!this.expanded) {
@@ -48875,14 +48887,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.expanded = !this.expanded;
         },
         createUser: function createUser() {
-            var _this = this;
+            var _this2 = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/user', this.addUser.data).then(function (response) {
-                _this.users = response.data;
-                _this.user_id = response.data[0].id;
-                _this.userChanged();
+                _this2.users = response.data;
+                _this2.user_id = response.data[0].id;
+                _this2.userChanged();
             }).catch(function (error) {
-                _this.addUser.errors.record(error.response.data.errors);
+                _this2.addUser.errors.record(error.response.data.errors);
             });
         },
         changeAdd: function changeAdd(index) {
@@ -48895,46 +48907,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         getData: function getData() {
-            var _this2 = this;
+            var _this3 = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/user').then(function (response) {
-                _this2.users = response.data;
-                _this2.user_id = response.data[0].id;
-                _this2.userChanged();
+                _this3.users = response.data;
+                _this3.user_id = response.data[0].id;
+                _this3.userChanged();
             }).catch(function (e) {
                 console.log(e);
             });
         },
         getRooms: function getRooms() {
-            var _this3 = this;
+            var _this4 = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room').then(function (response) {
-                _this3.rooms = response.data;
-                _this3.checkRooms();
+                _this4.rooms = response.data;
+                _this4.checkRooms();
             }).catch(function (e) {
                 console.log(e);
             });
         },
         createRoom: function createRoom() {
-            var _this4 = this;
+            var _this5 = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/room', this.addRoom.data).then(function (response) {
-                _this4.rooms = response.data;
-                _this4.checkRooms();
+                _this5.rooms = response.data;
+                _this5.checkRooms();
             }).catch(function (error) {
-                _this4.addRoom.errors.record(error.response.data.errors);
+                _this5.addRoom.errors.record(error.response.data.errors);
             });
         },
         createModule: function createModule() {
-            var _this5 = this;
+            var _this6 = this;
 
             this.addModule.data.user_id = this.user_id;
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/sensormodule', this.addModule.data).then(function (response) {
-                _this5.userInfo = response.data;
-                _this5.room_id = 0;
-                _this5.checkRooms();
+                _this6.userInfo = response.data;
+                _this6.room_id = 0;
+                _this6.checkRooms();
             }).catch(function (error) {
-                _this5.addModule.errors.record(error.response.data.errors);
+                _this6.addModule.errors.record(error.response.data.errors);
             });
         },
         checkRooms: function checkRooms() {
@@ -48955,31 +48967,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.noRoomsToAdd = true;
         },
         userChanged: function userChanged() {
-            var _this6 = this;
+            var _this7 = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('api/user/' + this.user_id + '/getAll').then(function (response) {
-                _this6.userInfo = response.data;
-                _this6.room_id = 0;
-                _this6.checkRooms();
+                _this7.userInfo = response.data;
+                _this7.room_id = 0;
+                _this7.checkRooms();
 
-                if (!_this6.rooms) {
-                    _this6.getRooms();
+                if (!_this7.rooms) {
+                    _this7.getRooms();
                 }
             }).catch(function (e) {
                 console.log(e);
             });
         },
         AddRoom: function AddRoom() {
-            var _this7 = this;
+            var _this8 = this;
 
             this.newRoomLink.data.user_id = this.user_id;
             this.newRoomLink.data.room_id = this.rooms[this.add_room_id].id;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/room_user', this.newRoomLink.data).then(function (response) {
-                _this7.userInfo = response.data;
-                _this7.checkRooms();
+                _this8.userInfo = response.data;
+                _this8.checkRooms();
             }).catch(function (error) {
-                _this7.newRoomLink.errors.record(error.response.data.errors);
+                _this8.newRoomLink.errors.record(error.response.data.errors);
             });
         },
         roomChanged: function roomChanged() {
@@ -49451,36 +49463,50 @@ var render = function() {
               [
                 _c("div", [
                   _c("div", [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.addModule.data.moduleName,
-                          expression: "addModule.data.moduleName"
-                        }
-                      ],
-                      attrs: {
-                        name: "naam",
-                        type: "text",
-                        placeholder: "Module naam",
-                        autofocus: "",
-                        required: ""
-                      },
-                      domProps: { value: _vm.addModule.data.moduleName },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.addModule.data,
-                            "moduleName",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    })
+                    _vm._v(
+                      "\n                    Module: \n                    "
+                    ),
+                    _vm.modules.length > 0
+                      ? _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.addModule.data.id,
+                                expression: "addModule.data.id"
+                              }
+                            ],
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.addModule.data,
+                                  "id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          _vm._l(_vm.modules, function(modul) {
+                            return _c(
+                              "option",
+                              { domProps: { value: modul.id } },
+                              [_vm._v(_vm._s(modul.moduleName))]
+                            )
+                          })
+                        )
+                      : _vm._e()
                   ])
                 ]),
                 _vm._v(" "),
