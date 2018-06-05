@@ -18,18 +18,25 @@ Route::group(['middleware' => 'auth:api'], function () {
     //You need to include the line below in your controller
     //use Illuminate\Support\Facades\Auth;
     //With "$user = Auth::user()" you get the authenticated user
-    Route::post('/user', 'UserController@store');  
-    Route::get('/user', 'UserController@showAll'); 
+   
+    Route::post('/logout', 'UserController@logout');
+    
+    Route::get('/getAuthUser', 'UserController@getAuthUser');
 });
 
 //user
 Route::get('/user/{id}', 'UserController@showOne');
-Route::post('/user', 'UserController@store');
+Route::get('/user/{id}/getAll', 'UserController@getAllValues');
+Route::post('/user', 'UserController@store');  
+Route::get('/user', 'UserController@showAll'); 
 Route::put('/user/{id}', 'UserController@update');
 //Route::delete('/user/{id}', 'UserController@destroy');      werkt nog niet
 
 //custom user actions
 Route::get('/user/rooms/{id}', 'UserController@getRooms');
+
+//user
+Route::post('/room_user', 'RoomUserController@store');
 
 //SensorModule
 Route::get('/sensormodule/{id}', 'SensorModuleController@showOne');
@@ -44,6 +51,7 @@ Route::get('/sensormodule/dataregister/{id}', 'SensorModuleController@getDataReg
 
 //room
 Route::get('/room/{id}', 'RoomController@showOne');
+Route::get('/room/{id}/getAll', 'RoomController@getAllValues');
 Route::get('/room', 'RoomController@showAll');
 Route::post('/room', 'RoomController@store');
 Route::put('/room/{id}', 'RoomController@update');
@@ -63,6 +71,7 @@ Route::put('/field/{id}', 'FieldController@update');
 //dataregister
 Route::get('/dataregister/{id}', 'DataRegisterController@showOne');
 Route::get('/dataregister', 'DataRegisterController@showAll');
+Route::get('/room/{room_id}/getAllValues', 'RoomController@getAllValues');
 Route::post('/dataregister', 'DataRegisterController@store');
 Route::put('/dataregister/{id}', 'UserDataRegisterControllerController@update');
 //Route::delete('/dataregister/{id}', 'UserDataRegisterControllerController@destroy');      werkt nog niet
@@ -75,3 +84,5 @@ Route::get('/dataregister/sensormodules/{id}', 'RoomController@getSensorModules'
 // });
 
 Route::post('/login', 'UserController@login');
+Route::post('/login/forget', 'UserController@resetPasswordemail');
+Route::post('/login/wachtwoord/update', 'UserController@resetPassword');

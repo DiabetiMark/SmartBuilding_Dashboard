@@ -16,7 +16,12 @@ window.Vue = require('vue');
  */
 
 Vue.component('room-component', require('./components/RoomComponent.vue'));
+Vue.component('room-overview', require('./components/RoomOverview.vue'));
 Vue.component('stats-component', require('./components/StatsComponent.vue'));
+Vue.component('admin-component', require('./components/AdminComponent.vue'));
+Vue.component('login-component', require('./components/login/LoginComponent.vue'));
+Vue.component('password-reset-component', require('./components/login/passwordResetComponent.vue'));
+Vue.component('password-forget-component', require('./components/login/passwordForgetComponent.vue'));
 
 const app = new Vue({
     el: '#app'

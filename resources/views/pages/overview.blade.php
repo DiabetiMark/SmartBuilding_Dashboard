@@ -4,9 +4,7 @@
     <section class="section">
         <div class="columns">
             <div class="column">
-                <div id="app">
-                    <admin-component></room-component>
-                </div>
+                <div id="app"><room-overview></room-overview></div>
             </div>
         </div>
     </section>
