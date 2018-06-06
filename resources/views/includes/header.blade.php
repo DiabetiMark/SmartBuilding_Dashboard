@@ -12,6 +12,7 @@
 
 <link href="{{ asset('css/bulma.css') }}" rel="stylesheet">
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+<link href="{{ asset('css/bulma-steps.css') }}" rel="stylesheet">
 
 <!-- We need Chart.js in the header so it loads before all the content -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>

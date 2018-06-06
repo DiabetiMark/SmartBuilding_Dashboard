@@ -1,5 +1,147 @@
 <template>
     <div>
+        <!-- WIP -->
+        <div class="notification is-danger has-text-centered">
+            <strong>WIP - Submitten werkt sowieso nog niet</strong>
+        </div>
+
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Gebruikers</a></li>
+            </ul>
+        </nav>
+        <hr>
+
+        <div class="columns is-gapless">
+            <div class="column is-two-thirds">
+                <h4 class="title is-4">Gebruiker toevoegen</h4>
+                <div class="steps" id="stepsDemo">
+                    <div class="step-item is-active is-success">
+                        <div class="step-marker">1</div>
+                        <div class="step-details">
+                            <p class="step-title">Account</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-marker">2</div>
+                        <div class="step-details">
+                            <p class="step-title">Rollen</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-marker">3</div>
+                        <div class="step-details">
+                            <p class="step-title">Ruimtes</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-marker">4</div>
+                        <div class="step-details">
+                            <p class="step-title">Klaar</p>
+                        </div>
+                    </div>
+                    <div class="steps-content">
+                        <div class="step-content has-text-centered is-active">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Naam</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="control">
+                                            <input class="input" name="name" id="name" type="text" placeholder="Bijv. Piet" data-validate="require">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Gebruikersnaam</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="control">
+                                            <input class="input" name="username" id="username" type="text" placeholder="Bijv. Piet" data-validate="require">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Email</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="control has-icon has-icon-right">
+                                            <input class="input" type="email" name="email" id="email" placeholder="Bijv. piet@aareon.nl" data-validate="require">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-content has-text-centered">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Rol</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="control has-icons-left">
+                                            <div class="select">
+                                                <select v-model='addModule.data.room_id' v-if="rooms.length > 0">
+                                                    <option value="" selected disabled hidden>Kies een rol</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                </select>
+                                                <span class="icon is-large is-left">
+                                                <i class="fas fa-user"></i>
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-content has-text-centered">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Ruimtes</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="control">
+                                            <div class="select is-multiple">
+                                                <select multiple size="8">
+                                                    <option :for="room.id" v-for="room in this.rooms" :value="room.id" v-model="addUser.data.rooms">
+                                                        {{room.roomName}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-content has-text-centered">
+                            <h1 class="title is-5">Het account is aangemaakt en een email is verstuurd!</h1>
+                        </div>
+                    </div>
+                    <div class="steps-actions">
+                        <div class="steps-action">
+                            <a href="#" data-nav="previous" class="button is-light">Terug</a>
+                        </div>
+                        <div class="steps-action">
+                            <a href="#" data-nav="next" class="button is-light">Volgende</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         <button @click="changeAdd(0)">Voeg kamer aan gebruiker toe</button>
         <button @click="changeAdd(1)">Voeg gebruiker toe</button>
         <button @click="changeAdd(2)">Voeg kamer toe</button>

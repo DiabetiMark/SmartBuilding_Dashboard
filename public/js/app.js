@@ -48806,6 +48806,148 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -49037,6 +49179,160 @@ var render = function() {
   return _c(
     "div",
     [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c("div", { staticClass: "columns is-gapless" }, [
+        _c("div", { staticClass: "column is-two-thirds" }, [
+          _c("h4", { staticClass: "title is-4" }, [
+            _vm._v("Gebruiker toevoegen")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "steps", attrs: { id: "stepsDemo" } }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _vm._m(3),
+            _vm._v(" "),
+            _vm._m(4),
+            _vm._v(" "),
+            _vm._m(5),
+            _vm._v(" "),
+            _c("div", { staticClass: "steps-content" }, [
+              _vm._m(6),
+              _vm._v(" "),
+              _c("div", { staticClass: "step-content has-text-centered" }, [
+                _c("div", { staticClass: "field is-horizontal" }, [
+                  _vm._m(7),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "field-body" }, [
+                    _c("div", { staticClass: "field" }, [
+                      _c("div", { staticClass: "control has-icons-left" }, [
+                        _c("div", { staticClass: "select" }, [
+                          _vm.rooms.length > 0
+                            ? _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.addModule.data.room_id,
+                                      expression: "addModule.data.room_id"
+                                    }
+                                  ],
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.$set(
+                                        _vm.addModule.data,
+                                        "room_id",
+                                        $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "option",
+                                    {
+                                      attrs: {
+                                        value: "",
+                                        selected: "",
+                                        disabled: "",
+                                        hidden: ""
+                                      }
+                                    },
+                                    [_vm._v("Kies een rol")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "1" } }, [
+                                    _vm._v("1")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "2" } }, [
+                                    _vm._v("2")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "3" } }, [
+                                    _vm._v("3")
+                                  ])
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm._m(8)
+                        ])
+                      ])
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "step-content has-text-centered" }, [
+                _c("div", { staticClass: "field is-horizontal" }, [
+                  _vm._m(9),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "field-body" }, [
+                    _c("div", { staticClass: "field" }, [
+                      _c("div", { staticClass: "control" }, [
+                        _c("div", { staticClass: "select is-multiple" }, [
+                          _c(
+                            "select",
+                            { attrs: { multiple: "", size: "8" } },
+                            _vm._l(this.rooms, function(room) {
+                              return _c(
+                                "option",
+                                {
+                                  attrs: { for: room.id },
+                                  domProps: { value: room.id },
+                                  model: {
+                                    value: _vm.addUser.data.rooms,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.addUser.data, "rooms", $$v)
+                                    },
+                                    expression: "addUser.data.rooms"
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                                    " +
+                                      _vm._s(room.roomName) +
+                                      "\n                                                "
+                                  )
+                                ]
+                              )
+                            })
+                          )
+                        ])
+                      ])
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(10)
+            ]),
+            _vm._v(" "),
+            _vm._m(11)
+          ])
+        ])
+      ]),
+      _vm._v(" "),
       _c(
         "button",
         {
@@ -49553,7 +49849,7 @@ var render = function() {
                           on: { click: _vm.showCheckboxes }
                         },
                         [
-                          _vm._m(0),
+                          _vm._m(12),
                           _vm._v(" "),
                           _c("div", { staticClass: "overSelect" })
                         ]
@@ -49865,6 +50161,225 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "notification is-danger has-text-centered" },
+      [_c("strong", [_vm._v("WIP - Submitten werkt sowieso nog niet")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "nav",
+      { staticClass: "breadcrumb", attrs: { "aria-label": "breadcrumbs" } },
+      [
+        _c("ul", [
+          _c("li", [_c("a", { attrs: { href: "/" } }, [_vm._v("Home")])]),
+          _vm._v(" "),
+          _c("li", { staticClass: "is-active" }, [
+            _c("a", { attrs: { href: "#", "aria-current": "page" } }, [
+              _vm._v("Gebruikers")
+            ])
+          ])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "step-item is-active is-success" }, [
+      _c("div", { staticClass: "step-marker" }, [_vm._v("1")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "step-details" }, [
+        _c("p", { staticClass: "step-title" }, [_vm._v("Account")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "step-item" }, [
+      _c("div", { staticClass: "step-marker" }, [_vm._v("2")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "step-details" }, [
+        _c("p", { staticClass: "step-title" }, [_vm._v("Rollen")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "step-item" }, [
+      _c("div", { staticClass: "step-marker" }, [_vm._v("3")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "step-details" }, [
+        _c("p", { staticClass: "step-title" }, [_vm._v("Ruimtes")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "step-item" }, [
+      _c("div", { staticClass: "step-marker" }, [_vm._v("4")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "step-details" }, [
+        _c("p", { staticClass: "step-title" }, [_vm._v("Klaar")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "step-content has-text-centered is-active" },
+      [
+        _c("div", { staticClass: "field is-horizontal" }, [
+          _c("div", { staticClass: "field-label is-normal" }, [
+            _c("label", { staticClass: "label" }, [_vm._v("Naam")])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "field-body" }, [
+            _c("div", { staticClass: "field" }, [
+              _c("div", { staticClass: "control" }, [
+                _c("input", {
+                  staticClass: "input",
+                  attrs: {
+                    name: "name",
+                    id: "name",
+                    type: "text",
+                    placeholder: "Bijv. Piet",
+                    "data-validate": "require"
+                  }
+                })
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field is-horizontal" }, [
+          _c("div", { staticClass: "field-label is-normal" }, [
+            _c("label", { staticClass: "label" }, [_vm._v("Gebruikersnaam")])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "field-body" }, [
+            _c("div", { staticClass: "field" }, [
+              _c("div", { staticClass: "control" }, [
+                _c("input", {
+                  staticClass: "input",
+                  attrs: {
+                    name: "username",
+                    id: "username",
+                    type: "text",
+                    placeholder: "Bijv. Piet",
+                    "data-validate": "require"
+                  }
+                })
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "field is-horizontal" }, [
+          _c("div", { staticClass: "field-label is-normal" }, [
+            _c("label", { staticClass: "label" }, [_vm._v("Email")])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "field-body" }, [
+            _c("div", { staticClass: "field" }, [
+              _c("div", { staticClass: "control has-icon has-icon-right" }, [
+                _c("input", {
+                  staticClass: "input",
+                  attrs: {
+                    type: "email",
+                    name: "email",
+                    id: "email",
+                    placeholder: "Bijv. piet@aareon.nl",
+                    "data-validate": "require"
+                  }
+                })
+              ])
+            ])
+          ])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "field-label is-normal" }, [
+      _c("label", { staticClass: "label" }, [_vm._v("Rol")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "icon is-large is-left" }, [
+      _c("i", { staticClass: "fas fa-user" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "field-label is-normal" }, [
+      _c("label", { staticClass: "label" }, [_vm._v("Ruimtes")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "step-content has-text-centered" }, [
+      _c("h1", { staticClass: "title is-5" }, [
+        _vm._v("Het account is aangemaakt en een email is verstuurd!")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "steps-actions" }, [
+      _c("div", { staticClass: "steps-action" }, [
+        _c(
+          "a",
+          {
+            staticClass: "button is-light",
+            attrs: { href: "#", "data-nav": "previous" }
+          },
+          [_vm._v("Terug")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "steps-action" }, [
+        _c(
+          "a",
+          {
+            staticClass: "button is-light",
+            attrs: { href: "#", "data-nav": "next" }
+          },
+          [_vm._v("Volgende")]
+        )
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

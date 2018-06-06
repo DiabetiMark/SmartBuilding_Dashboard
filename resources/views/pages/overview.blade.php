@@ -2,10 +2,8 @@
 
 @section('content')
     <section class="section">
-        <div class="columns">
-            <div class="column">
-                <div id="app"><room-overview></room-overview></div>
-            </div>
+        <div id="app">
+            <room-overview></room-overview>
         </div>
     </section>
 @stop

@@ -2,12 +2,9 @@
 
 @section('content')
     <section class="section">
-        <div class="columns">
-            <div class="column">
-                <div id="app">
-                    <admin-component></room-component>
-                </div>
-            </div>
+        <div id="app">
+            <admin-component></admin-component>
         </div>
     </section>
+    <script type="text/javascript" src="https://wikiki.github.io/node_modules/bulma-extensions/bulma-steps/dist/bulma-steps.min.js"></script>
 @stop
