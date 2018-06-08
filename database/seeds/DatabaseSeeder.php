@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -56,6 +57,15 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('roles')->insert([
             'role' => 'admin',
+        ]);
+
+        DB::table('users')->insert([
+            'username' => 'admin',
+            'password' => Hash::make('admin123'),
+            'name' => 'admin test',
+            'email' => 'admin@aareon.nl',
+            'phone' => '0612345678',
+            'role_id' => '3',
         ]);
     }
 }

@@ -266,6 +266,9 @@
 
                 })
             },
+            addModules(){
+
+            },
             showCheckboxes(){
                 var checkboxes = document.getElementById('checkboxes');
                 if(!this.expanded){
