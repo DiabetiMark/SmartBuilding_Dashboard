@@ -49027,6 +49027,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.modules = response.data;
             }).catch(function (error) {});
         },
+        addModules: function addModules() {},
         showCheckboxes: function showCheckboxes() {
             var checkboxes = document.getElementById('checkboxes');
             if (!this.expanded) {
