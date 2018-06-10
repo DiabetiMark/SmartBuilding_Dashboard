@@ -14007,6 +14007,7 @@ window.Vue = __webpack_require__(37);
  */
 
 Vue.component('room-component', __webpack_require__(40));
+Vue.component('nav-component', __webpack_require__(70));
 Vue.component('room-overview', __webpack_require__(43));
 Vue.component('stats-component', __webpack_require__(46));
 Vue.component('admin-component', __webpack_require__(49));
@@ -51085,6 +51086,250 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(71)
+/* template */
+var __vue_template__ = __webpack_require__(72)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\NavigationComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1de1ea22", Component.options)
+  } else {
+    hotAPI.reload("data-v-1de1ea22", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['nav'],
+
+    data: function data() {
+        return {
+            user: '',
+            uri: ''
+        };
+    },
+    mounted: function mounted() {
+        console.log('NavComponent mounted');
+        //this.setScript();
+    },
+    created: function created() {
+        this.setURI();
+        this.getUser();
+    },
+
+
+    methods: {
+        getUser: function getUser() {},
+        setScript: function setScript() {
+            var cookies = document.createElement('script');
+            cookies.async = true;
+            cookies.src('./js/vue-cookies.js');
+            document.head.appendChild(cookies);
+            this.getAuthUser();
+        },
+        getAuthUser: function getAuthUser() {
+
+            window.axios.defaults.headers.common = {
+                'Authorization': 'Bearer ' + this.$cookies.get('bearer')
+            };
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/getAuthUser').then(function (response) {
+
+                this.user = response.data;
+            }).catch(function (response) {
+                return console.log(response);
+            });
+        },
+        setURI: function setURI() {
+            this.uri = location.pathname.substr(1);
+        }
+    }
+});
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "aside",
+    {
+      staticClass: "menu",
+      on: {
+        getUser: function($event) {
+          _vm.user = _vm.navVue.user
+        }
+      }
+    },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("ul", { staticClass: "menu-list" }, [
+        _c("li", [
+          _c(
+            "a",
+            { class: _vm.uri == "" ? "is-active" : "", attrs: { href: "/" } },
+            [_vm._v("Overzicht")]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _c("ul", { staticClass: "menu-list" }, [
+        _c("li", [
+          _c(
+            "a",
+            {
+              class: _vm.uri == "overview" ? "is-active" : "",
+              attrs: { href: "/overview" }
+            },
+            [_vm._v("Ruimteoverzicht")]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm.user.role_id == 3
+        ? [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("ul", { staticClass: "menu-list" }, [
+              _c("li", [
+                _c(
+                  "a",
+                  {
+                    class: _vm.uri == "settings" ? "is-active" : "",
+                    attrs: { href: "/settings" }
+                  },
+                  [_vm._v("Instellingen")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("li", [
+                _c(
+                  "a",
+                  {
+                    class: _vm.uri == "users" ? "is-active" : "",
+                    attrs: { href: "/users" }
+                  },
+                  [_vm._v("Gebruikers")]
+                )
+              ])
+            ])
+          ]
+        : _vm._e()
+    ],
+    2
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "menu-label" }, [
+      _c("i", { staticClass: "fas fa-home" }),
+      _vm._v(" Algemeen")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "menu-label" }, [
+      _c("i", { staticClass: "fas fa-server" }),
+      _vm._v(" Ruimtes")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "menu-label" }, [
+      _c("i", { staticClass: "fas fa-cogs" }),
+      _vm._v(" Beheer")
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1de1ea22", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

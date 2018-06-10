@@ -22,6 +22,9 @@
         </div>
     </div>
 </nav>
+<button v-on:click="$emit('getUser')">
+  Enlarge text
+</button>
 <div class="columns is-fullheight">
     <div class="column is-2 is-sidebar-menu is-hidden-mobile">
         <div id="app">
@@ -49,7 +52,9 @@ let navVue = new Vue({
                 axios.get('/api/getAuthUser')
                 .then(function (response) {
                     navVue.user = response.data;
+                    $emit('getUser')
                 }).catch(response => console.log(response));
+
             },
             logout(){
                 window.axios.defaults.headers.common = {
