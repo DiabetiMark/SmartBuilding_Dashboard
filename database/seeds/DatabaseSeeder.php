@@ -67,5 +67,14 @@ class DatabaseSeeder extends Seeder
             'phone' => '0612345678',
             'role_id' => '3',
         ]);
+
+        DB::table('users')->insert([
+            'username' => 'user',
+            'password' => Hash::make('user123'),
+            'name' => 'user test',
+            'email' => 'user@aareon.nl',
+            'phone' => '0612345678',
+            'role_id' => '1',
+        ]);
     }
 }
