@@ -50,6 +50,15 @@
                 <canvas ref="humidityChart" id="humidityChart"></canvas>
             </div>
         </div>
+        <hr>
+        <div class="columns">
+            <div class="column">
+                <canvas ref="methaneChart" id="methaneChart"></canvas>
+            </div>
+            <div class="column">
+
+            </div>
+        </div>
 
         <br>
         <pre>{{ data }}</pre>
@@ -69,8 +78,11 @@
                 roomDescription: '',
                 modules: [],
                 data: {
+                    'deur': [],
+                    'methaan': [],
                     'temperatuur': [],
-                    'luchtvochtigheid': []
+                    'luchtvochtigheid': [],
+                    'beweging': []
                 },
                 dates: [],
                 dateDropdown: undefined,
@@ -99,22 +111,29 @@
         methods: {
             getData(){
                 axios.get('/api/room/' + this.roomId + '/getAllValues').then(response => {
+                    //console.log(response.data);
                     let data = {
+                        'deur': [],
+                        'methaan': [],
                         'temperatuur': [],
-                        'luchtvochtigheid': []
+                        'luchtvochtigheid': [],
+                        'beweging': []
                     };
 
                     let modules = response.data.sensor_modules;
                     modules.forEach((module) =>{
-                        module.data_registers.forEach((dataregister) =>{
-                           data[dataregister.field.name].push({
-                               'timestamp': dataregister.updated_at,
-                               'date': dataregister.updated_at.split(' ')[0],
-                               'time': dataregister.updated_at.split(' ')[1],
-                               'value': dataregister.value
-                           });
-
-                           this.dates.push(dataregister.updated_at.split(' ')[0]);
+                        module.sensors.forEach((sensor) =>{
+                            //console.log(sensor);
+                            sensor.data_registers.forEach((dataRegister) =>{
+                                //console.log(dataRegister.field.name);
+                                data[dataRegister.field.name].push({
+                                   'timestamp': dataRegister.updated_at,
+                                   'date': dataRegister.updated_at.split(' ')[0],
+                                   'time': dataRegister.updated_at.split(' ')[1],
+                                   'value': parseInt(dataRegister.value)
+                                });
+                                this.dates.push(dataRegister.updated_at.split(' ')[0]);
+                            });
                         });
                     });
 
@@ -124,7 +143,6 @@
                     this.roomName = response.data.roomName;
                     this.roomDescription = response.data.roomDescription;
                     this.populateGraphs();
-                    console.log(response.data);
                 }).catch(e => {
                     console.log(e);
                 });
@@ -182,6 +200,28 @@
                             }]
                         }
                     }
+                });
+
+                let methaneTime = [];
+                let methaneValues = [];
+                this.data.methaan.forEach((methane) =>{
+                    methaneTime.push(methane.time);
+                    methaneValues.push(methane.value);
+                });
+
+                new Chart(this.$refs.methaneChart, {
+                    "type": "line",
+                    "data": {
+                        "labels": methaneTime,
+                        "datasets": [{
+                            "label": "Methaan in delen per duizend in de lucht",
+                            "data": methaneValues,
+                            "fill": false,
+                            "borderColor": "rgb(54, 162, 235)",
+                            "lineTension": .3
+                        }]
+                    },
+                    "options": {}
                 });
             }
         }
