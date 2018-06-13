@@ -40,14 +40,14 @@ class RoomUserController extends Controller
             'user_id' => 'required',
             'room_id' => 'required',
         ]);
-
+        
         if(DB::table('room_user')->insert([
             'user_id' => $request->user_id,
             'room_id' => $request->room_id,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ])){
-            return app('App\Http\Controllers\UserController')->getAllValues($request->user_id);
+            return app('App\Http\Controllers\UserController')->getAll();
         }
 
         $error = [

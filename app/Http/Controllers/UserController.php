@@ -98,7 +98,7 @@ class UserController extends Controller
 
 
             Mail::to($request->email)->send(new newUser($request->name, $hash, $request->username));
-            return $this->showAll();
+            return $this->getAll();
         }
 
         $error = [
