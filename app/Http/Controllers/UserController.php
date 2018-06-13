@@ -116,7 +116,7 @@ class UserController extends Controller
 
     public function showOne($id)
     {
-        $user = User::select('username', 'name', 'phone', 'isAdmin')
+        $user = User::select('username', 'name', 'phone', 'email')
         ->find($id);
 
         if($user !== null) 
@@ -125,7 +125,7 @@ class UserController extends Controller
         }
 
         $error = [
-            "status" => xxxx,
+            "status" => 9999,
             "message" => 'User kon niet gevonden worden',
         ];
 
@@ -256,9 +256,26 @@ class UserController extends Controller
         $index = 0;
         foreach($user->rooms as $room){
             unset($room->pivot);
-            $user->rooms[$index] = app('App\Http\Controllers\RoomController')->getAllValues($room->id);
+            $user->rooms[$index] = app('App\Http\Controllers\RoomController')->getAllValuesRoom($room->id);
             $index++;
         }
         return $user;
+    }
+    public function getAll()
+    {
+        $users = User::all();
+        foreach($users as $user){
+            $user->role->role;
+            unset($user->role_id);
+            unset($user->created_at);
+            unset($user->updated_at);
+            $index = 0;
+            foreach($user->rooms as $room){
+                unset($room->pivot);
+                $user->rooms[$index] = app('App\Http\Controllers\RoomController')->getAllValuesRoom($room->id);
+                $index++;
+            }
+        }
+        return $users;
     }
 }

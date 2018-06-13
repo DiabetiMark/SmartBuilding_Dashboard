@@ -24,6 +24,14 @@
 
 <script>
     Vue.config.devtools = true;
+    let config = {
+        headers: {
+            'X-CSRF-TOKEN' : '{{csrf_token()}}',
+            'X-Requested-With' : 'XMLHttpRequest',
+            'Accept' : 'application/json',
+            'Authorization' : 'Bearer ' + this.$cookies.get('bearer'),
+        }
+    }
     window.axios.defaults.headers.common = {
         'X-CSRF-TOKEN' : '{{csrf_token()}}',
         'X-Requested-With' : 'XMLHttpRequest',
