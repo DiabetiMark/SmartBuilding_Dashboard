@@ -49633,42 +49633,44 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "control has-icons-left" }, [
                     _c("div", { staticClass: "select" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
+                      _vm.rooms.length > 0
+                        ? _c(
+                            "select",
                             {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.room_id,
-                              expression: "room_id"
-                            }
-                          ],
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.room_id = $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              },
-                              _vm.roomChanged
-                            ]
-                          }
-                        },
-                        _vm._l(_vm.userInfo.rooms, function(room, key) {
-                          return _c("option", { domProps: { value: key } }, [
-                            _vm._v(_vm._s(room.roomName))
-                          ])
-                        })
-                      ),
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.add_room_id,
+                                  expression: "add_room_id"
+                                }
+                              ],
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.add_room_id = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
+                              }
+                            },
+                            _vm._l(_vm.rooms, function(room, key) {
+                              return _vm.notYetAdded(room.id)
+                                ? _c("option", { domProps: { value: key } }, [
+                                    _vm._v(_vm._s(room.roomName))
+                                  ])
+                                : _vm._e()
+                            })
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
                       _vm._m(5)
                     ]),
@@ -49676,10 +49678,7 @@ var render = function() {
                     _c("p", { staticClass: "help" }, [
                       _c("strong", [_vm._v("Beschrijving:")]),
                       _vm._v(
-                        " " +
-                          _vm._s(
-                            _vm.userInfo.rooms[_vm.room_id].roomDescription
-                          )
+                        " " + _vm._s(_vm.rooms[_vm.add_room_id].roomDescription)
                       )
                     ])
                   ])

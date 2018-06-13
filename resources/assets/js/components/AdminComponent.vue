@@ -93,14 +93,14 @@
                         <label class="label">Kamer</label>
                         <div class="control has-icons-left">
                             <div class="select">
-                                <select v-model='room_id' @change="roomChanged">
-                                    <option v-for="(room, key) in userInfo.rooms" :value="key" >{{room.roomName}}</option>
+                                <select v-model='add_room_id' v-if="rooms.length > 0">
+                                    <option v-for="(room, key) in rooms" :value="key" v-if="notYetAdded(room.id)">{{room.roomName}}</option>
                                 </select>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-home"></i>
                                 </span>
                             </div>
-                            <p class="help"><strong>Beschrijving:</strong> {{ userInfo.rooms[room_id].roomDescription }}</p>
+                            <p class="help"><strong>Beschrijving:</strong> {{ rooms[add_room_id].roomDescription }}</p>
                         </div>
                     </div>
 
