@@ -50,8 +50,9 @@ Route::get('/sensormodule/rooms/{id}', 'SensorModuleController@getRooms');
 Route::get('/sensormodule/dataregister/{id}', 'SensorModuleController@getDataRegisters');
 
 //room
+Route::get('/room/getAll', 'RoomController@getAllValues');
 Route::get('/room/{id}', 'RoomController@showOne');
-Route::get('/room/{id}/getAll', 'RoomController@getAllValues');
+Route::get('/room/{id}/getAll', 'RoomController@getAllValuesRoom');
 Route::get('/room', 'RoomController@showAll');
 Route::post('/room', 'RoomController@store');
 Route::put('/room/{id}', 'RoomController@update');
@@ -71,7 +72,6 @@ Route::put('/field/{id}', 'FieldController@update');
 //dataregister
 Route::get('/dataregister/{id}', 'DataRegisterController@showOne');
 Route::get('/dataregister', 'DataRegisterController@showAll');
-Route::get('/room/{room_id}/getAllValues', 'RoomController@getAllValues');
 Route::post('/dataregister', 'DataRegisterController@store');
 Route::put('/dataregister/{id}', 'UserDataRegisterControllerController@update');
 //Route::delete('/dataregister/{id}', 'UserDataRegisterControllerController@destroy');      werkt nog niet

@@ -159,7 +159,7 @@ class RoomController extends Controller
         return $rooms = Room::find($id)->sensorModules;
     }
 
-    public function getAllValues($id){
+    public function getAllValuesRoom($id){
         $room = Room::find($id);
         unset($room->created_at);
         unset($room->updated_at);
@@ -178,5 +178,28 @@ class RoomController extends Controller
             }
         }
         return $room;
+    }
+
+    public function getAllValues(){
+        $rooms = Room::all();
+        foreach($rooms as $room){
+            unset($room->created_at);
+            unset($room->updated_at);
+            foreach($room->sensorModules as $module){
+                $module->room_name = $room->roomName;
+                unset($module->pivot);
+                unset($module->room_id);
+                unset($module->created_at);
+                unset($module->updated_at);
+                foreach($module->sensors as $sensor){
+                    foreach($sensor->dataRegisters as $dataRegister){
+                        $dataRegister->field;
+                        unset($dataRegister->sensorModule_id);
+                        unset($dataRegister->field_id);
+                    }
+                }
+            }
+        }
+        return $rooms;
     }
 }
