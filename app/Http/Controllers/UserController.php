@@ -256,7 +256,7 @@ class UserController extends Controller
         $index = 0;
         foreach($user->rooms as $room){
             unset($room->pivot);
-            $user->rooms[$index] = app('App\Http\Controllers\RoomController')->getAllValues($room->id);
+            $user->rooms[$index] = app('App\Http\Controllers\RoomController')->getAllValuesRoom($room->id);
             $index++;
         }
         return $user;
