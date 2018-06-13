@@ -12,12 +12,12 @@
 */
 
 Route::view('/', 'pages/home')->middleware('authWeb')->name('home');
-Route::view('/overview', 'pages/overview');
-Route::get('/overview/{room}', 'RoomController@index');
+Route::view('/overview', 'pages/overview')->middleware('authWeb');
+Route::get('/overview/{room}', 'RoomController@index')->middleware('authWeb');
 
 Route::view('/settings', 'pages/settings')->middleware('authWeb');
 
-Route::view('/users', 'pages/users')/*->middleware('authWeb')*/;
+Route::view('/users', 'pages/users')->middleware('accessControl:admin');
 
 
 Route::view('/login', 'pages/login/login')->name('login');
