@@ -22,14 +22,25 @@
         </div>
     </div>
 </nav>
-<button v-on:click="$emit('getUser')">
-  Enlarge text
-</button>
 <div class="columns is-fullheight">
     <div class="column is-2 is-sidebar-menu is-hidden-mobile">
-        <div id="app">
-            <nav-component></nav-component>
-        </div>
+        <aside class="menu" v-on:getUser="user = navVue.user">
+            <p class="menu-label"><i class="fas fa-home"></i>&nbsp;Algemeen</p>
+            <ul class="menu-list">
+            <li><a href="{{ url('/') }}" {{ (Request::is('/') ? 'class=is-active' : '') }}>Overzicht</a></li> 
+            </ul>
+            <p class="menu-label"><i class="fas fa-server"></i>&nbsp;Ruimtes</p>
+            <ul class="menu-list">
+                <li><a href="{{ url('/overview') }}" {{ ((Request::is('overview') || Request::is('overview/*')) ? 'class=is-active' : '') }}>Ruimteoverzicht</a></li> 
+            </ul>
+            @if( \Request::user('api')->role_id == 3)
+                <p class="menu-label"><i class="fas fa-cogs"></i>&nbsp;Beheer</p>
+                <ul class="menu-list">
+                    <li><a href="{{ url('/settings') }}" {{ (Request::is('settings') ? 'class=is-active' : '') }}>Instellingen</a></li> 
+                    <li><a href="{{ url('/users') }}" {{ (Request::is('users') ? 'class=is-active' : '') }}>Gebruikers</a></li> 
+                </ul>
+            @endif
+        </aside>
     </div>
     <div class="column is-main-content">
         @yield('content')
@@ -51,10 +62,8 @@ let navVue = new Vue({
             getAuthUser(){
                 axios.get('/api/getAuthUser')
                 .then(function (response) {
-                    navVue.user = response.data;
-                    $emit('getUser')
+                    this.user = response.data;
                 }).catch(response => console.log(response));
-
             },
             logout(){
                 window.axios.defaults.headers.common = {
