@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\User;
 use App\Room;
 use App\SensorModule;
 use Illuminate\Http\Request;
-use JavaScript;
+use Illuminate\Support\Facades\Auth;
 
 
 class RoomController extends Controller
@@ -64,9 +65,14 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function showAll()
+    public function showAll(Request $request)
     {
-        return $rooms = Room::all();
+        return Room::all();
+        if($request->user('api')->role_id == 3){
+            return $rooms = Room::all();
+        } else {
+            return User::find($request->user('api')->id)->rooms;
+        }
     }
 
     public function showOne($id)

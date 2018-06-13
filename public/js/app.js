@@ -47775,8 +47775,6 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 //
 //
 //
@@ -47829,8 +47827,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -47848,7 +47844,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getRooms: function getRooms() {
             var _this = this;
 
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room').then(function (response) {
+            axios.get('/api/room', config).then(function (response) {
                 _this.rooms = response.data;
                 _this.rooms.forEach(function (room) {
                     room.isVisible = true;
@@ -48319,7 +48315,7 @@ exports = module.exports = __webpack_require__(55)(false);
 
 
 // module
-exports.push([module.i, "\n.multiselect {\n    width: 200px;\n}\n.selectBox {\n    position: relative;\n}\n.selectBox select{\n    width: 100%;\n}\n.overSelect {\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n}\n#checkboxes{\n    display: none;\n    border: 1px #dadada solid;\n}\n#checkboxes label{\n    display: block;\n}\n#checkboxes label:hover {\n    background-color: #1e90ff;\n}\n", ""]);
+exports.push([module.i, "\n.multiselect { \n    width: 200px;\n}\n.selectBox { \n    position: relative;\n}\n.selectBox select{ \n    width: 100%;\n}\n.overSelect { \n    position: absolute; \n    left: 0; \n    right: 0; \n    top: 0; \n    bottom: 0;\n}\n#checkboxes{ \n    display: none; \n    border: 1px #dadada solid;\n}\n#checkboxes label{ \n    display: block;\n}\n#checkboxes label:hover { \n    background-color: #1e90ff;\n} \n", ""]);
 
 // exports
 
@@ -48839,170 +48835,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
+var promises = [];
 
 
 
@@ -49011,13 +48846,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     data: function data() {
         return {
-            addRoom: {
-                data: {
-                    roomName: '',
-                    roomDescription: ''
-                },
-                errors: new Errors()
-            },
             addModule: {
                 id: '',
                 data: {
@@ -49026,63 +48854,64 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 },
                 errors: new Errors()
             },
-            addSensor: {
+            user: {
                 data: {
-                    moduleName: '',
-                    room_id: '',
-                    user_id: ''
-                },
-                errors: new Errors()
-            },
-            addUser: {
-                data: {
-                    username: '',
-                    email: '',
-                    name: '',
-                    role: '',
+                    username: 'ChielTimmermans',
+                    email: 'chtm@aareon.com',
+                    name: 'chiel',
+                    role_id: '1',
                     rooms: []
                 },
+                index: 0,
                 errors: new Errors()
             },
-            open: [false, false, false, false, false],
+            room: {
+                index: ''
+            },
+            sensormodule: {
+                index: ''
+            },
             users: false,
-            userInfo: false,
-            user_id: false,
-            room_id: false,
-            sensor_modules_id: 0,
-            sensor_id: 0,
-            changeAddRoom: false,
-            add_room_id: false,
             rooms: false,
+            noRoomsToAdd: false,
             newRoomLink: {
                 data: {
                     room_id: '',
                     user_id: ''
                 },
                 errors: new Errors()
-            },
-            addRoomToUser: false,
-            noRoomsToAdd: true,
-            expanded: false,
-            modules: false
+            }
         };
     },
     mounted: function mounted() {},
     created: function created() {
         this.getData();
-        this.getModules();
     },
 
 
     methods: {
-        getModules: function getModules() {
+        getData: function getData() {
             var _this = this;
 
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/sensormodule').then(function (response) {
-                _this.modules = response.data;
-            }).catch(function (error) {});
+            promises.push(__WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room/getAll'));
+            promises.push(__WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/user/getAll'));
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.all(promises).then(function (response) {
+                _this.rooms = response[0].data;
+                _this.users = response[1].data;
+
+                _this.user.index = 0;
+
+                for (var index = 0; index < _this.rooms.length; index++) {
+                    if (_this.notYetAdded(_this.rooms[index].id)) {
+                        _this.room.index = index;
+                    }
+                }
+
+                _this.checkRooms();
+            }).catch(function (error) {
+                console.log(error);
+            });
         },
-        addModules: function addModules() {},
         showCheckboxes: function showCheckboxes() {
             var checkboxes = document.getElementById('checkboxes');
             if (!this.expanded) {
@@ -49095,127 +48924,50 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         createUser: function createUser() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/user', this.addUser.data).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/user', this.user.data).then(function (response) {
                 _this2.users = response.data;
                 _this2.user_id = response.data[0].id;
-                _this2.userChanged();
             }).catch(function (error) {
-                _this2.addUser.errors.record(error.response.data.errors);
-            });
-        },
-        changeAdd: function changeAdd(index) {
-            for (var i = 0; i < Object.keys(this.open).length; i++) {
-                if (i == index) {
-                    Vue.set(this.open, i, !this.open[i]);
-                } else {
-                    Vue.set(this.open, i, false);
-                }
-            }
-        },
-        getData: function getData() {
-            var _this3 = this;
-
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/user').then(function (response) {
-                _this3.users = response.data;
-                _this3.user_id = response.data[0].id;
-                _this3.userChanged();
-            }).catch(function (e) {
-                console.log(e);
-            });
-        },
-        getRooms: function getRooms() {
-            var _this4 = this;
-
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room').then(function (response) {
-                _this4.rooms = response.data;
-                _this4.checkRooms();
-            }).catch(function (e) {
-                console.log(e);
-            });
-        },
-        createRoom: function createRoom() {
-            var _this5 = this;
-
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/room', this.addRoom.data).then(function (response) {
-                _this5.rooms = response.data;
-                _this5.checkRooms();
-            }).catch(function (error) {
-                _this5.addRoom.errors.record(error.response.data.errors);
-            });
-        },
-        createModule: function createModule() {
-            var _this6 = this;
-
-            this.addModule.data.user_id = this.user_id;
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/sensormodule/' + this.addModule.id, this.addModule.data).then(function (response) {
-                _this6.userInfo = response.data.allValues;
-                _this6.modules = response.data.modules;
-                _this6.room_id = 0;
-                _this6.checkRooms();
-            }).catch(function (error) {
-                _this6.addModule.errors.record(error.response.data.errors);
+                _this2.user.errors.record(error.response.data.errors);
             });
         },
         checkRooms: function checkRooms() {
+            console.log("titom");
+
             var foundID = false;
             this.noRoomsToAdd = false;
             for (var i = 0; i < this.rooms.length; i++) {
                 foundID = false;
-                for (var j = 0; j < this.userInfo.rooms.length && !foundID; j++) {
-                    if (this.rooms[i].id == this.userInfo.rooms[j].id) {
+
+                for (var j = 0; j < this.users[this.user.index].rooms.length && !foundID; j++) {
+                    if (this.rooms[i].id == this.users[this.user.index].rooms[j].id) {
                         foundID = true;
                     }
                 }
                 if (!foundID) {
-                    this.add_room_id = i;
+                    this.room.index = i;
                     return;
                 }
             }
             this.noRoomsToAdd = true;
         },
-        userChanged: function userChanged() {
-            var _this7 = this;
-
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('api/user/' + this.user_id + '/getAll').then(function (response) {
-                _this7.userInfo = response.data;
-                _this7.room_id = 0;
-                _this7.checkRooms();
-
-                if (!_this7.rooms) {
-                    _this7.getRooms();
-                }
-            }).catch(function (e) {
-                console.log(e);
-            });
-        },
         AddRoom: function AddRoom() {
-            var _this8 = this;
+            var _this3 = this;
 
-            this.newRoomLink.data.user_id = this.user_id;
-            this.newRoomLink.data.room_id = this.rooms[this.add_room_id].id;
+            this.newRoomLink.data.user_id = this.users[this.user.index].id;
+            this.newRoomLink.data.room_id = this.rooms[this.room.index].id;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/room_user', this.newRoomLink.data).then(function (response) {
-                _this8.userInfo = response.data;
-                _this8.checkRooms();
+                _this3.users = response.data;
+                _this3.checkRooms();
             }).catch(function (error) {
-                _this8.newRoomLink.errors.record(error.response.data.errors);
+                _this3.newRoomLink.errors.record(error.response.data.errors);
             });
         },
-        roomChanged: function roomChanged() {
-            this.sensor_modules_id = 0;
-        },
-        sensor_moduleChanged: function sensor_moduleChanged() {},
         notYetAdded: function notYetAdded(id) {
-            for (var i = 0; i < this.userInfo.rooms.length; i++) {
-                if (this.userInfo.rooms[i].id == id) {
-                    return false;
-                }
-            }
-            return true;
-        },
-        allAdded: function allAdded() {
-            for (var i = 0; i < this.modules.length; i++) {
-                if (this.modules[i].room_id == null) {
+
+            for (var i = 0; i < this.users[this.user.index].rooms.length; i++) {
+                if (this.users[this.user.index].rooms[i].id == id) {
                     return false;
                 }
             }
@@ -49254,7 +49006,7 @@ var render = function() {
                 return _vm.createUser($event)
               },
               keydown: function($event) {
-                _vm.addUser.errors.clear($event.target.name)
+                _vm.user.errors.clear($event.target.name)
               }
             }
           },
@@ -49268,8 +49020,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.addUser.data.name,
-                      expression: "addUser.data.name"
+                      value: _vm.user.data.name,
+                      expression: "user.data.name"
                     }
                   ],
                   staticClass: "input",
@@ -49280,13 +49032,13 @@ var render = function() {
                     placeholder: "Naam",
                     required: ""
                   },
-                  domProps: { value: _vm.addUser.data.name },
+                  domProps: { value: _vm.user.data.name },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.$set(_vm.addUser.data, "name", $event.target.value)
+                      _vm.$set(_vm.user.data, "name", $event.target.value)
                     }
                   }
                 }),
@@ -49304,8 +49056,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.addUser.data.username,
-                      expression: "addUser.data.username"
+                      value: _vm.user.data.username,
+                      expression: "user.data.username"
                     }
                   ],
                   staticClass: "input",
@@ -49316,17 +49068,13 @@ var render = function() {
                     placeholder: "Gebruikersnaam",
                     required: ""
                   },
-                  domProps: { value: _vm.addUser.data.username },
+                  domProps: { value: _vm.user.data.username },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.$set(
-                        _vm.addUser.data,
-                        "username",
-                        $event.target.value
-                      )
+                      _vm.$set(_vm.user.data, "username", $event.target.value)
                     }
                   }
                 }),
@@ -49344,8 +49092,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.addUser.data.email,
-                      expression: "addUser.data.email"
+                      value: _vm.user.data.email,
+                      expression: "user.data.email"
                     }
                   ],
                   staticClass: "input",
@@ -49356,13 +49104,13 @@ var render = function() {
                     placeholder: "Email",
                     required: ""
                   },
-                  domProps: { value: _vm.addUser.data.email },
+                  domProps: { value: _vm.user.data.email },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.$set(_vm.addUser.data, "email", $event.target.value)
+                      _vm.$set(_vm.user.data, "email", $event.target.value)
                     }
                   }
                 }),
@@ -49376,64 +49124,58 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "control" }, [
                 _c("div", { staticClass: "select" }, [
-                  _vm.rooms.length > 0
-                    ? _c(
-                        "select",
+                  _c(
+                    "select",
+                    {
+                      directives: [
                         {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.addModule.data.room_id,
-                              expression: "addModule.data.room_id"
-                            }
-                          ],
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.addModule.data,
-                                "room_id",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.user.data.role_id,
+                          expression: "user.data.role_id"
+                        }
+                      ],
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.user.data,
+                            "role_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "option",
+                        {
+                          attrs: {
+                            value: "",
+                            selected: "selected",
+                            disabled: "",
+                            hidden: ""
                           }
                         },
-                        [
-                          _c(
-                            "option",
-                            {
-                              attrs: {
-                                value: "",
-                                selected: "",
-                                disabled: "",
-                                hidden: ""
-                              }
-                            },
-                            [_vm._v("Kies een rol")]
-                          ),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "1" } }, [
-                            _vm._v("1")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "2" } }, [
-                            _vm._v("2")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "3" } }, [_vm._v("3")])
-                        ]
-                      )
-                    : _vm._e()
+                        [_vm._v("Kies een rol")]
+                      ),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "1" } }, [_vm._v("1")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "2" } }, [_vm._v("2")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "3" } }, [_vm._v("3")])
+                    ]
+                  )
                 ])
               ])
             ]),
@@ -49511,20 +49253,20 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.addUser.data.rooms,
-                            expression: "addUser.data.rooms"
+                            value: _vm.user.data.rooms,
+                            expression: "user.data.rooms"
                           }
                         ],
                         attrs: { type: "checkbox", id: room.id },
                         domProps: {
                           value: room.id,
-                          checked: Array.isArray(_vm.addUser.data.rooms)
-                            ? _vm._i(_vm.addUser.data.rooms, room.id) > -1
-                            : _vm.addUser.data.rooms
+                          checked: Array.isArray(_vm.user.data.rooms)
+                            ? _vm._i(_vm.user.data.rooms, room.id) > -1
+                            : _vm.user.data.rooms
                         },
                         on: {
                           change: function($event) {
-                            var $$a = _vm.addUser.data.rooms,
+                            var $$a = _vm.user.data.rooms,
                               $$el = $event.target,
                               $$c = $$el.checked ? true : false
                             if (Array.isArray($$a)) {
@@ -49533,20 +49275,20 @@ var render = function() {
                               if ($$el.checked) {
                                 $$i < 0 &&
                                   _vm.$set(
-                                    _vm.addUser.data,
+                                    _vm.user.data,
                                     "rooms",
                                     $$a.concat([$$v])
                                   )
                               } else {
                                 $$i > -1 &&
                                   _vm.$set(
-                                    _vm.addUser.data,
+                                    _vm.user.data,
                                     "rooms",
                                     $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                                   )
                               }
                             } else {
-                              _vm.$set(_vm.addUser.data, "rooms", $$c)
+                              _vm.$set(_vm.user.data, "rooms", $$c)
                             }
                           }
                         }
@@ -49591,8 +49333,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.user_id,
-                            expression: "user_id"
+                            value: _vm.user.index,
+                            expression: "user.index"
                           }
                         ],
                         on: {
@@ -49606,16 +49348,20 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.user_id = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
+                              _vm.$set(
+                                _vm.user,
+                                "index",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
                             },
-                            _vm.userChanged
+                            _vm.checkRooms
                           ]
                         }
                       },
-                      _vm._l(_vm.users, function(user) {
-                        return _c("option", { domProps: { value: user.id } }, [
+                      _vm._l(_vm.users, function(user, key) {
+                        return _c("option", { domProps: { value: key } }, [
                           _vm._v(_vm._s(user.username))
                         ])
                       })
@@ -49627,7 +49373,7 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _vm.userInfo && _vm.userInfo.rooms.length > 0
+          !_vm.noRoomsToAdd && _vm.users && _vm.rooms.length > 0
             ? [
                 _c("div", { staticClass: "field" }, [
                   _c("label", { staticClass: "label" }, [_vm._v("Kamer")]),
@@ -49642,8 +49388,8 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.add_room_id,
-                                  expression: "add_room_id"
+                                  value: _vm.room.index,
+                                  expression: "room.index"
                                 }
                               ],
                               on: {
@@ -49657,9 +49403,13 @@ var render = function() {
                                         "_value" in o ? o._value : o.value
                                       return val
                                     })
-                                  _vm.add_room_id = $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
+                                  _vm.$set(
+                                    _vm.room,
+                                    "index",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
                                 }
                               }
                             },
@@ -49676,16 +49426,19 @@ var render = function() {
                       _vm._m(5)
                     ]),
                     _vm._v(" "),
-                    _c("p", { staticClass: "help" }, [
-                      _c("strong", [_vm._v("Beschrijving:")]),
-                      _vm._v(
-                        " " + _vm._s(_vm.rooms[_vm.add_room_id].roomDescription)
-                      )
-                    ])
+                    _vm.rooms
+                      ? _c("p", { staticClass: "help" }, [
+                          _c("strong", [_vm._v("Beschrijving:")]),
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.rooms[_vm.room.index].roomDescription)
+                          )
+                        ])
+                      : _vm._e()
                   ])
                 ]),
                 _vm._v(" "),
-                _vm.userInfo.rooms[_vm.room_id].sensor_modules.length > 0
+                _vm.rooms[_vm.room.index].sensor_modules.length > 0
                   ? [
                       _c("div", { staticClass: "field" }, [
                         _c("label", { staticClass: "label" }, [
@@ -49701,35 +49454,33 @@ var render = function() {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.sensor_modules_id,
-                                    expression: "sensor_modules_id"
+                                    value: _vm.sensormodule.index,
+                                    expression: "sensormodule.index"
                                   }
                                 ],
                                 on: {
-                                  change: [
-                                    function($event) {
-                                      var $$selectedVal = Array.prototype.filter
-                                        .call($event.target.options, function(
-                                          o
-                                        ) {
-                                          return o.selected
-                                        })
-                                        .map(function(o) {
-                                          var val =
-                                            "_value" in o ? o._value : o.value
-                                          return val
-                                        })
-                                      _vm.sensor_modules_id = $event.target
-                                        .multiple
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.sensormodule,
+                                      "index",
+                                      $event.target.multiple
                                         ? $$selectedVal
                                         : $$selectedVal[0]
-                                    },
-                                    _vm.sensor_moduleChanged
-                                  ]
+                                    )
+                                  }
                                 }
                               },
                               _vm._l(
-                                _vm.userInfo.rooms[_vm.room_id].sensor_modules,
+                                _vm.rooms[_vm.room.index].sensor_modules,
                                 function(sensor_module, key) {
                                   return _c(
                                     "option",
@@ -49753,13 +49504,7 @@ var render = function() {
                       ])
                     ]
               ]
-            : [
-                _c("p", { staticClass: "help is-danger" }, [
-                  _vm._v(
-                    "Er zijn geen ruimtes beschikbaar voor deze gebruiker."
-                  )
-                ])
-              ],
+            : _vm._e(),
           _vm._v(" "),
           !_vm.noRoomsToAdd
             ? [

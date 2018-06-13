@@ -51,8 +51,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
-
     export default {
         mounted() {
             console.log('RoomOverviewComponent mounted')
@@ -67,7 +65,7 @@
 
         methods: {
             getRooms(){
-                axios.get('/api/room').then(response => {
+                axios.get('/api/room', config).then(response => {
                     this.rooms = response.data;
                     this.rooms.forEach((room) => {
                        room.isVisible = true;

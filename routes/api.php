@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 //user
+Route::get('/user/getAll', 'UserController@getAll');
 Route::get('/user/{id}', 'UserController@showOne');
 Route::get('/user/{id}/getAll', 'UserController@getAllValues');
 Route::post('/user', 'UserController@store');  
