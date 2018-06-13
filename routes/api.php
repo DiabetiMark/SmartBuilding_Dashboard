@@ -56,7 +56,7 @@ Route::get('/room/{id}/getAll', 'RoomController@getAllValuesRoom');
 Route::get('/room', 'RoomController@showAll');
 Route::post('/room', 'RoomController@store');
 Route::put('/room/{id}', 'RoomController@update');
-//Route::delete('/room/{id}', 'RoomController@destroy');      werkt nog niet
+Route::delete('/room/{id}', 'RoomController@destroy');      
 
 //custom room actions
 Route::get('/room/users/{id}', 'RoomController@getUsers');

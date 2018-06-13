@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Room;
+use App\SensorModule;
 use Illuminate\Http\Request;
 use JavaScript;
 
@@ -104,7 +105,7 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $reqeust)
+    public function update($id, Request $request)
     {
         $this->validate($request, [
             
@@ -114,7 +115,7 @@ class RoomController extends Controller
 
         if($item !== null){
             if($this->setUpdate($item, $request)){
-                return;
+                return $this->showAll();
             }
 
             $error = [
@@ -143,9 +144,17 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Room $room)
+    public function destroy($id)
     {
-        //
+        DB::table('room_user')->where('room_id', $id)->delete();
+        SensorModule::where('room_id', $id)->update(['room_id' => null]);
+        Room::find($id)->delete();
+
+        $data = array(
+            'rooms' => $this->showAll(),
+            'modules' => app('App\Http\Controllers\SensorModuleController')->showAll(),
+        );
+        return $data;
     }
 
     //custom actions
