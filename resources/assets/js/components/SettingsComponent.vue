@@ -14,75 +14,98 @@
                 <hr>
                 <template v-if="!allAdded() && modules">
                     <form @submit.prevent="addModuleToRoom" @keydown="addModule.errors.clear($event.target.name)">
-                        <div>
-                            <div>
-                                Module:
-                                <select v-model='addModule.index.module' v-if="modules.length > 0">
-                                    <option v-for="(modul, key) in modules" :value="key" v-if="modul.room_id == null" >{{modul.moduleName}}</option>
-                                </select>
+                        <div class="field">
+                            <label class="label">Ruimte</label>
+                            <div class="control has-icons-left">
+                                <div class="select">
+                                    <select v-model='addModule.index.room' v-if="rooms.length > 0">
+                                        <option v-for="(room, key) in rooms" :value="key" >{{room.roomName}}</option>
+                                    </select>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-home"></i>
+                                    </span>
+                                </div>
+                                <p class="help" v-if="rooms.length > 0" style="max-width:50%;word-wrap:break-word;"><strong>Beschrijving:</strong> {{ rooms[addModule.index.room].roomDescription }}</p>
                             </div>
                         </div>
-                        <div>
-                            <div>
-                                Ruimte:
-                                <select v-model='addModule.index.room' v-if="rooms.length > 0">
-                                    <option v-for="(room, key) in rooms" :value="key" >{{room.roomName}}</option>
-                                </select>
-                                <p class="help" v-if="rooms.length > 0"><strong>Beschrijving:</strong> {{ rooms[addModule.index.room].roomDescription }}</p>
+                        <div class="field">
+                            <label class="label">Module</label>
+                            <div class="control has-icons-left">
+                                <div class="select">
+                                    <select v-model='addModule.index.module' v-if="modules.length > 0">
+                                        <option v-for="(modul, key) in modules" :value="key" v-if="modul.room_id == null" >{{modul.moduleName}}</option>
+                                    </select>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-microchip"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <input value="Toevoegen" type="submit">
+                        <input class="button is-info" value="Toevoegen" type="submit">
                     </form>
                 </template>
                 <template v-else-if="allAdded() && modules">
-                    Er zijn geen los modules beschikbaar
+                    <p class="help is-danger">Er zijn geen losse modules beschikbaar</p>
                 </template>
                 <template v-else-if="!modules">
-                    ff wachten
+                    Laden...
                 </template>
             </div>
             <div class="column">
                 <h4 class="title is-4">Module Van Ruimte Verwijderen</h4>
                 <hr>
                 <template v-if="modules && rooms">
-                    <div>
-                        <div>
-                            Ruimte:
-                            <select v-model='deleteModule.room_id.index' v-if="rooms.length > 0">
-                                <option v-for="(room, key) in rooms" :value="key" >{{room.roomName}}</option>
-                            </select>
-                            <p class="help" v-if="rooms.length > 0"><strong>Beschrijving:</strong> {{ rooms[deleteModule.room_id.index].roomDescription }}</p>
+                    <div class="field">
+                        <label class="label">Ruimte</label>
+                        <div class="control has-icons-left">
+                            <div class="select">
+                                <select v-model='deleteModule.room_id.index' v-if="rooms.length > 0">
+                                    <option v-for="(room, key) in rooms" :value="key" >{{room.roomName}}</option>
+                                </select>
+                                <span class="icon is-small is-left">
+                                        <i class="fas fa-home"></i>
+                                </span>
+                            </div>
+                            <p class="help" v-if="rooms.length > 0" style="max-width:50%;word-wrap:break-word;"><strong>Beschrijving:</strong> {{ rooms[deleteModule.room_id.index].roomDescription }}</p>
                         </div>
                     </div>
+
+                    <!-- TODO - Styling -->
                     <div>
                         <div v-if="modules.length > 0 && hasModules() && deleteModule.room_id.index >= 0" >
                             Modules:
-                            <div v-if="modul.room_id == rooms[deleteModule.room_id.index].id" v-for="modul in modules">
-                                <p>{{modul.moduleName}}</p><button @click="deleteModuleChange(modul.id)">verwijder</button>
+                            <div v-if="module.room_id == rooms[deleteModule.room_id.index].id" v-for="module in modules">
+                                <p>{{module.moduleName}}</p><button class="button is-info" @click="deleteModuleChange(module.id)">Verwijder</button>
                             </div>
                         </div>
                         <div v-if="!hasModules()">
-                            <p>er zijn geen modules beschikbaar voor deze ruimte</p>
+                            <p class="help is-danger">Er zijn geen modules beschikbaar voor deze ruimte</p>
                         </div>
 
                     </div>
+                    <!-- TODO - Styling -->
                 </template>
             </div>
+        </div>
+        <br><hr><br>
+        <div class="columns is-gapless">
             <div class="column">
                 <h4 class="title is-4">Ruimte Toevoegen</h4>
                 <hr>
                 <form @submit.prevent="createRoom" @keydown="addRoom.errors.clear($event.target.name)">
-                    <div>
-                        <div>
-                            <input name="naam" type="text" placeholder="Ruimte naam" v-model='addRoom.data.roomName' autofocus required>
+                    <div class="field">
+                        <label class="label">Naam</label>
+                        <div class="control">
+                            <input style="width:75%;" class="input" name="naam" type="text" placeholder="Ruimte naam" v-model='addRoom.data.roomName' autofocus required>
                         </div>
                     </div>
                     <div class="field">
+                        <label class="label">Omschrijving</label>
                         <div class="control">
-                            <input  name="omschrijving" type="text" placeholder="Ruimte omschrijving" v-model='addRoom.data.roomDescription' required>
+                            <input style="width:75%;" class="input" name="omschrijving" type="text" placeholder="Ruimte omschrijving" v-model='addRoom.data.roomDescription' required>
                         </div>
                     </div>
-                    <input value="Toevoegen" type="submit">
+                    <input class="button is-info" value="Toevoegen" type="submit">
                 </form>
             </div>
             <div class="column" v-if="rooms">
@@ -92,7 +115,7 @@
                 <select v-model='room.room_id.index' v-if="rooms.length > 0">
                     <option v-for="(room1, key) in rooms" :value="key" >{{room1.roomName}}</option>
                 </select>
-                <p class="help" v-if="rooms.length > 0  && room.room_id.index >= 0 && !isOpen"><strong>Beschrijving:</strong> {{ rooms[room.room_id.index].roomDescription }}</p>
+                <p class="help" v-if="rooms.length > 0  && room.room_id.index >= 0 && !isOpen" style="max-width:50%;word-wrap:break-word;"><strong>Beschrijving:</strong> {{ rooms[room.room_id.index].roomDescription }}</p>
                 <div v-if="isOpen">
                      <form @submit.prevent="addModuleToRoom" @keydown="addModule.errors.clear($event.target.name)">
                         <div>

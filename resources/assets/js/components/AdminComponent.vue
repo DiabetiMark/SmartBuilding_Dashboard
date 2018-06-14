@@ -127,7 +127,7 @@
                     <button class="button is-info" @click="AddRoom">Voeg kamer toe</button>
                 </template>
                 <template v-else>
-                    <p>Voor deze gebruiker zijn er geen kamers meer om toe tevoegen.</p>
+                    <p class="help is-danger">Voor deze gebruiker zijn er geen kamers meer om toe tevoegen.</p>
                 </template>
             </div>
         </div>
@@ -214,6 +214,7 @@
         },
 
         mounted() {
+
         },
 
         created(){
@@ -263,8 +264,6 @@
                 });
             },
             checkRooms(){
-                console.log("titom");
-                
                 var foundID = false;
                 this.noRoomsToAdd = false;
                 for(var i=0; i < this.rooms.length; i++){

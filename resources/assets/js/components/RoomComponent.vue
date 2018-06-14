@@ -73,6 +73,7 @@
 
         data(){
             return{
+                loader: undefined,
                 roomId: roomId,
                 roomName: '',
                 roomDescription: '',
@@ -102,15 +103,18 @@
                     dropdown.classList.toggle('is-active');
             });
             this.dateDropdown = dropdown;
+
+
         },
 
         created(){
             this.getData();
+
         },
 
         methods: {
             getData(){
-                axios.get('/api/room/' + this.roomId + '/getAllValues').then(response => {
+                axios.get('/api/room/' + this.roomId + '/getAll').then(response => {
                     //console.log(response.data);
                     let data = {
                         'deur': [],
@@ -173,9 +177,13 @@
 
                 let humTime = [];
                 let humValues = [];
+                let humBackgrounds = [];
+                let humBorders = [];
                 this.data.luchtvochtigheid.forEach((hum) =>{
                     humTime.push(hum.time);
                     humValues.push(hum.value);
+                    humBackgrounds.push("rgba(54, 162, 235, 0.2)");
+                    humBorders.push("rgb(54, 162, 235)");
                 });
 
                 new Chart(this.$refs.humidityChart, {
@@ -186,8 +194,8 @@
                             "label": "Gemiddelde luchtvochtigheid in alle ruimtes in percentages",
                             "data": humValues,
                             "fill": false,
-                            "backgroundColor": ["rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)"],
-                            "borderColor": ["rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)"],
+                            "backgroundColor": humBackgrounds,
+                            "borderColor": humBorders,
                             "borderWidth": 1
                         }]
                     },
