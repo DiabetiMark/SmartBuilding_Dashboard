@@ -49806,6 +49806,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -50286,50 +50313,42 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _c("div", [
-                  _vm.modules.length > 0 &&
-                  _vm.hasModules() &&
-                  _vm.deleteModule.room_id.index >= 0
-                    ? _c(
-                        "div",
-                        [
-                          _vm._v(
-                            "\n                        Modules:\n                        "
-                          ),
-                          _vm._l(_vm.modules, function(module) {
-                            return module.room_id ==
-                              _vm.rooms[_vm.deleteModule.room_id.index].id
-                              ? _c("div", [
-                                  _c("p", [_vm._v(_vm._s(module.moduleName))]),
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass: "button is-info",
-                                      on: {
-                                        click: function($event) {
-                                          _vm.deleteModuleChange(module.id)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Verwijder")]
-                                  )
-                                ])
-                              : _vm._e()
-                          })
-                        ],
-                        2
-                      )
-                    : _vm._e(),
+                _c("div", { staticClass: "field" }, [
+                  _c("label", { staticClass: "label" }, [_vm._v("Modules")]),
                   _vm._v(" "),
-                  !_vm.hasModules()
-                    ? _c("div", [
-                        _c("p", { staticClass: "help is-danger" }, [
-                          _vm._v(
-                            "Er zijn geen modules beschikbaar voor deze ruimte"
-                          )
-                        ])
-                      ])
-                    : _vm._e()
+                  _c("div", { staticClass: "control has-icons-left" }, [
+                    _c("div", { staticClass: "select" }, [
+                      _c(
+                        "select",
+                        _vm._l(_vm.modules, function(module) {
+                          return module.room_id ==
+                            _vm.rooms[_vm.deleteModule.room_id.index].id
+                            ? _c("option", [_vm._v(_vm._s(module.moduleName))])
+                            : _vm._e()
+                        })
+                      ),
+                      _vm._v(" "),
+                      _vm._m(4)
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "button is-info",
+                    on: {
+                      click: function($event) {
+                        _vm.deleteModuleChange(_vm.module.id)
+                      }
+                    }
+                  },
+                  [_vm._v("Verwijder")]
+                ),
+                _c("br"),
+                _vm._v(" "),
+                _c("span", { staticClass: "tag is-danger" }, [
+                  _vm._v("Deze button moet nog gefixt worden")
                 ])
               ]
             : _vm._e()
@@ -50454,68 +50473,80 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("hr"),
-            _vm._v("\n            Ruimtes:\n            "),
-            _vm.rooms.length > 0
-              ? _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.room.room_id.index,
-                        expression: "room.room_id.index"
-                      }
-                    ],
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.room.room_id,
-                          "index",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
-                    }
-                  },
-                  _vm._l(_vm.rooms, function(room1, key) {
-                    return _c("option", { domProps: { value: key } }, [
-                      _vm._v(_vm._s(room1.roomName))
-                    ])
-                  })
-                )
-              : _vm._e(),
             _vm._v(" "),
-            _vm.rooms.length > 0 && _vm.room.room_id.index >= 0 && !_vm.isOpen
-              ? _c(
-                  "p",
-                  {
-                    staticClass: "help",
-                    staticStyle: {
-                      "max-width": "50%",
-                      "word-wrap": "break-word"
-                    }
-                  },
-                  [
-                    _c("strong", [_vm._v("Beschrijving:")]),
-                    _vm._v(
-                      " " +
-                        _vm._s(
-                          _vm.rooms[_vm.room.room_id.index].roomDescription
+            _c("div", { staticClass: "field" }, [
+              _c("label", { staticClass: "label" }, [_vm._v("Ruimtes")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "control has-icons-left" }, [
+                _c("div", { staticClass: "select" }, [
+                  _vm.rooms.length > 0
+                    ? _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.room.room_id.index,
+                              expression: "room.room_id.index"
+                            }
+                          ],
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.room.room_id,
+                                "index",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.rooms, function(room1, key) {
+                          return _c("option", { domProps: { value: key } }, [
+                            _vm._v(_vm._s(room1.roomName))
+                          ])
+                        })
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm._m(5)
+                ]),
+                _vm._v(" "),
+                _vm.rooms.length > 0 &&
+                _vm.room.room_id.index >= 0 &&
+                !_vm.isOpen
+                  ? _c(
+                      "p",
+                      {
+                        staticClass: "help",
+                        staticStyle: {
+                          "max-width": "50%",
+                          "word-wrap": "break-word"
+                        }
+                      },
+                      [
+                        _c("strong", [_vm._v("Beschrijving:")]),
+                        _vm._v(
+                          " " +
+                            _vm._s(
+                              _vm.rooms[_vm.room.room_id.index].roomDescription
+                            )
                         )
+                      ]
                     )
-                  ]
-                )
-              : _vm._e(),
+                  : _vm._e()
+              ])
+            ]),
             _vm._v(" "),
             _vm.isOpen
               ? _c("div", [
@@ -50533,11 +50564,10 @@ var render = function() {
                       }
                     },
                     [
-                      _c("div", [
-                        _c("div", [
-                          _vm._v(
-                            "\n                            Naam: \n                            "
-                          ),
+                      _c("div", { staticClass: "field" }, [
+                        _c("label", { staticClass: "label" }, [_vm._v("Naam")]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "control" }, [
                           _c("input", {
                             directives: [
                               {
@@ -50547,6 +50577,8 @@ var render = function() {
                                 expression: "room.data.roomName"
                               }
                             ],
+                            staticClass: "input",
+                            staticStyle: { width: "75%" },
                             attrs: { type: "text", name: "name" },
                             domProps: { value: _vm.room.data.roomName },
                             on: {
@@ -50565,11 +50597,12 @@ var render = function() {
                         ])
                       ]),
                       _vm._v(" "),
-                      _c("div", [
-                        _c("div", [
-                          _vm._v(
-                            "\n                            Beschrijving:\n                            "
-                          ),
+                      _c("div", { staticClass: "field" }, [
+                        _c("label", { staticClass: "label" }, [
+                          _vm._v("Message")
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "control" }, [
                           _c("textarea", {
                             directives: [
                               {
@@ -50579,6 +50612,7 @@ var render = function() {
                                 expression: "room.data.roomDescription"
                               }
                             ],
+                            staticClass: "textarea",
                             attrs: { type: "text", name: "name" },
                             domProps: { value: _vm.room.data.roomDescription },
                             on: {
@@ -50604,6 +50638,7 @@ var render = function() {
             _c(
               "button",
               {
+                staticClass: "button is-info",
                 on: {
                   click: function($event) {
                     _vm.updateRoom()
@@ -50616,6 +50651,7 @@ var render = function() {
             _c(
               "button",
               {
+                staticClass: "button is-info",
                 on: {
                   click: function($event) {
                     _vm.deleteRoom()
@@ -50627,7 +50663,9 @@ var render = function() {
             _vm._v(" "),
             _vm.rooms.length == 0
               ? _c("div", [
-                  _c("p", [_vm._v("er zijn geen ruimtes beschikbaar")])
+                  _c("p", { staticClass: "help is-danger" }, [
+                    _vm._v("Er zijn geen ruimtes beschikbaar")
+                  ])
                 ])
               : _vm._e()
           ])
@@ -50655,6 +50693,22 @@ var staticRenderFns = [
         ])
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "icon is-small is-left" }, [
+      _c("i", { staticClass: "fas fa-home" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "icon is-small is-left" }, [
+      _c("i", { staticClass: "fas fa-microchip" })
+    ])
   },
   function() {
     var _vm = this
