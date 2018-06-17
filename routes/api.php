@@ -80,6 +80,9 @@ Route::put('/dataregister/{id}', 'UserDataRegisterControllerController@update');
 //custom room actions
 Route::get('/dataregister/sensormodules/{id}', 'RoomController@getSensorModules');
 
+
+//roles
+Route::get('/role', 'RoleController@showall');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });

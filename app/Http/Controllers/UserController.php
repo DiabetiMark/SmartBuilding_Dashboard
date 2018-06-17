@@ -98,7 +98,7 @@ class UserController extends Controller
 
 
             Mail::to($request->email)->send(new newUser($request->name, $hash, $request->username));
-            return $this->getAll();
+            return $this->showAll();
         }
 
         $error = [
@@ -111,7 +111,12 @@ class UserController extends Controller
 
     public function showAll()
     {
-        return $users = User::all();
+        $data = array(
+            'users' => User::all(),
+            'room_user' => app('App\Http\Controllers\RoomUserController')->showAll(),
+        );
+
+        return response()->json($data);
     }
 
     public function showOne($id)
