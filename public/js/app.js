@@ -47378,14 +47378,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -47406,8 +47398,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 'luchtvochtigheid': [],
                 'beweging': []
             },
+            selectedDate: undefined,
             dates: [],
-            dateDropdown: undefined
+            dateDropdown: undefined,
+            charts: []
         };
     },
     mounted: function mounted() {
@@ -47422,11 +47416,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (dropdown.classList.contains('is-active')) dropdown.classList.toggle('is-active');
         });
         this.dateDropdown = dropdown;
+
+        var today = new Date();
+        var day = today.getDate();
+        var month = today.getMonth() + 1;
+        var year = today.getFullYear();
+        if (day < 10) {
+            day = '0' + day;
+        }
+        if (month < 10) {
+            month = '0' + month;
+        }
+        this.selectedDate = year + '-' + month + '-' + day;
     },
     created: function created() {
         this.getData();
     },
 
+
+    watch: {
+        selectedDate: function selectedDate() {
+            this.populateGraphs();
+        }
+    },
 
     methods: {
         getData: function getData() {
@@ -47463,6 +47475,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.dates = _this.dates.filter(function (item, pos, self) {
                     return self.indexOf(item) === pos;
                 });
+                _this.dates = _this.dates.sort(function (a, b) {
+                    return new Date(b) - new Date(a);
+                });
                 _this.modules = modules;
                 _this.roomName = response.data.roomName;
                 _this.roomDescription = response.data.roomDescription;
@@ -47472,14 +47487,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         populateGraphs: function populateGraphs() {
+            var _this2 = this;
+
+            // Destroy the charts to remove objects that are still alive and thus interactable
+            this.charts.forEach(function (chart) {
+                chart.destroy();
+            });
+
             var tempTime = [];
             var tempValues = [];
             this.data.temperatuur.forEach(function (temp) {
-                tempTime.push(temp.time);
-                tempValues.push(temp.value);
+                if (temp.date === _this2.selectedDate) {
+                    tempTime.push(temp.time);
+                    tempValues.push(temp.value);
+                }
             });
 
-            new Chart(this.$refs.tempChart, {
+            this.charts.push(new Chart(this.$refs.tempChart, {
                 "type": "line",
                 "data": {
                     "labels": tempTime,
@@ -47492,20 +47516,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     }]
                 },
                 "options": {}
-            });
+            }));
 
             var humTime = [];
             var humValues = [];
             var humBackgrounds = [];
             var humBorders = [];
             this.data.luchtvochtigheid.forEach(function (hum) {
-                humTime.push(hum.time);
-                humValues.push(hum.value);
-                humBackgrounds.push("rgba(54, 162, 235, 0.2)");
-                humBorders.push("rgb(54, 162, 235)");
+                if (hum.date === _this2.selectedDate) {
+                    humTime.push(hum.time);
+                    humValues.push(hum.value);
+                    humBackgrounds.push("rgba(54, 162, 235, 0.2)");
+                    humBorders.push("rgb(54, 162, 235)");
+                }
             });
 
-            new Chart(this.$refs.humidityChart, {
+            this.charts.push(new Chart(this.$refs.humidityChart, {
                 "type": "bar",
                 "data": {
                     "labels": humTime,
@@ -47527,16 +47553,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         }]
                     }
                 }
-            });
+            }));
 
             var methaneTime = [];
             var methaneValues = [];
             this.data.methaan.forEach(function (methane) {
-                methaneTime.push(methane.time);
-                methaneValues.push(methane.value);
+                if (methane.date === _this2.selectedDate) {
+                    methaneTime.push(methane.time);
+                    methaneValues.push(methane.value);
+                }
             });
 
-            new Chart(this.$refs.methaneChart, {
+            this.charts.push(new Chart(this.$refs.methaneChart, {
                 "type": "line",
                 "data": {
                     "labels": methaneTime,
@@ -47549,7 +47577,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     }]
                 },
                 "options": {}
-            });
+            }));
         }
     }
 });
@@ -47594,53 +47622,49 @@ var render = function() {
             "div",
             { staticClass: "dropdown is-right", attrs: { id: "datedropdown" } },
             [
-              _c("div", { staticClass: "dropdown-trigger" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "button is-small",
-                    attrs: {
-                      "aria-haspopup": "true",
-                      "aria-controls": "dropdown-menu"
-                    }
-                  },
-                  [
-                    _c("span", [_vm._v(_vm._s(_vm.dates[0]))]),
-                    _vm._v(" "),
-                    _vm._m(2)
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "dropdown-menu",
-                  attrs: { id: "dropdown-menu", role: "menu" }
-                },
-                [
+              _c("div", { staticClass: "control" }, [
+                _c("div", { staticClass: "select" }, [
                   _c(
-                    "div",
-                    { staticClass: "dropdown-content" },
-                    _vm._l(_vm.dates, function(date) {
-                      return _c(
-                        "a",
+                    "select",
+                    {
+                      directives: [
                         {
-                          staticClass: "dropdown-item is-active",
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selectedDate,
+                          expression: "selectedDate"
+                        }
+                      ],
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.selectedDate = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    _vm._l(_vm.dates, function(date, index) {
+                      return _c(
+                        "option",
+                        {
+                          staticClass: "dropdown-item",
+                          class: { "is-active": index === 0 },
                           attrs: { href: "#" }
                         },
-                        [
-                          _vm._v(
-                            "\n                                " +
-                              _vm._s(date) +
-                              "\n                            "
-                          )
-                        ]
+                        [_vm._v(_vm._s(date))]
                       )
                     })
                   )
-                ]
-              )
+                ])
+              ])
             ]
           )
         ])
@@ -47683,9 +47707,7 @@ var render = function() {
       _c("div", { staticClass: "column" })
     ]),
     _vm._v(" "),
-    _c("br"),
-    _vm._v(" "),
-    _c("pre", [_vm._v(_vm._s(_vm.data))])
+    _c("br")
   ])
 }
 var staticRenderFns = [
@@ -47701,17 +47723,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("li", [
       _c("a", { attrs: { href: "/overview" } }, [_vm._v("Overzicht")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "icon is-small" }, [
-      _c("i", {
-        staticClass: "fa fa-angle-down",
-        attrs: { "aria-hidden": "true" }
-      })
     ])
   }
 ]
