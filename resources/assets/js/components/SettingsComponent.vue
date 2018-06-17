@@ -59,7 +59,7 @@
                         <label class="label">Ruimte</label>
                         <div class="control has-icons-left">
                             <div class="select">
-                                <select v-model='deleteModule.room_id.index' v-if="rooms.length > 0">
+                                <select v-model='deleteModule.room_id.index' v-if="rooms.length > 0" @change="deleteModule.change = true">
                                     <option v-for="(room, key) in rooms" :value="key" >{{room.roomName}}</option>
                                 </select>
                                 <span class="icon is-small is-left">
@@ -69,35 +69,27 @@
                             <p class="help" v-if="rooms.length > 0" style="max-width:50%;word-wrap:break-word;"><strong>Beschrijving:</strong> {{ rooms[deleteModule.room_id.index].roomDescription }}</p>
                         </div>
                     </div>
-
-                    <div class="field">
-                        <label class="label">Modules</label>
-                        <div class="control has-icons-left">
-                            <div class="select">
-                                <select>
-                                    <option v-if="module.room_id == rooms[deleteModule.room_id.index].id" v-for="module in modules">{{module.moduleName}}</option>
-                                </select>
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-microchip"></i>
-                                </span>
+                    <template v-if="checkModules()">
+                        <div class="field" >
+                            <label class="label">Modules</label>
+                            <div class="control has-icons-left">
+                                <div class="select">
+                                    <select v-model='modul.id' v-if="modules.length > 0">
+                                        <option v-for="modul in modules" v-if="modul.room_id == rooms[deleteModule.room_id.index].id" :value="modul.id">{{modul.moduleName}}</option>
+                                    </select>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-microchip"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <button class="button is-info" @click="deleteModuleChange(module.id)">Verwijder</button><br>
-                    <span class="tag is-danger">Deze button moet nog gefixt worden</span>
-
-                    <!--<div>
-                        <div v-if="modules.length > 0 && hasModules() && deleteModule.room_id.index >= 0" >
-                            Modules:
-                            <div v-if="module.room_id == rooms[deleteModule.room_id.index].id" v-for="module in modules">
-                                <p>{{module.moduleName}}</p><button class="button is-info" @click="deleteModuleChange(module.id)">Verwijder</button>
-                            </div>
-                        </div>
-                        <div v-if="!hasModules()">
+                        <button class="button is-info" @click="deleteModuleChange()">Verwijder</button><br>
+                    </template>
+                    <template v-else>
+                        <div>
                             <p class="help is-danger">Er zijn geen modules beschikbaar voor deze ruimte</p>
                         </div>
-
-                    </div>-->
+                    </template>
                 </template>
             </div>
         </div>
@@ -200,6 +192,7 @@
                         index: '',
                     },
                     errors: new Errors(),
+                    change: true,
                 },
                 room: {
                     data: {
@@ -209,6 +202,9 @@
                     room_id:{
                         index: '',
                     },
+                    id: '',
+                },
+                modul: {
                     id: '',
                 },
                 room_id: false,
@@ -234,6 +230,19 @@
         },
 
         methods: {
+            checkModules(){
+                for(let index = 0; index < this.modules.length; index++){
+                    if(this.modules[index].room_id == this.rooms[this.deleteModule.room_id.index].id)
+                    {
+                        if(this.deleteModule.change){
+                            this.deleteModule.change = false;
+                            this.modul.id = this.modules[index].id;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            },
             updateRoom(){
                 let id = this.rooms[this.room.room_id.index].id
                 if(this.isOpen){
@@ -277,13 +286,14 @@
                     console.log(response);
                 })
             },
-            deleteModuleChange(id){
+            deleteModuleChange(){
                 let data = {
                     room_id: -1,
                 };
-                axios.put('/api/sensormodule/' + id, data)
+                axios.put('/api/sensormodule/' + this.modul.id, data)
                 .then(response => {
                     this.modules = response.data;
+                    this.deleteModule.change = true;
                     
                     for(let index = 0; index < this.modules.length; index++){
                         if(this.modules[index].room_id == null){

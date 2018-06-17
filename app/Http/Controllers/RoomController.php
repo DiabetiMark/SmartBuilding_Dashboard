@@ -121,7 +121,7 @@ class RoomController extends Controller
 
         if($item !== null){
             if($this->setUpdate($item, $request)){
-                return $this->showAll();
+                return $this->showAll($request);
             }
 
             $error = [

@@ -49825,14 +49825,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -49862,7 +49854,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 room_id: {
                     index: ''
                 },
-                errors: new Errors()
+                errors: new Errors(),
+                change: true
             },
             room: {
                 data: {
@@ -49872,6 +49865,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 room_id: {
                     index: ''
                 },
+                id: ''
+            },
+            modul: {
                 id: ''
             },
             room_id: false,
@@ -49895,6 +49891,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     methods: {
+        checkModules: function checkModules() {
+            for (var index = 0; index < this.modules.length; index++) {
+                if (this.modules[index].room_id == this.rooms[this.deleteModule.room_id.index].id) {
+                    if (this.deleteModule.change) {
+                        this.deleteModule.change = false;
+                        this.modul.id = this.modules[index].id;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        },
         updateRoom: function updateRoom() {
             var _this = this;
 
@@ -49937,14 +49945,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(response);
             });
         },
-        deleteModuleChange: function deleteModuleChange(id) {
+        deleteModuleChange: function deleteModuleChange() {
             var _this3 = this;
 
             var data = {
                 room_id: -1
             };
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/sensormodule/' + id, data).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/sensormodule/' + this.modul.id, data).then(function (response) {
                 _this3.modules = response.data;
+                _this3.deleteModule.change = true;
 
                 for (var index = 0; index < _this3.modules.length; index++) {
                     if (_this3.modules[index].room_id == null) {
@@ -50255,24 +50264,29 @@ var render = function() {
                                 }
                               ],
                               on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.$set(
-                                    _vm.deleteModule.room_id,
-                                    "index",
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  )
-                                }
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.deleteModule.room_id,
+                                      "index",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  function($event) {
+                                    _vm.deleteModule.change = true
+                                  }
+                                ]
                               }
                             },
                             _vm._l(_vm.rooms, function(room, key) {
@@ -50313,43 +50327,84 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "field" }, [
-                  _c("label", { staticClass: "label" }, [_vm._v("Modules")]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "control has-icons-left" }, [
-                    _c("div", { staticClass: "select" }, [
-                      _c(
-                        "select",
-                        _vm._l(_vm.modules, function(module) {
-                          return module.room_id ==
-                            _vm.rooms[_vm.deleteModule.room_id.index].id
-                            ? _c("option", [_vm._v(_vm._s(module.moduleName))])
-                            : _vm._e()
-                        })
-                      ),
+                _vm.checkModules()
+                  ? [
+                      _c("div", { staticClass: "field" }, [
+                        _c("label", { staticClass: "label" }, [
+                          _vm._v("Modules")
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "control has-icons-left" }, [
+                          _c("div", { staticClass: "select" }, [
+                            _vm.modules.length > 0
+                              ? _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.modul.id,
+                                        expression: "modul.id"
+                                      }
+                                    ],
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          _vm.modul,
+                                          "id",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      }
+                                    }
+                                  },
+                                  _vm._l(_vm.modules, function(modul) {
+                                    return modul.room_id ==
+                                      _vm.rooms[_vm.deleteModule.room_id.index]
+                                        .id
+                                      ? _c(
+                                          "option",
+                                          { domProps: { value: modul.id } },
+                                          [_vm._v(_vm._s(modul.moduleName))]
+                                        )
+                                      : _vm._e()
+                                  })
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm._m(4)
+                          ])
+                        ])
+                      ]),
                       _vm._v(" "),
-                      _vm._m(4)
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "button is-info",
-                    on: {
-                      click: function($event) {
-                        _vm.deleteModuleChange(_vm.module.id)
-                      }
-                    }
-                  },
-                  [_vm._v("Verwijder")]
-                ),
-                _c("br"),
-                _vm._v(" "),
-                _c("span", { staticClass: "tag is-danger" }, [
-                  _vm._v("Deze button moet nog gefixt worden")
-                ])
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button is-info",
+                          on: {
+                            click: function($event) {
+                              _vm.deleteModuleChange()
+                            }
+                          }
+                        },
+                        [_vm._v("Verwijder")]
+                      ),
+                      _c("br")
+                    ]
+                  : [_vm._m(5)]
               ]
             : _vm._e()
         ],
@@ -50519,7 +50574,7 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm._m(5)
+                  _vm._m(6)
                 ]),
                 _vm._v(" "),
                 _vm.rooms.length > 0 &&
@@ -50724,6 +50779,16 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "icon is-small is-left" }, [
       _c("i", { staticClass: "fas fa-microchip" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("p", { staticClass: "help is-danger" }, [
+        _vm._v("Er zijn geen modules beschikbaar voor deze ruimte")
+      ])
     ])
   },
   function() {
