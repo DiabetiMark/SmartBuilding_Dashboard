@@ -14,10 +14,9 @@ class DatabaseSeeder extends Seeder
     public function run(Faker $faker)
     {
         factory(App\User::class, 100)->create();
-        factory(App\DataRegister::class, 1000)->create();
+        factory(App\DataRegister::class, 5000)->create();
         factory(App\SensorModule::class, 50)->create();
         factory(App\Room::class, 30)->create();
-        factory(App\Sensor::class, 100)->create();
 
         $fieldName = [
             'temperatuur',
@@ -76,5 +75,24 @@ class DatabaseSeeder extends Seeder
             'phone' => '0612345678',
             'role_id' => '1',
         ]);
+
+        $sensorName = array();
+        for($index = 0; $index < 2 ; $index++){
+            array_push($sensorName, 'temperatuur' . $index);
+            array_push($sensorName, 'luchtvochtigheid' . $index);
+            array_push($sensorName, 'deur' . $index);
+            array_push($sensorName, 'raam' . $index);
+            array_push($sensorName, 'beweging' . $index);
+        }
+
+        for($index2 = 0; $index2 < 50; $index2++){
+            for($index = 0; $index < count($sensorName); $index++){
+                $data = [
+                    'name' => $sensorName[$index],
+                    'sensorModule_id' => $index2,
+                ];
+                DB::table('sensors')->insert($data);
+            }
+        }
     }
 }
