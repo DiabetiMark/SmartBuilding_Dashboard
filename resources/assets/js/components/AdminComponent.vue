@@ -103,13 +103,13 @@
                             </div>
                         </div>
 
-                        <template v-if="rooms[room.index].sensor_modules.length > 0">
+                        <template v-if="checkIfSensorModule">
                             <div class="field">
                                 <label class="label">Sensormodule</label>
                                 <div class="control has-icons-left">
                                     <div class="select">
                                         <select v-model='sensormodule.index'>
-                                            <option v-for="(sensor_module, key) in rooms[room.index].sensor_modules" v-bind:key="key" :value="key">{{sensor_module.moduleName}}</option>
+                                            <option v-for="(sensorModule, key) in sensorModules" v-bind:key="key" :value="key" v-if="sensorModule.room_id == rooms[room.index].id">{{sensorModule.moduleName}}</option>
                                         </select>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-microchip"></i>
@@ -206,7 +206,11 @@
                 users: false,
                 rooms: false,
                 roles: false,
+                roomUser: false,
+                sensorModules: false,
+                sensors: false,
                 noRoomsToAdd: false,
+                checkIfSensorModule: false,
                 newRoomLink: {
                     data: {
                         room_id: '',
@@ -229,16 +233,30 @@
 
         methods: {
             changedRoom(){
-                this.sensormodule.index = 0;
+                this.sensormodule.index = this.checkIfSensorModuleIsYeah();
+            },
+            checkIfSensorModuleIsYeah(){
+                for(let idx = 0 ; idx < this.sensorModules.length; idx++){
+                    if(this.sensorModules[idx].room_id == this.rooms[this.room.index].id){
+                        this.checkIfSensorModule = true;
+                        
+                        return idx;
+                    }
+                }
+                this.checkIfSensorModule = false;
             },
             getData(){
-                promises.push(axios.get('/api/room/getAll'));
+                promises.push(axios.get('/api/room'));
                 promises.push(axios.get('/api/user'));
+                promises.push(axios.get('/api/sensormodule'));
+                promises.push(axios.get('/api/sensor'));
                 axios.all(promises)
                 .then(response => {
                     this.rooms = response[0].data;
                     this.users = response[1].data.users;
                     this.roomUser = response[1].data.room_user;
+                    this.sensorModules = response[2].data;
+                    this.sensors = response[3].data;
 
                     this.user.index = 0;
 
@@ -247,8 +265,9 @@
                             this.room.index = index;
                         }
                     }
-                    this.changedRoom();
                     this.checkRooms();
+                    this.changedRoom();
+                    this.checkIfSensorModuleIsYeah();
                 })
                 .catch(error => {
                     console.log(error);
@@ -301,7 +320,6 @@
                 }
                 this.noRoomsToAdd = true;
             },
-            
             AddRoom(){
                 this.newRoomLink.data.user_id = this.users[this.user.index].id;
                 this.newRoomLink.data.room_id = this.rooms[this.room.index].id;

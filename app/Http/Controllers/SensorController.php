@@ -44,9 +44,20 @@ class SensorController extends Controller
      * @param  \App\Sensor  $sensor
      * @return \Illuminate\Http\Response
      */
-    public function show(Sensor $sensor)
+    public function showAll()
     {
-        //
+        return Sensor::all();
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Sensor  $sensor
+     * @return \Illuminate\Http\Response
+     */
+    public function showOne($id)
+    {
+        return Sensor::find($id);
     }
 
     /**

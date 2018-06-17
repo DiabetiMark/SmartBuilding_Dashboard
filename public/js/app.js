@@ -48684,6 +48684,8 @@ module.exports = function listToStyles (parentId, list) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -48861,7 +48863,7 @@ var promises = [];
     props: ['admin'],
 
     data: function data() {
-        return {
+        return _defineProperty({
             addModule: {
                 id: '',
                 data: {
@@ -48890,16 +48892,19 @@ var promises = [];
             users: false,
             rooms: false,
             roles: false,
+            roomUser: false,
+            sensorModules: false,
+            sensors: false,
             noRoomsToAdd: false,
+            checkIfSensorModule: false,
             newRoomLink: {
                 data: {
                     room_id: '',
                     user_id: ''
                 },
                 errors: new Errors()
-            },
-            roomUser: ''
-        };
+            }
+        }, 'roomUser', '');
     },
     mounted: function mounted() {},
     created: function created() {
@@ -48910,17 +48915,31 @@ var promises = [];
 
     methods: {
         changedRoom: function changedRoom() {
-            this.sensormodule.index = 0;
+            this.sensormodule.index = this.checkIfSensorModuleIsYeah();
+        },
+        checkIfSensorModuleIsYeah: function checkIfSensorModuleIsYeah() {
+            for (var idx = 0; idx < this.sensorModules.length; idx++) {
+                if (this.sensorModules[idx].room_id == this.rooms[this.room.index].id) {
+                    this.checkIfSensorModule = true;
+
+                    return idx;
+                }
+            }
+            this.checkIfSensorModule = false;
         },
         getData: function getData() {
             var _this = this;
 
-            promises.push(__WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room/getAll'));
+            promises.push(__WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room'));
             promises.push(__WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/user'));
+            promises.push(__WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/sensormodule'));
+            promises.push(__WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/sensor'));
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.all(promises).then(function (response) {
                 _this.rooms = response[0].data;
                 _this.users = response[1].data.users;
                 _this.roomUser = response[1].data.room_user;
+                _this.sensorModules = response[2].data;
+                _this.sensors = response[3].data;
 
                 _this.user.index = 0;
 
@@ -48929,8 +48948,9 @@ var promises = [];
                         _this.room.index = index;
                     }
                 }
-                _this.changedRoom();
                 _this.checkRooms();
+                _this.changedRoom();
+                _this.checkIfSensorModuleIsYeah();
             }).catch(function (error) {
                 console.log(error);
             });
@@ -49492,7 +49512,7 @@ var render = function() {
                         ])
                       ]),
                       _vm._v(" "),
-                      _vm.rooms[_vm.room.index].sensor_modules.length > 0
+                      _vm.checkIfSensorModule
                         ? [
                             _c("div", { staticClass: "field" }, [
                               _c("label", { staticClass: "label" }, [
@@ -49541,24 +49561,28 @@ var render = function() {
                                           }
                                         }
                                       },
-                                      _vm._l(
-                                        _vm.rooms[_vm.room.index]
-                                          .sensor_modules,
-                                        function(sensor_module, key) {
-                                          return _c(
-                                            "option",
-                                            {
-                                              key: key,
-                                              domProps: { value: key }
-                                            },
-                                            [
-                                              _vm._v(
-                                                _vm._s(sensor_module.moduleName)
-                                              )
-                                            ]
-                                          )
-                                        }
-                                      )
+                                      _vm._l(_vm.sensorModules, function(
+                                        sensorModule,
+                                        key
+                                      ) {
+                                        return sensorModule.room_id ==
+                                          _vm.rooms[_vm.room.index].id
+                                          ? _c(
+                                              "option",
+                                              {
+                                                key: key,
+                                                domProps: { value: key }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    sensorModule.moduleName
+                                                  )
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      })
                                     ),
                                     _vm._v(" "),
                                     _vm._m(6)
