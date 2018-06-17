@@ -22,8 +22,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', 'UserController@logout');
     
     Route::get('/getAuthUser', 'UserController@getAuthUser');
+    
 });
 
+Route::get('/room', 'RoomController@showAll')->middleware('accessControl:admin,default');
 //user
 Route::get('/user/getAll', 'UserController@getAll');
 Route::get('/user/{id}', 'UserController@showOne');
@@ -53,8 +55,7 @@ Route::get('/sensormodule/dataregister/{id}', 'SensorModuleController@getDataReg
 //room
 Route::get('/room/getAll', 'RoomController@getAllValues');
 Route::get('/room/{id}', 'RoomController@showOne');
-Route::get('/room/{id}/getAll', 'RoomController@getAllValuesRoom');
-Route::get('/room', 'RoomController@showAll');
+Route::get('/room/{id}/getAll', 'RoomController@getAllValuesRoom')->middleware('roomControl');
 Route::post('/room', 'RoomController@store');
 Route::put('/room/{id}', 'RoomController@update');
 Route::delete('/room/{id}', 'RoomController@destroy');      

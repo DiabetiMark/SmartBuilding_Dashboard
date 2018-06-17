@@ -17,9 +17,9 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($room)
+    public function index($id)
     {
-        return view('/pages/room')->with('room', $room);
+        return view('/pages/room')->with('room', $id);
     }
 
     /**
@@ -67,11 +67,10 @@ class RoomController extends Controller
      */
     public function showAll(Request $request)
     {
-        return Room::all();
-        if($request->user('api')->role_id == 3){
+        if($request->user('api')->role->role == 'admin'){
             return $rooms = Room::all();
         } else {
-            return User::find($request->user('api')->id)->rooms;
+            return $request->user('api')->rooms;
         }
     }
 

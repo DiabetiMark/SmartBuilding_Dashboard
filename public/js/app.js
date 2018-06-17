@@ -47445,7 +47445,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/room/' + this.roomId + '/getAll').then(function (response) {
-                //console.log(response.data);
+
                 var data = {
                     'deur': [],
                     'methaan': [],
@@ -48980,6 +48980,7 @@ var promises = [];
                 _this3.users = response.data.users;
                 _this3.roomUser = response.data.room_user;
                 _this3.user_id = response.data[0].id;
+                _this3.checkRooms();
             }).catch(function (error) {
                 _this3.user.errors.record(error.response.data.errors);
             });
@@ -49018,12 +49019,11 @@ var promises = [];
         notYetAdded: function notYetAdded(id) {
             var count = 0;
             for (var idx = 0; idx < this.roomUser.length; idx++) {
-                if (this.roomUser[idx].user_id == this.user.id) {
-                    count++;
+                if (this.roomUser[idx].user_id == this.users[this.user.index].id) {
+                    if (this.roomUser[idx].room_id == id) {
+                        return true;
+                    }
                 }
-            }
-            if (this.rooms.length > count) {
-                return true;
             }
             return false;
         }

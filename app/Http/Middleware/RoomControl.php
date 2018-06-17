@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
-class AccessControl
+class RoomControl
 {
     protected $auth;
 
@@ -23,13 +23,16 @@ class AccessControl
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$scopes)
+    public function handle($request, Closure $next)
     {
         $cookie = Cookie::get('bearer');
         
         $request->headers->add(['Authorization' => "Bearer $cookie" ]);
-        foreach($scopes as $scope){
-            if ($request->user('api')->role->role == $scope) {
+
+        foreach($request->user('api')->rooms as $room)
+        {
+            if(intval($room->id) == intval($request->id)){
+                
                 return $next($request);
             }
         }

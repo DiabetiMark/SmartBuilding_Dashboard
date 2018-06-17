@@ -299,6 +299,7 @@
                     this.users = response.data.users;
                     this.roomUser = response.data.room_user;
                     this.user_id = response.data[0].id;
+                    this.checkRooms();
                 }).catch(error => {
                     this.user.errors.record(error.response.data.errors)
                 });
@@ -336,12 +337,11 @@
             notYetAdded(id){   
                 let count = 0;
                 for(let idx = 0; idx < this.roomUser.length; idx++){
-                    if(this.roomUser[idx].user_id == this.user.id){
-                        count++;
+                    if(this.roomUser[idx].user_id ==this.users[this.user.index].id){
+                        if(this.roomUser[idx].room_id == id){
+                            return true;
+                        }
                     }
-                }
-                if(this.rooms.length > count){
-                    return true;
                 }
                 return false;
             },

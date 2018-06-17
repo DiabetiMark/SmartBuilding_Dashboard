@@ -121,7 +121,7 @@
         methods: {
             getData(){
                 axios.get('/api/room/' + this.roomId + '/getAll').then(response => {
-                    //console.log(response.data);
+
                     let data = {
                         'deur': [],
                         'methaan': [],
