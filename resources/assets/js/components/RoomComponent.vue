@@ -16,19 +16,11 @@
             <div class="level-right">
                 <div class="level-item">
                     <div id="datedropdown" class="dropdown is-right">
-                        <div class="dropdown-trigger">
-                            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu">
-                                <span>{{ dates[0] }}</span>
-                                <span class="icon is-small">
-                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </span>
-                            </button>
-                        </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                            <div class="dropdown-content">
-                                <a v-for="date in dates" href="#" class="dropdown-item is-active">
-                                    {{ date }}
-                                </a>
+                        <div class="control">
+                            <div class="select">
+                                <select v-model="selectedDate">
+                                    <option v-for="(date, index) in dates" href="#" class="dropdown-item" :class="{ 'is-active': index === 0 }">{{ date }}</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -61,7 +53,7 @@
         </div>
 
         <br>
-        <pre>{{ data }}</pre>
+        <!--<pre>{{ data }}</pre>-->
     </div>
 </template>
 
@@ -85,8 +77,10 @@
                     'luchtvochtigheid': [],
                     'beweging': []
                 },
+                selectedDate: undefined,
                 dates: [],
                 dateDropdown: undefined,
+                charts: []
             }
         },
 
@@ -104,12 +98,24 @@
             });
             this.dateDropdown = dropdown;
 
-
+            let today = new Date();
+            let day = today.getDate();
+            let month = today.getMonth() + 1;
+            let year = today.getFullYear();
+            if(day < 10) { day = '0' + day; }
+            if(month < 10) { month = '0' + month; }
+            this.selectedDate = year + '-' + month + '-' + day;
         },
 
         created(){
             this.getData();
 
+        },
+
+        watch: {
+            selectedDate: function(){
+                this.populateGraphs();
+            }
         },
 
         methods: {
@@ -143,6 +149,7 @@
 
                     this.data = data;
                     this.dates = this.dates.filter(function(item, pos, self){ return self.indexOf(item) === pos});
+                    this.dates = this.dates.sort(function(a, b){ return new Date(b) - new Date(a)});
                     this.modules = modules;
                     this.roomName = response.data.roomName;
                     this.roomDescription = response.data.roomDescription;
@@ -153,14 +160,21 @@
             },
 
             populateGraphs(){
+                // Destroy the charts to remove objects that are still alive and thus interactable
+                this.charts.forEach((chart) =>{
+                    chart.destroy();
+                });
+
                 let tempTime = [];
                 let tempValues = [];
                 this.data.temperatuur.forEach((temp) =>{
-                    tempTime.push(temp.time);
-                    tempValues.push(temp.value);
+                    if(temp.date === this.selectedDate){
+                        tempTime.push(temp.time);
+                        tempValues.push(temp.value);
+                    }
                 });
 
-                new Chart(this.$refs.tempChart, {
+                this.charts.push(new Chart(this.$refs.tempChart, {
                     "type": "line",
                     "data": {
                         "labels": tempTime,
@@ -173,20 +187,22 @@
                         }]
                     },
                     "options": {}
-                });
+                }));
 
                 let humTime = [];
                 let humValues = [];
                 let humBackgrounds = [];
                 let humBorders = [];
                 this.data.luchtvochtigheid.forEach((hum) =>{
-                    humTime.push(hum.time);
-                    humValues.push(hum.value);
-                    humBackgrounds.push("rgba(54, 162, 235, 0.2)");
-                    humBorders.push("rgb(54, 162, 235)");
+                    if(hum.date === this.selectedDate){
+                        humTime.push(hum.time);
+                        humValues.push(hum.value);
+                        humBackgrounds.push("rgba(54, 162, 235, 0.2)");
+                        humBorders.push("rgb(54, 162, 235)");
+                    }
                 });
 
-                new Chart(this.$refs.humidityChart, {
+                this.charts.push(new Chart(this.$refs.humidityChart, {
                     "type": "bar",
                     "data": {
                         "labels": humTime,
@@ -208,16 +224,18 @@
                             }]
                         }
                     }
-                });
+                }));
 
                 let methaneTime = [];
                 let methaneValues = [];
                 this.data.methaan.forEach((methane) =>{
-                    methaneTime.push(methane.time);
-                    methaneValues.push(methane.value);
+                    if(methane.date === this.selectedDate){
+                        methaneTime.push(methane.time);
+                        methaneValues.push(methane.value);
+                    }
                 });
 
-                new Chart(this.$refs.methaneChart, {
+                this.charts.push(new Chart(this.$refs.methaneChart, {
                     "type": "line",
                     "data": {
                         "labels": methaneTime,
@@ -230,7 +248,7 @@
                         }]
                     },
                     "options": {}
-                });
+                }));
             }
         }
     }
