@@ -49019,7 +49019,9 @@ var promises = [];
         notYetAdded: function notYetAdded(id) {
             var count = 0;
             for (var idx = 0; idx < this.roomUser.length; idx++) {
+                console.log(this.user.index);
                 if (this.roomUser[idx].user_id == this.users[this.user.index].id) {
+                    console.log(this.roomUser[idx].room_id, id);
                     if (this.roomUser[idx].room_id == id) {
                         return true;
                     }
