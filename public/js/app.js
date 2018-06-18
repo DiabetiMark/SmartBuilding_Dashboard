@@ -48874,9 +48874,9 @@ var promises = [];
             },
             user: {
                 data: {
-                    username: 'ChielTimmermans',
-                    email: 'chtm@aareon.com',
-                    name: 'chiel',
+                    username: '',
+                    email: '',
+                    name: '',
                     role_id: '1',
                     rooms: []
                 },

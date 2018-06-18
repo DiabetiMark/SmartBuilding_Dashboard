@@ -28,11 +28,13 @@ class RoomControl
         $cookie = Cookie::get('bearer');
         
         $request->headers->add(['Authorization' => "Bearer $cookie" ]);
-
+        
+        if($request->user('api')->role->role == "admin"){
+            return $next($request);
+        }
         foreach($request->user('api')->rooms as $room)
         {
             if(intval($room->id) == intval($request->id)){
-                
                 return $next($request);
             }
         }
