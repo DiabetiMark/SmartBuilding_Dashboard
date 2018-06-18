@@ -56,7 +56,7 @@
                 }).catch(e => {
                     console.log(e);
                 });
-                axios.get('/api/dataregister').then(response => {
+                axios.get('/api/sensor').then(response => {
                     this.sensors = response.data.length;
                 }).catch(e => {
                     console.log(e);
