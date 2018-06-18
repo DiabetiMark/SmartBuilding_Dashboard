@@ -3,7 +3,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/overview">Overzicht</a></li>
+                <li ><a href="/overview">Overzicht</a></li>
                 <li class="is-active"><a href="#" aria-current="page">{{ roomName }}</a></li>
             </ul>
         </nav>

@@ -48053,7 +48053,7 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("li", { staticClass: "is-active" }, [
             _c("a", { attrs: { href: "#", "aria-current": "page" } }, [
-              _vm._v("Overzicht")
+              _vm._v("Ruimteoverzicht")
             ])
           ])
         ])

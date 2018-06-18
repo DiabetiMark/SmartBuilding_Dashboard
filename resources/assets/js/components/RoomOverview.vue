@@ -3,7 +3,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li class="is-active"><a href="#" aria-current="page">Overzicht</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Ruimteoverzicht</a></li>
             </ul>
         </nav>
 
