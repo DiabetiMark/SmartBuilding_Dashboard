@@ -47555,28 +47555,80 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }));
 
-            var methaneTime = [];
-            var methaneValues = [];
-            this.data.methaan.forEach(function (methane) {
-                if (methane.date === _this2.selectedDate) {
-                    methaneTime.push(methane.time);
-                    methaneValues.push(methane.value);
+            var movementTime = [];
+            var movementValues = [];
+            this.data.beweging.forEach(function (movement) {
+                if (movement.date === _this2.selectedDate) {
+                    movementTime.push(movement.time);
+                    movementValues.push(movement.value);
                 }
             });
 
-            this.charts.push(new Chart(this.$refs.methaneChart, {
+            this.charts.push(new Chart(this.$refs.movementChart, {
                 "type": "line",
                 "data": {
-                    "labels": methaneTime,
+                    "labels": movementTime,
                     "datasets": [{
-                        "label": "Methaan in delen per duizend in de lucht",
-                        "data": methaneValues,
+                        "label": "Beweging ja(1) of nee(0)",
+                        "steppedLine": true,
+                        "data": movementValues,
                         "fill": false,
-                        "borderColor": "rgb(54, 162, 235)",
-                        "lineTension": .3
+                        "borderColor": "rgb(50, 115, 220)"
                     }]
                 },
-                "options": {}
+                "options": {
+                    layout: {
+                        padding: {
+                            top: 50,
+                            bottom: 50
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fixedStepSize: 1
+                            }
+                        }]
+                    }
+                }
+            }));
+
+            var reedTime = [];
+            var reedValues = [];
+            this.data.deur.forEach(function (door) {
+                if (door.date === _this2.selectedDate) {
+                    reedTime.push(door.time);
+                    reedValues.push(door.value);
+                }
+            });
+            // Reed
+            this.charts.push(new Chart(this.$refs.reedChart, {
+                "type": "line",
+                "data": {
+                    "labels": reedTime,
+                    "datasets": [{
+                        "label": "Deur open ja(1) of nee(0)",
+                        "steppedLine": true,
+                        "data": reedValues,
+                        "fill": false,
+                        "borderColor": "rgb(50, 115, 220)"
+                    }]
+                },
+                "options": {
+                    layout: {
+                        padding: {
+                            top: 50,
+                            bottom: 50
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fixedStepSize: 1
+                            }
+                        }]
+                    }
+                }
             }));
         }
     }
@@ -47701,10 +47753,12 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "columns" }, [
       _c("div", { staticClass: "column" }, [
-        _c("canvas", { ref: "methaneChart", attrs: { id: "methaneChart" } })
+        _c("canvas", { ref: "movementChart", attrs: { id: "movementChart" } })
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "column" })
+      _c("div", { staticClass: "column" }, [
+        _c("canvas", { ref: "reedChart", attrs: { id: "reedChart" } })
+      ])
     ]),
     _vm._v(" "),
     _c("br")
@@ -47999,7 +48053,7 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("li", { staticClass: "is-active" }, [
             _c("a", { attrs: { href: "#", "aria-current": "page" } }, [
-              _vm._v("Overzicht")
+              _vm._v("Ruimteoverzicht")
             ])
           ])
         ])
@@ -48159,7 +48213,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (e) {
                 console.log(e);
             });
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/dataregister').then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/sensor').then(function (response) {
                 _this.sensors = response.data.length;
             }).catch(function (e) {
                 console.log(e);

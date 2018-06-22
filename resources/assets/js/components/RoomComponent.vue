@@ -3,7 +3,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/overview">Overzicht</a></li>
+                <li ><a href="/overview">Overzicht</a></li>
                 <li class="is-active"><a href="#" aria-current="page">{{ roomName }}</a></li>
             </ul>
         </nav>
@@ -45,10 +45,10 @@
         <hr>
         <div class="columns">
             <div class="column">
-                <canvas ref="methaneChart" id="methaneChart"></canvas>
+                <canvas ref="movementChart" id="movementChart"></canvas>
             </div>
             <div class="column">
-
+                <canvas ref="reedChart" id="reedChart"></canvas>
             </div>
         </div>
 
@@ -226,28 +226,80 @@
                     }
                 }));
 
-                let methaneTime = [];
-                let methaneValues = [];
-                this.data.methaan.forEach((methane) =>{
-                    if(methane.date === this.selectedDate){
-                        methaneTime.push(methane.time);
-                        methaneValues.push(methane.value);
+                let movementTime = [];
+                let movementValues = [];
+                this.data.beweging.forEach((movement) =>{
+                    if(movement.date === this.selectedDate){
+                        movementTime.push(movement.time);
+                        movementValues.push(movement.value);
                     }
                 });
 
-                this.charts.push(new Chart(this.$refs.methaneChart, {
+                this.charts.push(new Chart(this.$refs.movementChart, {
                     "type": "line",
                     "data": {
-                        "labels": methaneTime,
+                        "labels": movementTime,
                         "datasets": [{
-                            "label": "Methaan in delen per duizend in de lucht",
-                            "data": methaneValues,
+                            "label": "Beweging ja(1) of nee(0)",
+                            "steppedLine": true,
+                            "data": movementValues,
                             "fill": false,
-                            "borderColor": "rgb(54, 162, 235)",
-                            "lineTension": .3
+                            "borderColor": "rgb(50, 115, 220)"
                         }]
                     },
-                    "options": {}
+                    "options": {
+                        layout: {
+                            padding: {
+                                top: 50,
+                                bottom: 50
+                            }
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    fixedStepSize: 1
+                                }
+                            }],
+                        }
+                    }
+                }));
+
+                let reedTime = [];
+                let reedValues = [];
+                this.data.deur.forEach((door) =>{
+                    if(door.date === this.selectedDate){
+                        reedTime.push(door.time);
+                        reedValues.push(door.value);
+                    }
+                });
+                // Reed
+                this.charts.push(new Chart(this.$refs.reedChart, {
+                    "type": "line",
+                    "data": {
+                        "labels": reedTime,
+                        "datasets": [{
+                            "label": "Deur open ja(1) of nee(0)",
+                            "steppedLine": true,
+                            "data": reedValues,
+                            "fill": false,
+                            "borderColor": "rgb(50, 115, 220)"
+                        }]
+                    },
+                    "options": {
+                        layout: {
+                            padding: {
+                                top: 50,
+                                bottom: 50
+                            }
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    fixedStepSize: 1
+                                }
+                            }],
+                        }
+                    }
                 }));
             }
         }
