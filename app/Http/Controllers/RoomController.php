@@ -48,7 +48,7 @@ class RoomController extends Controller
         $item = new Room;
 
         if ($this->setCreate($item, $request)) {
-            return $this->showAll();
+            return $this->showAll($request);
         }
 
         $error = [
