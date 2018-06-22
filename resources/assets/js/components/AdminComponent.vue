@@ -233,7 +233,9 @@
 
         methods: {
             changedRoom(){
-                this.sensormodule.index = this.checkIfSensorModuleIsYeah();
+                if(this.room.index != undefined){
+                    this.sensormodule.index = this.checkIfSensorModuleIsYeah();
+                }
             },
             checkIfSensorModuleIsYeah(){
                 for(let idx = 0 ; idx < this.sensorModules.length; idx++){
@@ -308,9 +310,10 @@
                 let foundID = false;
                 this.noRoomsToAdd = false;
                 let rooms = [];
+              
                 for(let idx = 0; idx < this.roomUser.length; idx++){
-                    if(this.roomUser[idx].user_id == this.user.id){
-                        rooms.push(roomUser[idx].room_id);
+                    if(this.roomUser[idx].user_id == this.users[this.user.index].id){
+                        rooms.push(this.roomUser[idx].room_id);
                     }
                 }
                 for(let idx = 0; idx < this.rooms.length; idx++){
@@ -334,12 +337,9 @@
                     this.newRoomLink.errors.record(error.response.data.errors)
                 });
             },
-            notYetAdded(id){   
-                let count = 0;
+            notYetAdded(id){
                 for(let idx = 0; idx < this.roomUser.length; idx++){
-                    console.log(this.user.index);
-                    if(this.roomUser[idx].user_id ==this.users[this.user.index].id){
-                        console.log(this.roomUser[idx].room_id, id);
+                    if(this.roomUser[idx].user_id == this.users[this.user.index].id){
                         if(this.roomUser[idx].room_id == id){
                             return true;
                         }

@@ -48915,7 +48915,9 @@ var promises = [];
 
     methods: {
         changedRoom: function changedRoom() {
-            this.sensormodule.index = this.checkIfSensorModuleIsYeah();
+            if (this.room.index != undefined) {
+                this.sensormodule.index = this.checkIfSensorModuleIsYeah();
+            }
         },
         checkIfSensorModuleIsYeah: function checkIfSensorModuleIsYeah() {
             for (var idx = 0; idx < this.sensorModules.length; idx++) {
@@ -48989,9 +48991,10 @@ var promises = [];
             var foundID = false;
             this.noRoomsToAdd = false;
             var rooms = [];
+
             for (var idx = 0; idx < this.roomUser.length; idx++) {
-                if (this.roomUser[idx].user_id == this.user.id) {
-                    rooms.push(roomUser[idx].room_id);
+                if (this.roomUser[idx].user_id == this.users[this.user.index].id) {
+                    rooms.push(this.roomUser[idx].room_id);
                 }
             }
             for (var _idx = 0; _idx < this.rooms.length; _idx++) {
@@ -49017,11 +49020,8 @@ var promises = [];
             });
         },
         notYetAdded: function notYetAdded(id) {
-            var count = 0;
             for (var idx = 0; idx < this.roomUser.length; idx++) {
-                console.log(this.user.index);
                 if (this.roomUser[idx].user_id == this.users[this.user.index].id) {
-                    console.log(this.roomUser[idx].room_id, id);
                     if (this.roomUser[idx].room_id == id) {
                         return true;
                     }
