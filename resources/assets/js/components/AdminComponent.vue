@@ -93,7 +93,7 @@
                             <div class="control has-icons-left">
                                 <div class="select">
                                     <select v-model='room.index' v-if="rooms.length > 0" @change="changedRoom">
-                                        <option v-for="(room, key) in rooms" :value="key" v-if="notYetAdded(room.id)">{{room.roomName}}</option>
+                                        <option v-for="(room, key) in rooms" :value="key" v-if="!notYetAdded(room.id)">{{room.roomName}}</option>
                                     </select>
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-home"></i>

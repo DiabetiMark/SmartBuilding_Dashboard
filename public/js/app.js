@@ -49540,7 +49540,7 @@ var render = function() {
                                     }
                                   },
                                   _vm._l(_vm.rooms, function(room, key) {
-                                    return _vm.notYetAdded(room.id)
+                                    return !_vm.notYetAdded(room.id)
                                       ? _c(
                                           "option",
                                           { domProps: { value: key } },
