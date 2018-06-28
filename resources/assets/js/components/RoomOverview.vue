@@ -3,7 +3,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li class="is-active"><a href="#" aria-current="page">Overzicht</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Ruimteoverzicht</a></li>
             </ul>
         </nav>
 
@@ -51,8 +51,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
-
     export default {
         mounted() {
             console.log('RoomOverviewComponent mounted')
@@ -67,7 +65,7 @@
 
         methods: {
             getRooms(){
-                axios.get('/api/room').then(response => {
+                axios.get('/api/room', config).then(response => {
                     this.rooms = response.data;
                     this.rooms.forEach((room) => {
                        room.isVisible = true;

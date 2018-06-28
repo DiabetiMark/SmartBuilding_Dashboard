@@ -18,9 +18,9 @@ class SensorModule extends Model
         return $this->belongsTo('App\Room', 'room_id', 'id');
     }
 
-    public function dataRegisters()
+    public function sensors()
     {
-        return $this->hasMany('App\DataRegister', 'sensorModule_id', 'id');
+        return $this->hasMany('App\Sensor', 'sensorModule_id', 'id');
     }
     
     public function getFillable()

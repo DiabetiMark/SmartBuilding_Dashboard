@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\SensorModule;
 use Illuminate\Http\Request;
 
@@ -43,7 +44,7 @@ class SensorModuleController extends Controller
         $item = new SensorModule;
 
         if ($this->setCreate($item, $request)) {
-            return app('App\Http\Controllers\UserController')->getAllValues($request->user_id);;
+            return app('App\Http\Controllers\UserController')->getAllValues($request->user_id);
         }
 
         $error = [
@@ -101,21 +102,26 @@ class SensorModuleController extends Controller
      * @param  \App\SensorModule  $sensorModule
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $reqeust)
+    public function update($id, Request $request)
     {
         $this->validate($request, [
             'moduleName' => 'max:45',
         ]);
 
+
         $item = SensorModule::find($id);
 
         if($item !== null){
-            if($this->setUpdate($item, $request)){
-                return;
+            if($request->room_id == -1){
+                if(DB::table('sensormodules')->where('id', $id)->update(array('room_id' => null))){
+                    return $this->showAll();
+                }
+            } else if($this->setUpdate($item, $request)){
+                return $this->showAll();
             }
 
             $error = [
-                "status" => xxxx,
+                "status" => 9999,
                 "message" => 'Het wijzigen van de Sensor module is niet gelukt',
             ];
             $errorCode = 405;
@@ -123,7 +129,7 @@ class SensorModuleController extends Controller
 
             //if the category cannot be found
             $error = [
-                "status" => xxxx,
+                "status" => 9999,
                 "message" => 'De Sensor module is niet gevonden',
             ];
             $errorCode = 404;

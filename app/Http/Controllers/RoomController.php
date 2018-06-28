@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\User;
 use App\Room;
+use App\SensorModule;
 use Illuminate\Http\Request;
-use JavaScript;
+use Illuminate\Support\Facades\Auth;
 
 
 class RoomController extends Controller
@@ -15,9 +17,9 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($room)
+    public function index($id)
     {
-        return view('/pages/room')->with('room', $room);
+        return view('/pages/room')->with('room', $id);
     }
 
     /**
@@ -46,7 +48,7 @@ class RoomController extends Controller
         $item = new Room;
 
         if ($this->setCreate($item, $request)) {
-            return $this->showAll();
+            return $this->showAll($request);
         }
 
         $error = [
@@ -63,9 +65,13 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function showAll()
+    public function showAll(Request $request)
     {
-        return $rooms = Room::all();
+        if($request->user('api')->role->role == 'admin'){
+            return $rooms = Room::all();
+        } else {
+            return $request->user('api')->rooms;
+        }
     }
 
     public function showOne($id)
@@ -104,7 +110,7 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $reqeust)
+    public function update($id, Request $request)
     {
         $this->validate($request, [
             
@@ -114,7 +120,7 @@ class RoomController extends Controller
 
         if($item !== null){
             if($this->setUpdate($item, $request)){
-                return;
+                return $this->showAll($request);
             }
 
             $error = [
@@ -143,9 +149,17 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Room $room)
+    public function destroy($id)
     {
-        //
+        DB::table('room_user')->where('room_id', $id)->delete();
+        SensorModule::where('room_id', $id)->update(['room_id' => null]);
+        Room::find($id)->delete();
+
+        $data = array(
+            'rooms' => $this->showAll(),
+            'modules' => app('App\Http\Controllers\SensorModuleController')->showAll(),
+        );
+        return $data;
     }
 
     //custom actions
@@ -159,7 +173,7 @@ class RoomController extends Controller
         return $rooms = Room::find($id)->sensorModules;
     }
 
-    public function getAllValues($id){
+    public function getAllValuesRoom($id){
         $room = Room::find($id);
         unset($room->created_at);
         unset($room->updated_at);
@@ -169,13 +183,37 @@ class RoomController extends Controller
             unset($module->room_id);
             unset($module->created_at);
             unset($module->updated_at);
-            foreach($module->dataRegisters as $dataRegister){
-                $dataRegister->field;
-                unset($dataRegister->sensorModule_id);
-                unset($dataRegister->field_id);
+            foreach($module->sensors as $sensor){
+                foreach($sensor->dataRegisters as $dataRegister){
+                    $dataRegister->field;
+                    unset($dataRegister->sensorModule_id);
+                    unset($dataRegister->field_id);
+                }
             }
-            
         }
         return $room;
+    }
+
+    public function getAllValues(){
+        $rooms = Room::all();
+        foreach($rooms as $room){
+            unset($room->created_at);
+            unset($room->updated_at);
+            foreach($room->sensorModules as $module){
+                $module->room_name = $room->roomName;
+                unset($module->pivot);
+                unset($module->room_id);
+                unset($module->created_at);
+                unset($module->updated_at);
+                foreach($module->sensors as $sensor){
+                    foreach($sensor->dataRegisters as $dataRegister){
+                        $dataRegister->field;
+                        unset($dataRegister->sensorModule_id);
+                        unset($dataRegister->field_id);
+                    }
+                }
+            }
+        }
+        return $rooms;
     }
 }

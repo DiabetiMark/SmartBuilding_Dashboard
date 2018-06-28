@@ -2,6 +2,8 @@
 
 @section('content')
     <section class="section">
-        <h1>Settings</h1>
+        <div id="app">
+            <settings-component></settings-component>
+        </div>
     </section>
 @stop

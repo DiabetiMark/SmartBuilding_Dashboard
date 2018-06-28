@@ -43,8 +43,8 @@
         data(){
             return{
                 user: {
-                    username: 'Chiel timmermans',
-                    password: '12345678',
+                    username: 'admin',
+                    password: 'admin123',
                     errors: new Errors()
                 },
                 loadingSpinner: false

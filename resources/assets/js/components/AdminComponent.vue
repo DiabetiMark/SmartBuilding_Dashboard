@@ -1,179 +1,174 @@
 <template>
     <div>
-        <button @click="changeAdd(0)">Voeg kamer aan gebruiker toe</button>
-        <button @click="changeAdd(1)">Voeg gebruiker toe</button>
-        <button @click="changeAdd(2)">Voeg kamer toe</button>
-        <button @click="changeAdd(3)">Voeg module toe</button>
-        <button @click="changeAdd(4)">Voeg sensor toe</button>
-        <template v-if="this.open[0]">
-            <br>
-            Gebruiker:
-            <select v-model='user_id' @change="userChanged" v-if="users">
-                <option v-for="user in users" :value="user.id" >{{user.username}}</option>
-            </select>
-            <br>
-            <template v-if="userInfo && userInfo.rooms.length > 0">
-                <br>
-                Kamer:
-                <select v-model='room_id' @change="roomChanged">
-                    <option v-for="(room, key) in userInfo.rooms" :value="key" >{{room.roomName}}</option>
-                </select>
-                <br>
-                <p>Kamer beschrijving: {{ userInfo.rooms[room_id].roomDescription }}</p>
-                
-                <template v-if="userInfo.rooms[room_id].sensor_modules.length > 0">
-                    <br>
-                    Sensormodule:
-                    <select v-model='sensor_modules_id' @change="sensor_moduleChanged">
-                        <option v-for="(sensor_module, key) in userInfo.rooms[room_id].sensor_modules" :value="key" >{{sensor_module.moduleName}}</option>
-                    </select>
-                    <template v-if="userInfo.rooms[room_id].sensor_modules[sensor_modules_id].data_registers.length>0">
-                        <div v-for="data_register in userInfo.rooms[room_id].sensor_modules[sensor_modules_id].data_registers" >
-                            <p>{{data_register.field.name}}</p>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <p>Er zijn geen sensoren beschikbaar voor deze module</p>
-                    </template>
-                </template>
-                <template v-else>
-                    <p>Er zijn geen modules beschikbaar in deze kamer</p>
-                </template>
-            </template>
-            <template v-else>
-                <p>Er zijn geen ruimtes beschikbaar voor deze gebruiker</p>
-            </template>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Gebruikers</a></li>
+            </ul>
+        </nav>
+        <hr>
 
-            <div>
-            <br>
-            <template v-if="!noRoomsToAdd">
-                <button @click="changeAddRoom = !changeAddRoom">Voeg ruimte toe</button>
-                <div v-if="changeAddRoom">
-                    <select v-model='add_room_id' v-if="rooms.length > 0">
-                        <option v-for="(room, key) in rooms" :value="key" v-if="notYetAdded(room.id)">{{room.roomName}}</option>
-                    </select>
-                    <p>{{ rooms[add_room_id].roomDescription }}</p>
-                    <button @click="AddRoom">Voeg kamer toe</button>
-                </div>
-            </template>
-            <template v-else>
-                <p>Voor deze gebruiker zijn er geen kamers meer om toe tevoegen.</p>
-            </template>
-            </div>
-        </template>
-        <template v-if="this.open[2]">
-            <form @submit.prevent="createRoom" @keydown="addRoom.errors.clear($event.target.name)">
-                <div>
-                    <div>
-                        <input name="naam" type="text" placeholder="Ruimte naam" v-model='addRoom.data.roomName' autofocus required>
+        <div class="columns is-gapless">
+            <div class="column">
+                <h4 class="title is-4">Gebruiker Toevoegen</h4>
+                <hr>
+                <form @submit.prevent="createUser" @keydown="user.errors.clear($event.target.name)">
+                    <div class="field">
+                        <label class="label">Naam</label>
+                        <div class="control has-icons-left">
+                            <input style="width:75%;" class="input" name="naam" type="text" placeholder="Naam" v-model='user.data.name' required>
+                            <span class="icon is-small is-left">
+                              <i class="fas fa-user"></i>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <input  name="omschrijving" type="text" placeholder="Ruimte omschrijving" v-model='addRoom.data.roomDescription' required>
+                    <div class="field">
+                        <label class="label">Gebruikersnaam</label>
+                        <div class="control has-icons-left">
+                            <input style="width:75%;" class="input" name="gebruikersnaam" type="text" placeholder="Gebruikersnaam" v-model='user.data.username' required>
+                            <span class="icon is-small is-left">
+                              <i class="fas fa-user"></i>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <input value="Toevoegen" type="submit">
-            </form>
-        </template>
-        <template v-if="this.open[3]">
-            <form @submit.prevent="createModule" @keydown="addModule.errors.clear($event.target.name)">
-                <div>
-                    <div>
-                        <input name="naam" type="text" placeholder="Module naam" v-model='addModule.data.moduleName' autofocus required>
+                    <div class="field">
+                        <label class="label">Gebruikersnaam</label>
+                        <div class="control has-icons-left">
+                            <input style="width:75%;" class="input" name="email" type="email" placeholder="Email" v-model='user.data.email' required>
+                            <span class="icon is-small is-left">
+                              <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div>Ruimte: 
-                        <select v-model='addModule.data.room_id' v-if="rooms.length > 0">
-                            <option v-for="room in rooms" :value="room.id" >{{room.roomName}}</option>
-                        </select>
+                    <div class="field">
+                        <label class="label">Rol</label>
+                        <div class="control">
+                            <div class="select">
+                                <select v-model='user.data.role_id'>
+                                    <option value="" selected="selected" disabled hidden>Kies een rol</option>
+                                    <option v-for="role in roles" :value="role.id">{{role.role}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <input value="Toevoegen" type="submit">
-            </form>
-        </template>
-        <template v-if="this.open[4]">
-            <p>ff kijken hoe we dit gaan doen...</p>
-        </template>
-        <template v-if="this.open[1]">
-            <form @submit.prevent="createUser" @keydown="addUser.errors.clear($event.target.name)">
-                <div>
-                    <div>
-                        <input name="naam" type="text" placeholder="Naam" v-model='addUser.data.name' required>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <input name="gebruikersnaam" type="text" placeholder="Gebruikersnaam" v-model='addUser.data.username' required>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <input name="email" type="email" placeholder="Email" v-model='addUser.data.email' required>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <select v-model='addModule.data.room_id' v-if="rooms.length > 0">
-                            <option value="1" >1</option>
-                            <option value="2" >2</option>
-                            <option value="3" >3</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div class="multiselect">
-                            <div class="selectBox" @click="showCheckboxes">
-                                <select>
-                                    <option>Select an option</option>
+                    <div class="field">
+                        <label class="label">Ruimte(s) Selecteren</label>
+                        <div class="control">
+                            <div class="select" @click="showCheckboxes">
+                                <select v-model='addModule.data.room_id' v-if="rooms.length > 0">
+                                    <option value="" selected disabled hidden>Kies een ruimte</option>
                                 </select>
                                 <div class="overSelect"></div>
                             </div>
                             <div id="checkboxes">
-                                <label :for="room.id" v-for="room in this.rooms">
-                                    <input type="checkbox" :id="room.id" v-model="addUser.data.rooms" :value="room.id"/>{{room.roomName}}
+                                <label :for="room.id" v-for="room in rooms">
+                                    <input type="checkbox" :id="room.id" v-model="user.data.rooms" :value="room.id"/>{{room.roomName}}
                                 </label>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <input class="button is-info" value="Toevoegen" type="submit">
+                </form>
+            </div>
+            <div class="column">
+                <h4 class="title is-4">Ruimte Toevoegen Aan Gebruiker</h4>
+                <hr>
+                <template v-if="rooms && users">
+                    <div class="field">
+                        <label class="label">Gebruiker</label>
+                        <div class="control has-icons-left">
+                            <div class="select">
+                                <select v-model='user.index' @change="checkRooms" v-if="users">
+                                    <option v-for="(user, key) in users" :value="key" >{{user.username}}</option>
+                                </select>
+                                <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <template v-if="!noRoomsToAdd && users && rooms.length > 0">
+                        <div class="field">
+                            <label class="label">Kamer</label>
+                            <div class="control has-icons-left">
+                                <div class="select">
+                                    <select v-model='room.index' v-if="rooms.length > 0" @change="changedRoom">
+                                        <option v-for="(room, key) in rooms" :value="key" v-if="!notYetAdded(room.id)">{{room.roomName}}</option>
+                                    </select>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-home"></i>
+                                    </span>
+                                </div>
+                                <p class="help" v-if="rooms"><strong>Beschrijving:</strong> {{ rooms[room.index].roomDescription }}</p>
+                            </div>
+                        </div>
 
-                <input value="Toevoegen" type="submit">
-            </form>
-        </template>
+                        <template v-if="checkIfSensorModule">
+                            <div class="field">
+                                <label class="label">Sensormodule</label>
+                                <div class="control has-icons-left">
+                                    <div class="select">
+                                        <select v-model='sensormodule.index'>
+                                            <option v-for="(sensorModule, key) in sensorModules" v-bind:key="key" :value="key" v-if="sensorModule.room_id == rooms[room.index].id">{{sensorModule.moduleName}}</option>
+                                        </select>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-microchip"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <p class="help is-danger">Er zijn geen modules beschikbaar voor deze module.</p>
+                        </template>
+                    </template>
+                    <template v-if="!noRoomsToAdd">
+                        <button class="button is-info" @click="AddRoom">Voeg kamer toe</button>
+                    </template>
+                    <template v-else>
+                        <p class="help is-danger">Voor deze gebruiker zijn er geen kamers meer om toe tevoegen.</p>
+                    </template>
+                </template>
+                <template v-else>
+                    Laden
+                </template>
+            </div>
+        </div>
+
     </div>
 </template>
-<style>
-    .multiselect {
-        width: 200px;
-    }
-    .selectBox {
-        position: relative;
-    }
-    .selectBox select{
-        width: 100%;
-    }
-    .overSelect {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-    }
-    #checkboxes{
-        display: none;
-        border: 1px #dadada solid;
-    }
-    #checkboxes label{
-        display: block;
-    }
-    #checkboxes label:hover {
-        background-color: #1e90ff;
-    }
-</style>
+<style> 
+    .multiselect { 
+        width: 200px; 
+    } 
+    .selectBox { 
+        position: relative; 
+    } 
+    .selectBox select{ 
+        width: 100%; 
+    } 
+    .overSelect { 
+        position: absolute; 
+        left: 0; 
+        right: 0; 
+        top: 0; 
+        bottom: 0; 
+    } 
+    #checkboxes{ 
+        display: none; 
+        border: 1px #dadada solid; 
+    } 
+    #checkboxes label{ 
+        display: block; 
+    } 
+    #checkboxes label:hover { 
+        background-color: #1e90ff; 
+    } 
+</style> 
 <script>
+
+    let promises = [];
+
     import axios from 'axios';
 
     export default {
@@ -181,56 +176,41 @@
 
         data(){
             return{
-                addRoom: {
-                    data: {
-                        roomName: '',
-                        roomDescription: '',
-                    },
-                    errors: new Errors(),
-                },
                 addModule: {
+                    id: '',
                     data: {
-                        moduleName: '',
                         room_id: '',
                         user_id: '',
                     },
                     errors: new Errors(),
                 },
-                addSensor: {
-                    data: {
-                        moduleName: '',
-                        room_id: '',
-                        user_id: '',
-                    },
-                    errors: new Errors(),
-                },
-                addUser: {
+                user: {
                     data: {
                         username: '',
                         email: '',
                         name: '',
-                        role: '',
+                        role_id: '1',
                         rooms: [
 
                         ],
                     },
+                    index: 0,
                     errors: new Errors(),
                 },
-                open: [
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                ],
+                room: {
+                    index: '',
+                },
+                sensormodule:{
+                    index: '',
+                },
                 users: false,
-                userInfo: false,
-                user_id: false,
-                room_id: false,
-                sensor_modules_id: 0,
-                changeAddRoom: false,
-                add_room_id: false,
                 rooms: false,
+                roles: false,
+                roomUser: false,
+                sensorModules: false,
+                sensors: false,
+                noRoomsToAdd: false,
+                checkIfSensorModule: false,
                 newRoomLink: {
                     data: {
                         room_id: '',
@@ -238,144 +218,135 @@
                     },
                     errors: new Errors(),
                 },
-                addRoomToUser: false,
-                noRoomsToAdd: true,
-                expanded: false,
+                roomUser: '',
             }
         },
 
         mounted() {
+
         },
 
         created(){
             this.getData();
+            this.getRoles();
         },
 
         methods: {
+            changedRoom(){
+                if(this.room.index != undefined){
+                    this.sensormodule.index = this.checkIfSensorModuleIsYeah();
+                }
+            },
+            checkIfSensorModuleIsYeah(){
+                for(let idx = 0 ; idx < this.sensorModules.length; idx++){
+                    if(this.sensorModules[idx].room_id == this.rooms[this.room.index].id){
+                        this.checkIfSensorModule = true;
+                        
+                        return idx;
+                    }
+                }
+                this.checkIfSensorModule = false;
+            },
+            getData(){
+                promises.push(axios.get('/api/room'));
+                promises.push(axios.get('/api/user'));
+                promises.push(axios.get('/api/sensormodule'));
+                promises.push(axios.get('/api/sensor'));
+                axios.all(promises)
+                .then(response => {
+                    this.rooms = response[0].data;
+                    this.users = response[1].data.users;
+                    this.roomUser = response[1].data.room_user;
+                    this.sensorModules = response[2].data;
+                    this.sensors = response[3].data;
+
+                    this.user.index = 0;
+
+                    for(let index = 0; index < this.rooms.length; index++){
+                        if(this.notYetAdded(this.rooms[index].id)){
+                            this.room.index = index;
+                        }
+                    }
+                    this.checkRooms();
+                    this.changedRoom();
+                    this.checkIfSensorModuleIsYeah();
+                })
+                .catch(error => {
+                    console.log(error);
+                    
+                })
+            },
+            getRoles(){
+                axios.get('/api/role')
+                .then(response => {
+                    this.roles = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    
+                })
+            },
             showCheckboxes(){
                 var checkboxes = document.getElementById('checkboxes');
                 if(!this.expanded){
                     checkboxes.style.display = "block";
                 } else {
-                    checkboxes.style.display = "none";                    
+                    checkboxes.style.display = "none";
                 }
                 this.expanded = !this.expanded;
             },
             createUser(){
-                axios.post('/api/user', this.addUser.data)
+                axios.post('/api/user', this.user.data)
                 .then(response => {
-                    this.users = response.data;
+                    this.users = response.data.users;
+                    this.roomUser = response.data.room_user;
                     this.user_id = response.data[0].id;
-                    this.userChanged();
-                }).catch(error => {
-                    this.addUser.errors.record(error.response.data.errors)
-                });
-            },
-            changeAdd(index){
-                for(var i = 0; i < Object.keys(this.open).length; i++){
-                    if(i == index){
-                        Vue.set(this.open, i, !this.open[i]);
-                    } else {
-                        Vue.set(this.open, i, false);
-                    }
-                }             
-            },
-            getData(){
-                axios.get('/api/user')
-                .then(response => {
-                    this.users = response.data;
-                    this.user_id = response.data[0].id;
-                    this.userChanged();
-                }).catch(e => {
-                    console.log(e);
-                });
-            },
-            getRooms(){
-                axios.get('/api/room')
-                .then(response => {
-                    this.rooms = response.data;
-                    this.checkRooms();
-
-                }).catch(e => {
-                    console.log(e);
-                });
-            },
-            createRoom(){
-                axios.post('/api/room', this.addRoom.data)
-                .then(response => {
-                    this.rooms = response.data;
                     this.checkRooms();
                 }).catch(error => {
-                    this.addRoom.errors.record(error.response.data.errors)
-                });
-            },
-            createModule(){
-                this.addModule.data.user_id = this.user_id;
-                axios.post('/api/sensormodule', this.addModule.data)
-                .then(response => {
-                    this.userInfo = response.data;
-                    this.room_id = 0;
-                    this.checkRooms();
-                }).catch(error => {
-                    this.addModule.errors.record(error.response.data.errors)
+                    this.user.errors.record(error.response.data.errors)
                 });
             },
             checkRooms(){
-                var foundID = false;
+                let foundID = false;
                 this.noRoomsToAdd = false;
-                for(var i=0; i < this.rooms.length; i++){
-                    foundID = false;
-                    for(var j=0; j < this.userInfo.rooms.length && !foundID; j++){
-                        if( this.rooms[i].id == this.userInfo.rooms[j].id){
-                            foundID = true;
-                        }
+                let rooms = [];
+              
+                for(let idx = 0; idx < this.roomUser.length; idx++){
+                    if(this.roomUser[idx].user_id == this.users[this.user.index].id){
+                        rooms.push(this.roomUser[idx].room_id);
                     }
-                    if(!foundID){
-                        this.add_room_id = i;
+                }
+                for(let idx = 0; idx < this.rooms.length; idx++){
+                    if(rooms.indexOf(this.rooms[idx].id) == -1){
+                        this.room.index = idx;
                         return;
                     }
                 }
                 this.noRoomsToAdd = true;
             },
-            userChanged(){
-                axios.get('api/user/' + this.user_id + '/getAll')
-                .then(response => {
-                    this.userInfo = response.data;
-                    this.room_id = 0;
-                    this.checkRooms();
-                    
-                    if(!this.rooms){
-                        this.getRooms();
-                    }
-                }).catch(e => {
-                    console.log(e);
-                });
-            },
             AddRoom(){
-                this.newRoomLink.data.user_id = this.user_id;
-                this.newRoomLink.data.room_id = this.rooms[this.add_room_id].id;
+                this.newRoomLink.data.user_id = this.users[this.user.index].id;
+                this.newRoomLink.data.room_id = this.rooms[this.room.index].id;
 
                 axios.post('api/room_user', this.newRoomLink.data)
                 .then(response => {
-                    this.userInfo = response.data;
+                    this.users = response.data.users;
+                    this.roomUser = response.data.room_user;
                     this.checkRooms();
                 }).catch(error => {
                     this.newRoomLink.errors.record(error.response.data.errors)
                 });
             },
-            roomChanged(){
-                this.sensor_modules_id = 0;
-            },
-            sensor_moduleChanged(){
-            },
             notYetAdded(id){
-                for(var i=0; i < this.userInfo.rooms.length; i++){
-                    if( this.userInfo.rooms[i].id == id){
-                        return false
+                for(let idx = 0; idx < this.roomUser.length; idx++){
+                    if(this.roomUser[idx].user_id == this.users[this.user.index].id){
+                        if(this.roomUser[idx].room_id == id){
+                            return true;
+                        }
                     }
                 }
-                return true
-            }
+                return false;
+            },
         }
     }
 </script>
