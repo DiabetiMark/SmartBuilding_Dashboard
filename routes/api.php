@@ -22,9 +22,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', 'UserController@logout');
     
     Route::get('/getAuthUser', 'UserController@getAuthUser');
+    
 });
 
+Route::get('/room', 'RoomController@showAll')->middleware('accessControl:admin,default');
+Route::post('/room', 'RoomController@store')->middleware('accessControl:admin,default');
 //user
+Route::get('/user/getAll', 'UserController@getAll');
 Route::get('/user/{id}', 'UserController@showOne');
 Route::get('/user/{id}/getAll', 'UserController@getAllValues');
 Route::post('/user', 'UserController@store');  
@@ -50,12 +54,11 @@ Route::get('/sensormodule/rooms/{id}', 'SensorModuleController@getRooms');
 Route::get('/sensormodule/dataregister/{id}', 'SensorModuleController@getDataRegisters');
 
 //room
+Route::get('/room/getAll', 'RoomController@getAllValues');
 Route::get('/room/{id}', 'RoomController@showOne');
-Route::get('/room/{id}/getAll', 'RoomController@getAllValues');
-Route::get('/room', 'RoomController@showAll');
-Route::post('/room', 'RoomController@store');
+Route::get('/room/{id}/getAll', 'RoomController@getAllValuesRoom')->middleware('roomControl');
 Route::put('/room/{id}', 'RoomController@update');
-//Route::delete('/room/{id}', 'RoomController@destroy');      werkt nog niet
+Route::delete('/room/{id}', 'RoomController@destroy');      
 
 //custom room actions
 Route::get('/room/users/{id}', 'RoomController@getUsers');
@@ -71,7 +74,6 @@ Route::put('/field/{id}', 'FieldController@update');
 //dataregister
 Route::get('/dataregister/{id}', 'DataRegisterController@showOne');
 Route::get('/dataregister', 'DataRegisterController@showAll');
-Route::get('/room/{room_id}/getAllValues', 'RoomController@getAllValues');
 Route::post('/dataregister', 'DataRegisterController@store');
 Route::put('/dataregister/{id}', 'UserDataRegisterControllerController@update');
 //Route::delete('/dataregister/{id}', 'UserDataRegisterControllerController@destroy');      werkt nog niet
@@ -79,6 +81,13 @@ Route::put('/dataregister/{id}', 'UserDataRegisterControllerController@update');
 //custom room actions
 Route::get('/dataregister/sensormodules/{id}', 'RoomController@getSensorModules');
 
+
+//roles
+Route::get('/role', 'RoleController@showall');
+
+//sensor
+Route::get('/sensor', 'SensorController@showAll');
+Route::get('/sensor/{id}', 'SensorController@showOne');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });

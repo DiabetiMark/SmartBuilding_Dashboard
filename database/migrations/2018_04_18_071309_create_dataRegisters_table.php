@@ -16,7 +16,7 @@ class CreateDataRegistersTable extends Migration
         Schema::create('dataRegisters', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('field_id');
-            $table->integer('sensorModule_id');
+            $table->integer('sensor_id');
             $table->string('value', 45);
             $table->timestamps();
         });

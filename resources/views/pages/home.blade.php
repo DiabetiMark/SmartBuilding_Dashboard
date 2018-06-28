@@ -62,7 +62,7 @@
                 "labels": ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"],
                 "datasets": [{
                     "label": "Gemiddelde luchtvochtigheid in alle ruimtes in percentages",
-                    "data": [52, 53, 52, 55, 57, 57, 51],
+                    "data": [],
                     "fill": false,
                     "backgroundColor": ["rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)"],
                     "borderColor": ["rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)"],
@@ -79,37 +79,5 @@
                 }
             }
         });
-
-        // Reed
-        new Chart(document.getElementById("reedChart"), {
-            "type": "line",
-            "data": {
-                "labels": ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"],
-                "datasets": [{
-                    "label": "Deur open ja(1) of nee(0)",
-                    "steppedLine": true,
-                    "data": [false, false, true, true, true, false, true, true, true, true, false],
-                    "fill": false,
-                    "borderColor": "rgb(50, 115, 220)"
-                }]
-            },
-            "options": {
-                layout: {
-                    padding: {
-                        top: 50,
-                        bottom: 50
-                    }
-                }
-            }
-        });
-
-        setInterval(function(){
-            let hours = new Date().getHours();
-            let minutes = new Date().getMinutes();
-
-            chart.data.labels.push(hours + ':' + minutes);
-            chart.data.datasets[0].data.push(Math.floor(Math.random() * (21 - 19     + 1)) + 18);
-            chart.update();
-        }, 1000 * 5);
     </script>
 @stop

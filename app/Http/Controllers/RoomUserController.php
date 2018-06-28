@@ -40,14 +40,14 @@ class RoomUserController extends Controller
             'user_id' => 'required',
             'room_id' => 'required',
         ]);
-
+        
         if(DB::table('room_user')->insert([
             'user_id' => $request->user_id,
             'room_id' => $request->room_id,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ])){
-            return app('App\Http\Controllers\UserController')->getAllValues($request->user_id);
+            return app('App\Http\Controllers\UserController')->showAll();
         }
 
         $error = [
@@ -61,22 +61,21 @@ class RoomUserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\SensorModule  $sensorModule
+     * @param  \App\SensorModule  $roomUser
      * @return \Illuminate\Http\Response
      */
     public function showAll()
     {
-        return $sensorModules = SensorModule::all();
+        return DB::table('room_user')->get();
     }
 
     public function showOne($id)
     {
-        $sensorModule = SensorModule::select('moduleName')
-        ->find($id);
+        $roomUser = DB::table('room_user')->where('id', $id)->get();
 
-        if($sensorModule !== null) 
+        if($roomUser !== null) 
         {
-            return response()->json($sensorModule);
+            return response()->json($roomUser);
         }
 
         $error = [
@@ -90,10 +89,10 @@ class RoomUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\SensorModule  $sensorModule
+     * @param  \App\SensorModule  $roomUser
      * @return \Illuminate\Http\Response
      */
-    public function edit(SensorModule $sensorModule)
+    public function edit($id)
     {
         //
     }
@@ -102,7 +101,7 @@ class RoomUserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\SensorModule  $sensorModule
+     * @param  \App\SensorModule  $roomUser
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $reqeust)
@@ -140,10 +139,10 @@ class RoomUserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\SensorModule  $sensorModule
+     * @param  \App\SensorModule  $roomUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SensorModule $sensorModule)
+    public function destroy(SensorModule $roomUser)
     {
         //
     }
